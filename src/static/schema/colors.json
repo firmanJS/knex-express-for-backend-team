@@ -1,0 +1,42 @@
+{
+	"SchemaColors": {
+		"type": "object",
+		"properties": {
+			"id": {
+				"type": "number"
+			},
+			"name": {
+				"type": "string"
+			},
+			"created_at": {
+				"type": "string",
+				"format": "date-time"
+			},
+			"created_by": {
+				"type": "string"
+			},
+			"updated_at": {
+				"type": "string",
+				"format": "date-time"
+			},
+			"updated_by": {
+				"type": "string"
+			},
+			"deleted_at": {
+				"type": "string",
+				"format": "date-time"
+			},
+			"deleted_by": {
+				"type": "string"
+			}
+		}
+	},
+	"SchemaBodyColors": {
+		"type": "object",
+		"properties": {
+			"name": {
+				"type": "string"
+			}
+		}
+	}
+}

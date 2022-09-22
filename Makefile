@@ -1,0 +1,46 @@
+#ganti compose file sesuai environment
+compose-file = docker-compose-dev.yml
+
+# run using yarn
+run-dev:
+	yarn dev
+run-production:
+	yarn start
+
+# run via docker
+docker-start:
+	docker-compose -f $(compose-file) up -d
+docker-start-watch:
+	docker-compose -f $(compose-file) up
+docker-build:
+	docker-compose -f $(compose-file) up --build --remove-orphans --force-recreate
+docker-deploy:
+	docker-compose -f $(compose-file) up --build --remove-orphans --force-recreate -d
+docker-stop:
+	docker-compose -f $(compose-file) stop
+docker-test:
+	docker-compose -f $(compose-file) exec lelang-core-api yarn test
+docker-coverage:
+	docker-compose -f $(compose-file) exec lelang-core-api yarn coverage
+docker-down:
+	docker-compose -f $(compose-file) down
+docker-migrate:
+	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:latest --cwd=src
+docker-migrate-specific:
+	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:up $(table) --cwd=src
+docker-migrate-create:
+	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:make $(table).js --cwd=src 
+docker-rollback:
+	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:rollback --cwd=src
+docker-migrate-down:
+	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:down --cwd=src
+docker-migrate-down-specific:
+	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:down $(table) --cwd=src
+docker-seed:
+	docker-compose -f $(compose-file) exec lelang-core-api knex seed:run --cwd=src
+docker-seed-specific:
+	docker-compose -f $(compose-file) exec lelang-core-api knex seed:run --specific=$(seed-name) --cwd=src
+docker-top:
+	docker-compose -f $(compose-file) top
+image-pull:
+	docker-compose -f $(compose-file) pull

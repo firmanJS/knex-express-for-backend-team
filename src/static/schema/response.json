@@ -1,0 +1,53 @@
+{
+	"SchemaResponse": {
+		"type": "object",
+		"properties": {
+			"message": {
+				"type": "string"
+			},
+			"status": {
+				"type": "boolean"
+			},
+			"data": {
+				"type": "object"
+			}
+		}
+	},
+	"SchemaPaginationResponse": {
+		"type": "object",
+		"properties": {
+			"message": {
+				"type": "string"
+			},
+			"status": {
+				"type": "boolean"
+			},
+			"data": {
+				"type": "object"
+			},
+			"_links": {
+				"type": "string"
+			},
+			"_meta": {
+				"type": "object",
+				"properties": {
+					"page": {
+						"type": "number"
+					},
+					"limit_per_page": {
+						"type": "number"
+					},
+					"total_page": {
+						"type": "number"
+					},
+					"count_per_page": {
+						"type": "number"
+					},
+					"count_total": {
+						"type": "number"
+					}
+				}
+			}
+		}
+	}
+}
