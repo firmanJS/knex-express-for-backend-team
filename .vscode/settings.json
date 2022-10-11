@@ -3,5 +3,5 @@
 		"source.fixAll.eslint": true,
 		"source.fixAll": true
 	},
-	"eslint.validate": ["javascript"],
+	"eslint.validate": ["javascript"]
 }
