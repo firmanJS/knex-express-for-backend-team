@@ -109,7 +109,7 @@ const mappingSuccess = (message, data = [], code = HTTP.OK, status = true) => ({
   }
 })
 
-const mappingError = (error, code = HTTP.CREATED) => {
+const mappingError = (req, error, code = HTTP.CREATED) => {
   let { message, exception } = ['', '']
   const manipulate = error.toString().split(':')
   switch (manipulate[0]) {
