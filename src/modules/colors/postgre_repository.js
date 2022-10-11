@@ -20,28 +20,32 @@ const condition = (builder, where, search) => {
 /**
  *
  *
+ * @param {*} req
  * @param {*} payload
  * @return {*}
  */
-const create = async (payload) => {
+const create = async (req, payload) => {
   const trx = await pgCore.transaction();
   try {
-    const result = await Repo.insertTrx(TABLES.COLOR, payload, COLUMN[0], trx)
+    const options = { column:  COLUMN[0], trx, isUpdated: true }
+    const result = await Repo.insertTrx(TABLES.COLOR, payload, options)
     trx.commit()
     return mappingSuccess(lang.__('created.success'), result)
   } catch (error) {
     trx.rollback()
-    return mappingError(error)
+    error.path_filename = __filename
+    return mappingError(req, error)
   }
 }
 /**
  *
  *
+ * @param {*} req
  * @param {*} where
  * @param {*} filter
  * @return {*}
  */
-const get = async (where, filter, column = COLUMN) => {
+const get = async (req, where, filter, column = COLUMN) => {
   try {
     const result = await pgCore(TABLES.COLOR).select(column)
       .where((builder) => {
@@ -62,17 +66,19 @@ const get = async (where, filter, column = COLUMN) => {
       count: rows?.count
     })
   } catch (error) {
-    return mappingError(error)
+    error.path_filename = __filename
+    return mappingError(req, error)
   }
 }
 /**
  *
  *
+ * @param {*} req
  * @param {*} where
  * @param {*} column
  * @return {*}
  */
-const getByParam = async (where, column = COLUMN) => {
+const getByParam = async (req, where, column = COLUMN) => {
   try {
     where.deleted_at = null
     const result = await Repo.fetchByParam(TABLES.COLOR, where, column)
@@ -81,17 +87,19 @@ const getByParam = async (where, column = COLUMN) => {
     }
     return mappingSuccess(lang.__('not.found.id', { id: where?.id }), result)
   } catch (error) {
-    return mappingError(error)
+    error.path_filename = __filename
+    return mappingError(req, error)
   }
 }
 /**
  *
  *
+ * @param {*} req
  * @param {*} where
  * @param {*} payload
  * @return {*}
  */
-const update = async (where, payload, name = '') => {
+const update = async (req, where, payload, name = '') => {
   try {
     let message = ''
     if (payload.type_method === 'update') {
@@ -105,7 +113,8 @@ const update = async (where, payload, name = '') => {
     }
     return mappingSuccess(lang.__('not.found.id', { id: where?.id }), result)
   } catch (error) {
-    return mappingError(error)
+    error.path_filename = __filename
+    return mappingError(req, error)
   }
 }
 

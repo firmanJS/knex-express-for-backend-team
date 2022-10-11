@@ -6,15 +6,14 @@ const { todayFormat } = require('../../utils')
  *
  * @param {*} table
  * @param {*} payload
- * @param {*} column
- * @param {boolean} isUpdated
+ * @param {*} options
  * @return {*}
  */
-const insert = async (table, payload, column, isUpdated = true) => {
-  if (isUpdated) {
+const insert = async (table, payload, options = { column:'*', isUpdated: true}) => {
+  if (options?.isUpdated) {
     payload.updated_at = new Date().toISOString()
   }
-  const [result] = await pgCore(table).insert(payload).returning(column)
+  const [result] = await pgCore(table).insert(payload).returning(options?.column)
   return result
 }
 /**
@@ -22,16 +21,14 @@ const insert = async (table, payload, column, isUpdated = true) => {
  *
  * @param {*} table
  * @param {*} payload
- * @param {*} column
- * @param {boolean} isUpdated
- * @param {*} trx
+ * @param {*} options
  * @return {*}
  */
-const insertTrx = async (table, payload, column, trx, isUpdated = true) => {
-  if (isUpdated) {
+const insertTrx = async (table, payload, options = { column:'*', isUpdated: true}) => {
+  if (options?.isUpdated) {
     payload.updated_at = new Date().toISOString()
   }
-  const [result] = await pgCore(table).transacting(trx).insert(payload).returning(column)
+  const [result] = await pgCore(table).transacting(options?.trx).insert(payload).returning(options?.column)
   return result
 }
 /**
