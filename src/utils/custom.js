@@ -1,68 +1,56 @@
-const { decodeToken } = requrie('./auth')
-
-const requestHttp = (req) => ({
+const paramsHttp = (req) => ({
   ...req?.params
 })
 
-const payloadWithUsers = (options) => {
-  let payload = {}
-  switch (options?.type) {
-    case 'created-all':
-      payload = { ...options?.req?.body, ...decodeToken('created', req) }
-      break
-    case 'created-only':
-      payload =  payload = { ...decodeToken('created', req) }
-      break
-    case 'updated-only':
-      payload = { ...decodeToken('updated', req), type_method: 'updated' }
-      break
-    case 'updated-all':
-      payload = { ...options?.req?.body, ...decodeToken('updated', req), type_method: 'updated' }
-      break
-    case 'deleted':
-      payload = { ...options?.req?.body, ...decodeToken('deleted', req), type_method: 'soft-deleted' }
-      break
-    default:
-      payload
-  }
-  return payload
-}
+const queryHttp = (req) => ({
+  ...req?.query
+})
+
+const bodyHttp = (req) => ({
+  ...req?.query
+})
 
 const isNumeric = (str) => {
-  if (typeof str !== 'string') return false
-  return !Number.isNaN(str) && !Number.isNaN(parseFloat(str))
-}
-
-const validationId = (req, name) => {
-  let where
-  if (isNumeric(req.params[name])) {
-    where = requestHttp(req)
-  } else {
-    where = { [name]: 0 }
+  try {
+    if (typeof str !== 'string') return false
+    return !Number.isNaN(str) && !Number.isNaN(parseFloat(str))
+  } catch (error) {
+    return error
   }
-
-  return where
 }
 
-const convertToSlug = (text = '') => text.toLowerCase()
-  .replace(/[^\w ]+/g, '')
-  .replace(/ +/g, '-')
+const convertToSlug = (text = '') => {
+  try {
+    return text.toLowerCase()
+      .replace(/[^\w ]+/g, '')
+      .replace(/ +/g, '-')
+  } catch (error) {
+    return error
+  }
+}
 
-const replaceString = (str, from, to = '') => str.replace(from, to)
+const replaceString = (str, from, to = '') => {
+  try {
+    return str.replace(from, to)
+  } catch (error) {
+    return error
+  }
+}
 
-const ucword = (str = '') => (`${str}`).replace(/^([a-z])|\s+([a-z])/g, ($1) => $1.toUpperCase())
+const ucword = (str = '') => {
+  try {
+    return (`${str}`).replace(/^([a-z])|\s+([a-z])/g, ($1) => $1.toUpperCase())
+  } catch (error) {
+    return error
+  }
+}
 
 module.exports = {
-  requestHttp,
+  queryHttp,
+  paramsHttp,
+  bodyHttp,
   isNumeric,
   convertToSlug,
-  validationId,
   replaceString,
-  ucword,
-  formatRp,
-  alphaNumeric,
-  strMasked,
-  removeDomain,
-  addWatermark,
-  payloadWithUsers,
+  ucword
 }

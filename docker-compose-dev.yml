@@ -17,20 +17,6 @@ services:
     ports:
       - "${APP_PORT}:${APP_PORT}"
 
-  # Postgre
-  db-postgres:
-    container_name: postgre-template
-    command: postgres -c port=${POSTGRES_PORT}
-    image: postgres:14.3-alpine3.15
-    env_file:
-      - .env
-    networks:
-      - express-template-network
-    ports:
-      - "${POSTGRES_PORT}:5432"
-    volumes:
-      - postgre_template:/var/lib/postgresql/data
-
 networks:
   express-template-network:
     driver: bridge
