@@ -1,5 +1,4 @@
-# Core Api
-Knex Express Api
+# Knex Express API
 [![Maintainability](https://api.codeclimate.com/v1/badges/cf5d695145d250eb622a/maintainability)](https://codeclimate.com/github/firmanJS/knex-express-for-backend-team/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/cf5d695145d250eb622a/test_coverage)](https://codeclimate.com/github/firmanJS/knex-express-for-backend-team/test_coverage)
 [![Node.js CI](https://github.com/firmanJS/express-boillerplate-restfullapi/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/firmanJS/express-boillerplate-restfullapi/actions/workflows/node.js.yml)
