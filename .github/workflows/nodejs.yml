@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -40,24 +40,21 @@ jobs:
           echo TZ=${{ secrets.TZ }} >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
           echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
-          echo SENTRY_DSN=${{ secrets.SENTRY_DSN }} >> .env
-          echo SENTRY_TRACE_RATE=${{ secrets.SENTRY_TRACE_RATE }} >> .env
-          echo CLUSTER_MODE=${{ secrets.CLUSTER_MODE }} >> .env
           echo CC_TEST_REPORTER_ID=${{ secrets.CC_TEST_REPORTER_ID }} >> .env
-  # coverage:
-  #   needs: [ create-env ]
-  #   name: coverage
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@main
-  #   - uses: actions/setup-node@main
-  #     with:
-  #       node-version: ${{ matrix.node-version }}
-  #   - run: sudo npm install -g yarn
-  #   - run: sudo yarn install
-  #   - run: sudo yarn add --dev jest         
-  #   - uses: paambaati/codeclimate-action@v2.7.5
-  #     env:
-  #       CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-  #     with:
-  #       coverageCommand: yarn test:coverage
+  coverage:
+    needs: [ create-env ]
+    name: coverage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    - uses: actions/setup-node@main
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: sudo npm install -g yarn
+    - run: sudo yarn install
+    - run: sudo yarn add --dev jest         
+    - uses: paambaati/codeclimate-action@v2.7.5
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      with:
+        coverageCommand: yarn test:coverage

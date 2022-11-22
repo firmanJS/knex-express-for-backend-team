@@ -1,4 +1,4 @@
-FROM node:16.14.0-alpine3.15
+FROM node:18.12.1-buster-slim
 
 RUN rm -rf /var/cache/apk/*
 
@@ -10,6 +10,6 @@ ENV NODE_ENV development
 
 COPY package.json /usr/apps/knex-express-template/
 
-RUN yarn install && yarn global add nodemon && yarn global add knex && yarn cache clean --all
+RUN yarn install && yarn global add knex && yarn cache clean --all
 
 CMD ["yarn", "dev"]
