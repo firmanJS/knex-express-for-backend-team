@@ -1,15 +1,15 @@
 # Knex Express API
 [![Maintainability](https://api.codeclimate.com/v1/badges/cf5d695145d250eb622a/maintainability)](https://codeclimate.com/github/firmanJS/knex-express-for-backend-team/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/cf5d695145d250eb622a/test_coverage)](https://codeclimate.com/github/firmanJS/knex-express-for-backend-team/test_coverage)
-[![Node.js CI](https://github.com/firmanJS/express-boillerplate-restfullapi/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/firmanJS/express-boillerplate-restfullapi/actions/workflows/node.js.yml)
+[![Node.js CI](https://github.com/firmanJS/knex-express-for-backend-team/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/firmanJS/knex-express-for-backend-team/actions/workflows/node.js.yml)
 [![made-with-nodejs](https://img.shields.io/badge/Made%20with-Nodejs-1f425f.svg)](https://nodejs.org)
 [![made-with-expressjs](https://img.shields.io/badge/Made%20with-Expressjs-1f425f.svg)](https://expressjs.com/)
 [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://github.com/firmanJS)
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/firmanJS/express-boillerplate-restfullapi/blob/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/firmanjs/express-boillerplate-restfullapi.svg)](https://github.com/firmanJS/express-boillerplate-restfullapi/releases)
-[![Github all releases](https://img.shields.io/github/downloads/firmanjs/express-boillerplate-restfullapi/total.svg)](https://github.com/firmanJS/express-boillerplate-restfullapi/releases)
-[![GitHub issues](https://img.shields.io/github/issues/firmanjs/express-boillerplate-restfullapi.svg)](https://gitHub.com/firmanJS/express-boillerplate-restfullapi/issues/)
-[![GitHub pull-requests](https://img.shields.io/github/issues-pr/firmanjs/express-boillerplate-restfullapi.svg)](https://gitHub.com/firmanjs/express-boillerplate-restfullapi/pulls/)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/firmanJS/knex-express-for-backend-team/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/firmanjs/knex-express-for-backend-team.svg)](https://github.com/firmanJS/knex-express-for-backend-team/releases)
+[![Github all releases](https://img.shields.io/github/downloads/firmanjs/knex-express-for-backend-team/total.svg)](https://github.com/firmanJS/knex-express-for-backend-team/releases)
+[![GitHub issues](https://img.shields.io/github/issues/firmanjs/knex-express-for-backend-team.svg)](https://gitHub.com/firmanJS/knex-express-for-backend-team/issues/)
+[![GitHub pull-requests](https://img.shields.io/github/issues-pr/firmanjs/knex-express-for-backend-team.svg)](https://gitHub.com/firmanjs/knex-express-for-backend-team/pulls/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 ## Getting started
 - **Clone This Repository Using HTTPS** 

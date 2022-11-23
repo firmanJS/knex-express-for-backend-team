@@ -45,6 +45,19 @@ const ucword = (str = '') => {
   }
 }
 
+const formatCurrency = (currency, language = 'id-ID', format = 'IDR') => {
+  try {
+    const moneyFormat = Intl.NumberFormat(language, {
+      style: 'currency',
+      currency: format
+    });
+
+    return moneyFormat.format(currency);
+  } catch (error) {
+    return error
+  }
+}
+
 module.exports = {
   queryHttp,
   paramsHttp,
@@ -52,5 +65,6 @@ module.exports = {
   isNumeric,
   convertToSlug,
   replaceString,
+  formatCurrency,
   ucword
 }
