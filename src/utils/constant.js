@@ -21,7 +21,7 @@ module.exports = {
   },
   MODEL_PROPERTIES: {
     TABLES: {
-      COLOR: 'mst_color'
+      TODO: 'mst_todo'
     },
     PRIMARY_KEY: {
       ID: 'id'
