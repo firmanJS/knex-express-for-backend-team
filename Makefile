@@ -19,27 +19,27 @@ docker-deploy:
 docker-stop:
 	docker-compose -f $(compose-file) stop
 docker-test:
-	docker-compose -f $(compose-file) exec lelang-core-api yarn test
+	docker-compose -f $(compose-file) exec knex-express-template yarn test
 docker-coverage:
-	docker-compose -f $(compose-file) exec lelang-core-api yarn coverage
+	docker-compose -f $(compose-file) exec knex-express-template yarn coverage
 docker-down:
 	docker-compose -f $(compose-file) down
 docker-migrate:
-	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:latest --cwd=src
+	docker-compose -f $(compose-file) exec knex-express-template knex migrate:latest --cwd=src
 docker-migrate-specific:
-	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:up $(table) --cwd=src
+	docker-compose -f $(compose-file) exec knex-express-template knex migrate:up $(table) --cwd=src
 docker-migrate-create:
-	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:make $(table).js --cwd=src 
+	docker-compose -f $(compose-file) exec knex-express-template knex migrate:make $(table).js --cwd=src 
 docker-rollback:
-	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:rollback --cwd=src
+	docker-compose -f $(compose-file) exec knex-express-template knex migrate:rollback --cwd=src
 docker-migrate-down:
-	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:down --cwd=src
+	docker-compose -f $(compose-file) exec knex-express-template knex migrate:down --cwd=src
 docker-migrate-down-specific:
-	docker-compose -f $(compose-file) exec lelang-core-api knex migrate:down $(table) --cwd=src
+	docker-compose -f $(compose-file) exec knex-express-template knex migrate:down $(table) --cwd=src
 docker-seed:
-	docker-compose -f $(compose-file) exec lelang-core-api knex seed:run --cwd=src
+	docker-compose -f $(compose-file) exec knex-express-template knex seed:run --cwd=src
 docker-seed-specific:
-	docker-compose -f $(compose-file) exec lelang-core-api knex seed:run --specific=$(seed-name) --cwd=src
+	docker-compose -f $(compose-file) exec knex-express-template knex seed:run --specific=$(seed-name) --cwd=src
 docker-top:
 	docker-compose -f $(compose-file) top
 image-pull:

@@ -8,3 +8,4 @@ coverage
 .vscode
 *.log
 .husky
+__test__/

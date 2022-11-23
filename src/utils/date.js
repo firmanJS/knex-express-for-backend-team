@@ -1,32 +1,29 @@
 const moment = require('moment')
-const DEFAULT_FORMAT = 'DD-MM-YYYY'
 
-const customDateFormat = (date = new Date().toISOString(), format = DEFAULT_FORMAT) => {
-  const newDate = moment(date).format(format)
+const TZ = process?.env?.TZ ?? 'Asia/Jakarta'
+const DATE_FORMAT_INDO = 'DD MMMM YYYY, H:mm:ss'
+const LOG_FORMAT = 'DD-MM-YYYY'
+
+const fullDateFormatIndo = (date) => {
+  const dateManipualte = moment(new Date(date).getTime()).format(
+    DATE_FORMAT_INDO
+  )
+  const getNameDay = moment(date).locale('id').format('dddd')
+
+  return `${getNameDay}, ${dateManipualte}`
+}
+const nowWithUtc = (date = Date.now(), formatDate = LOG_FORMAT) => {
+  const format = moment(new Date(date).getTime()).utc(TZ).format(formatDate)
+  return format
+}
+
+const todayFormat = (format, date = new Date().toISOString()) => {
+  const newDate = moment(new Date(date)).format(format)
   return newDate
 }
 
-const manipulateDate = (result = {}, isArray = true) => {
-  let mapping
-
-  if (isArray) {
-    mapping = result.map((r) => {
-      r.created_at = fullDateFormat(r.created_at)
-      r.updated_at = fullDateFormat(r.updated_at)
-      r.deleted_at = fullDateFormat(r.deleted_at)
-      return r
-    })
-  } else {
-    result.created_at = fullDateFormat(result?.created_at)
-    result.updated_at = fullDateFormat(result?.updated_at)
-    result.deleted_at = fullDateFormat(result?.deleted_at)
-    mapping = result
-  }
-
-  return mapping
-}
-
 module.exports = {
-  customDateFormat,
-  manipulateDate
+  nowWithUtc,
+  todayFormat,
+  fullDateFormatIndo
 }

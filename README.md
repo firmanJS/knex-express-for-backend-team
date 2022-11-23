@@ -67,16 +67,16 @@ docker-compose -f docker-compose-dev.yml up
 docker-compose -f docker-compose-dev.yml up -d
 
 # Create migration in docker container
-docker-compose -f docker-compose-dev.yml exec lelang-core-api knex migrate:make create_core_users_table --cwd=src 
+docker-compose -f docker-compose-dev.yml exec knex-express-template knex migrate:make create_core_users_table --cwd=src 
 
 # Run migration in docker container
-docker-compose -f docker-compose-dev.yml exec lelang-core-api knex migrate:latest --cwd=src
+docker-compose -f docker-compose-dev.yml exec knex-express-template knex migrate:latest --cwd=src
 
 # Create Seed in docker container
-docker-compose -f docker-compose-dev.yml exec lelang-core-api knex seed:make seed_users --cwd=src
+docker-compose -f docker-compose-dev.yml exec knex-express-template knex seed:make seed_users --cwd=src
 
 # Run Seed in docker container
-docker-compose -f docker-compose-dev.yml exec lelang-core-api knex seed:run --cwd=src
+docker-compose -f docker-compose-dev.yml exec knex-express-template knex seed:run --cwd=src
 ```
 
 * Via Make :

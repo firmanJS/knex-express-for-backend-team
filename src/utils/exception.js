@@ -51,11 +51,11 @@ const syntaxError = (err, req, res, next) => {
 
 const paginationResponse = (req, res, rows) => {
   const limitPerPage = req.query?.limit || LIMIT
-  const countTotal = Number(rows?.data?.response?.count) || 0
+  const countTotal = Number(rows?.data?.data?.count) || +LIMIT
   res.status(HTTP.OK).json({
     message: lang.__('get.success'),
     status: true,
-    data: rows?.data?.response?.result || [],
+    data: rows?.data?.data?.result || [],
     _meta: {
       page: Number(req.query?.page) || +PAGE,
       limit_per_page: +limitPerPage,
@@ -88,8 +88,6 @@ const originResponse = (res, status, data) => {
 }
 
 const baseResponse = (res, data) => res.status(data?.code ?? HTTP.OK).json(data?.data)
-
-const baseResponseGeneral = (res, data) => res.status(data?.code ?? HTTP.OK).json(data)
 
 const mappingSuccessPagination = (message, response = [], code = HTTP.OK, status = true) => ({
   code,
@@ -128,6 +126,9 @@ const mappingError = (req, error, code = HTTP.CREATED) => {
     case 'AggregateError':
       message = lang.__('error.db.query')
       break
+    case 'MongoServerError':
+      message = manipulate.toString()
+      break
     case 'ReferenceError':
       message = manipulate.toString()
       break
@@ -137,6 +138,10 @@ const mappingError = (req, error, code = HTTP.CREATED) => {
   console.error(`catch message ${error}`);
   if (process.env.NODE_ENV === 'development') {
     exception = error.toString()
+  }
+  if (error?.type_error !== 'validation') {
+    // sent alert
+    console.info(error)
   }
   return {
     code,
@@ -159,6 +164,5 @@ module.exports = {
   originResponse,
   mappingSuccess,
   mappingError,
-  mappingSuccessPagination,
-  baseResponseGeneral,
+  mappingSuccessPagination
 }

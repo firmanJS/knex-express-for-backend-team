@@ -1,4 +1,5 @@
 const fs = require('fs')
+const { nowWithUtc, todayFormat } = require('./date')
 
 const generateFolderLogs = (dynamicFolder, path) => {
   const today = new Date()
@@ -9,8 +10,7 @@ const generateFolderLogs = (dynamicFolder, path) => {
   const pathForDatabase = `${dynamicFolder}/${path}/${year}/${month}/${date}/`
   try {
     if (!fs.existsSync(folderPath)) {
-      console.log('generated folder');
-      fs.mkdirSync(folderPath, { recursive: true, mode: 775 })
+      fs.mkdirSync(folderPath, { recursive: true, mode: 0o755 })
       return {
         pathForDatabase,
         folderPath
@@ -26,18 +26,19 @@ const generateFolderLogs = (dynamicFolder, path) => {
   }
 }
 
-const logger = (fileName, type) => {
+const writeLog = (message, fileName = `auction-log-${todayFormat('DD-MM-YYYY')}.txt`, path = 'auction') => {
   try {
-    const { folderPath } = generateFolderLogs('logs', type)
+    const { folderPath } = generateFolderLogs('logs', path)
     const finalPath = `${__dirname}/../../${folderPath}/${fileName}`
     return fs.createWriteStream(finalPath, {
-      flags: 'a'
-    })
+      flags: 'a',
+      mode: 0o755
+    }).write(`${nowWithUtc(new Date().toISOString(), 'DD-MM-YYYY H:mm:ss')} - ${message}\n`)
   } catch (error) {
     return error
   }
 }
 
 module.exports = {
-  logger
+  writeLog
 }
