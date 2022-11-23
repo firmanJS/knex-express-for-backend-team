@@ -10,8 +10,8 @@ COPY package.json /usr/apps/logique-express-api
 
 COPY ./src /usr/apps/logique-express-api
 
-RUN npm ci --only=production
+RUN yarn install --frozen-lockfile --production && yarn global add knex && yarn cache clean --all
 
 USER node
 
-CMD ["npm", "run", "start"]
+CMD ["yarn", "start"]

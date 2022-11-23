@@ -18,7 +18,7 @@ const {
 const healthCheck = require('./routes');
 const apiV1 = require('./routes/V1');
 
-const limit = process.env.JSON_LIMIT.toString() ?? '123072kb';
+const limit = process.env.JSON_LIMIT.toString() ?? '12800kb';
 app.use(compress()); // gzip compression
 app.use(methodOverride()); // lets you use HTTP verbs
 app.use(xss()); // handler xss attack

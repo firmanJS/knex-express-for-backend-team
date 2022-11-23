@@ -3,7 +3,7 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') })
 
 module.exports = {
   development: {
-    client: process.env.DB_CLIENT_DEV,
+    client: process.env.KNEX_CLIENT,
     connection: {
       host: process.env.DB_HOST_DEV,
       port: process.env.DB_PORT_DEV,
