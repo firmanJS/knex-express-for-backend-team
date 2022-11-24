@@ -115,9 +115,6 @@ const conditionCheck = (error, manipulate, message) => {
     case 'Error':
       message = lang.__('error.db.connection')
       break
-    case 'error':
-      message = lang.__('error.db')
-      break
     case 'TypeError':
       message = `error in code ${manipulate.toString()}`
       break
