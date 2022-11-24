@@ -1,7 +1,7 @@
 const { pgCore } = require('../../config/database')
 const Repo = require('../../repository/postgres/core_postgres')
 const {
-  mappingSuccess, mappingError, manipulateDate, mappingSuccessPagination,
+  mappingSuccess, mappingError, manipulateDate,
   MODEL_PROPERTIES: { TABLES }
 } = require('../../utils')
 const { lang } = require('../../lang')
@@ -64,7 +64,7 @@ const get = async (req, where, filter, column = COLUMN) => {
       })
       .count(column[0])
 
-    return mappingSuccessPagination(lang.__('get.success'), {
+    return mappingSuccess(lang.__('get.success'), {
       result: manipulateDate(result),
       count: rows?.count
     })
