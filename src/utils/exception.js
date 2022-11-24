@@ -107,7 +107,7 @@ const mappingSuccess = (message, data = [], code = HTTP.OK, status = true) => ({
   }
 })
 
-const mappingError = (req, error, code = HTTP.CREATED) => {
+const mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
   let { message, exception } = ['', '']
   const manipulate = error.toString().split(':')
   switch (manipulate[0]) {
@@ -116,6 +116,7 @@ const mappingError = (req, error, code = HTTP.CREATED) => {
       break
     case 'Error':
       message = lang.__('error.db.connection')
+      code = HTTP.BAD_REQUEST
       break
     case 'error':
       message = lang.__('error.db')
@@ -141,7 +142,7 @@ const mappingError = (req, error, code = HTTP.CREATED) => {
   }
   if (error?.type_error !== 'validation') {
     // sent alert
-    console.info(error)
+    console.info('sent alert', error)
   }
   return {
     code,

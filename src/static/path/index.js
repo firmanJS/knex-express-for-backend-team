@@ -1,5 +1,5 @@
-const colors = require('./colors.json')
+const todos = require('./todo.json')
 
 module.exports = {
-  ...colors
+  ...todos
 }

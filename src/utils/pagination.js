@@ -1,6 +1,8 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 const { LIMIT, PAGE } = require('./constant');
 
-const dynamicFilter = (req, column= []) => {
+const dynamicFilter = (req, column = []) => {
   const push = {};
   const asArray = Object.entries(req.query);
   const filtered = asArray.filter(([key]) => column.includes(key));
@@ -14,7 +16,7 @@ const dynamicFilter = (req, column= []) => {
   return push;
 };
 
-const paging = (req, defaultOrder= []) => {
+const paging = (req, defaultOrder = []) => {
   const direction = req.query.direction || defaultOrder[0];
   const order = req.query.order || defaultOrder[1];
   const page = +req.query.page || PAGE;

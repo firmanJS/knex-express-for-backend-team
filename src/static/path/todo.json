@@ -1,8 +1,8 @@
 {
-	"/colors": {
+	"/todo": {
 		"get": {
 			"tags": [
-				"Colors"
+				"Todo"
 			],
 			"security": [
 				{
@@ -71,7 +71,7 @@
 		},
 		"post": {
 			"tags": [
-				"Colors"
+				"Todo"
 			],
 			"security": [
 				{
@@ -83,7 +83,7 @@
 				"content": {
 					"application/json": {
 						"schema": {
-							"$ref": "#/components/schemas/SchemaBodyColors"
+							"$ref": "#/components/schemas/SchemaBodyTodo"
 						}
 					}
 				}
@@ -102,10 +102,10 @@
 			}
 		}
 	},
-	"/colors/{id}": {
+	"/todo/{id}": {
 		"get": {
 			"tags": [
-				"Colors"
+				"Todo"
 			],
 			"security": [
 				{
@@ -137,7 +137,7 @@
 		},
 		"put": {
 			"tags": [
-				"Colors"
+				"Todo"
 			],
 			"security": [
 				{
@@ -159,7 +159,7 @@
 				"content": {
 					"application/json": {
 						"schema": {
-							"$ref": "#/components/schemas/SchemaBodyColors"
+							"$ref": "#/components/schemas/SchemaBodyTodo"
 						}
 					}
 				}
@@ -179,7 +179,7 @@
 		},
 		"delete": {
 			"tags": [
-				"Colors"
+				"Todo"
 			],
 			"security": [
 				{
