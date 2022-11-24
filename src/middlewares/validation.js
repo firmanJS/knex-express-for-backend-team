@@ -39,32 +39,13 @@ const validateMiddleware = (req, res, next) => {
     const catchMessage = errors.array().map((err) => err.msg.split(' '))
     console.error('error validateMiddleware', errors);
     const message = checkMessageError(catchMessage, errors)
+    message.type_error = 'validation'
     return baseResponse(res, mappingError(message))
   }
 
   return next()
 }
 
-// schema options
-const options = {
-  abortEarly: false, // include all errors
-  allowUnknown: true, // ignore unknown props
-  stripUnknown: true // remove unknown props
-};
-
-const joiResult = (schema, property = 'body') => (req, res, next) => {
-  const { error } = schema.validate(req[property], options)
-  if (error) {
-    const extractedErrors = []
-    console.error(error.details);
-    error.details.map((err) => extractedErrors.push(err.message.replace(/"/g, '')))
-    return baseResponse(res, mappingError(extractedErrors))
-  }
-  // req[property] = value;
-  return next()
-}
-
 module.exports = {
-  validateMiddleware,
-  joiResult
+  validateMiddleware
 }

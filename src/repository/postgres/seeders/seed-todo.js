@@ -7,7 +7,7 @@ exports.seed = function (knex) {
   // Deletes ALL existing entries
   const todos = [
     {
-      title: 'todo 1',
+      name: 'todo 1',
       description: ' lorem ipsum'
     }
   ]

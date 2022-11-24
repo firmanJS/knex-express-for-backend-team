@@ -1,12 +1,13 @@
 const { MODEL_PROPERTIES: { TABLES } } = require('../../../utils')
 
 exports.up = function (knex) {
-  return knex.schema.createTable(TABLES.COLOR, (table) => {
-    table.increments('id').primary();
+  return knex.schema.createTable(TABLES.TODO, (table) => {
+    table.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary();
     table.string('name', 150).notNullable().unique();
+    table.text('description')
     table.timestamp('created_at').defaultTo(knex.fn.now())
     table.uuid('created_by')
-    table.timestamp('updated_at')
+    table.timestamp('updated_at').defaultTo(knex.fn.now())
     table.uuid('updated_by')
     table.timestamp('deleted_at')
     table.uuid('deleted_by')
@@ -18,5 +19,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable(TABLES.COLOR);
+  return knex.schema.dropTable(TABLES.TODO);
 };

@@ -1,7 +1,7 @@
-const colors = require('./colors.json')
+const todos = require('./todo.json')
 const response = require('./response.json')
 
 module.exports = {
-  ...colors,
+  ...todos,
   ...response
 }

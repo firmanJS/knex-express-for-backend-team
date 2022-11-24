@@ -6,7 +6,10 @@ const {
 } = require('../../utils')
 const { lang } = require('../../lang')
 
-const COLUMN = ['id', 'name', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by']
+const COLUMN = [
+  'id', 'name', 'description', 'created_at', 'created_by',
+  'updated_at', 'updated_by', 'deleted_at', 'deleted_by'
+]
 const DEFAULT_SORT = [COLUMN[0], 'DESC']
 const condition = (builder, where, search) => {
   if (search) {
@@ -27,8 +30,8 @@ const condition = (builder, where, search) => {
 const create = async (req, payload) => {
   const trx = await pgCore.transaction();
   try {
-    const options = { column:  COLUMN[0], trx, isUpdated: true }
-    const result = await Repo.insertTrx(TABLES.COLOR, payload, options)
+    const options = { column: COLUMN[0], trx }
+    const result = await Repo.insertTrx(TABLES.TODO, payload, options)
     trx.commit()
     return mappingSuccess(lang.__('created.success'), result)
   } catch (error) {
@@ -47,7 +50,7 @@ const create = async (req, payload) => {
  */
 const get = async (req, where, filter, column = COLUMN) => {
   try {
-    const result = await pgCore(TABLES.COLOR).select(column)
+    const result = await pgCore(TABLES.TODO).select(column)
       .where((builder) => {
         condition(builder, where, filter.search)
       })
@@ -55,7 +58,7 @@ const get = async (req, where, filter, column = COLUMN) => {
       .limit(filter.limit)
       .offset(((filter.page - 1) * filter.limit))
 
-    const [rows] = await pgCore(TABLES.COLOR)
+    const [rows] = await pgCore(TABLES.TODO)
       .where((builder) => {
         condition(builder, where, filter.search)
       })
@@ -81,7 +84,7 @@ const get = async (req, where, filter, column = COLUMN) => {
 const getByParam = async (req, where, column = COLUMN) => {
   try {
     where.deleted_at = null
-    const result = await Repo.fetchByParam(TABLES.COLOR, where, column)
+    const result = await Repo.fetchByParam(TABLES.TODO, where, column)
     if (result) {
       return mappingSuccess(lang.__('get.success'), result)
     }
@@ -107,7 +110,7 @@ const update = async (req, where, payload, name = '') => {
     } else {
       message = lang.__('archive.success', { id: where?.id })
     }
-    const result = await Repo.updated(TABLES.COLOR, where, payload, COLUMN[0], name)
+    const result = await Repo.updated(TABLES.TODO, where, payload, COLUMN[0], name)
     if (result) {
       return mappingSuccess(message, result)
     }
