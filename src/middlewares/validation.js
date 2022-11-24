@@ -22,9 +22,6 @@ const checkMessageError = (catchMessage, errors) => {
     case 'getaddrinfo':
       message = lang.__('knex.host')
       break
-    case 'Please':
-      message = errors.array()
-      break
     default:
       message = extractedErrors
   }
