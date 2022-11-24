@@ -107,16 +107,13 @@ const mappingSuccess = (message, data = [], code = HTTP.OK, status = true) => ({
   }
 })
 
-const mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
-  let { message, exception } = ['', '']
-  const manipulate = error.toString().split(':')
+const conditionCheck = (error, manipulate, message) => {
   switch (manipulate[0]) {
     case 'JsonWebTokenError':
       message = error
       break
     case 'Error':
       message = lang.__('error.db.connection')
-      code = HTTP.BAD_REQUEST
       break
     case 'error':
       message = lang.__('error.db')
@@ -136,6 +133,14 @@ const mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
     default:
       message = error
   }
+
+  return message
+}
+
+const mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
+  let { message, exception } = ['', '']
+  const manipulate = error.toString().split(':')
+  message = conditionCheck(error, manipulate, message)
   console.error(`catch message ${error}`);
   if (process.env.NODE_ENV === 'development') {
     exception = error.toString()

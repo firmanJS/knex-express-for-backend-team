@@ -1,7 +1,7 @@
 # Knex Express API
 [![Maintainability](https://api.codeclimate.com/v1/badges/cf5d695145d250eb622a/maintainability)](https://codeclimate.com/github/firmanJS/knex-express-for-backend-team/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/cf5d695145d250eb622a/test_coverage)](https://codeclimate.com/github/firmanJS/knex-express-for-backend-team/test_coverage)
-[![Node.js CI](https://github.com/firmanJS/knex-express-for-backend-team/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/firmanJS/knex-express-for-backend-team/actions/workflows/node.js.yml)
+[![Node.js CI](https://github.com/firmanJS/knex-express-for-backend-team/actions/workflows/nodejs.yml/badge.svg?branch=main)](https://github.com/firmanJS/knex-express-for-backend-team/actions/workflows/nodejs.yml)
 [![made-with-nodejs](https://img.shields.io/badge/Made%20with-Nodejs-1f425f.svg)](https://nodejs.org)
 [![made-with-expressjs](https://img.shields.io/badge/Made%20with-Expressjs-1f425f.svg)](https://expressjs.com/)
 [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://github.com/firmanJS)
