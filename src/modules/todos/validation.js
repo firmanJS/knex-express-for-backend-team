@@ -1,6 +1,7 @@
 const { check } = require('express-validator')
 const { validateMiddleware } = require('../../middlewares')
 const { lang } = require('../../lang')
+const { MODEL_PROPERTIES: { TABLES } } = require('../../utils')
 const { checkSameValueinDb, checkSameValueinDbUpdate } = require('../../repository/postgres/core_postgres')
 /* RULE
   ** More Documentation in here https://express-validator.github.io/docs/
@@ -16,7 +17,7 @@ const postValidation = [
       const condition = {
         name: value
       }
-      await checkSameValueinDb('mst_color', condition, 'name', lang.__('data.exist', { msg }))
+      await checkSameValueinDb(TABLES.TODO, condition, 'name', lang.__('data.exist', { msg }))
     }),
   (req, res, next) => { validateMiddleware(req, res, next) }
 ]
@@ -28,7 +29,7 @@ const putValidation = [
     .optional(true)
     .custom(async (value, { req }) => {
       const msg = `Name ${value}`
-      await checkSameValueinDbUpdate('mst_color', { name: value }, 'id', req?.params?.id, lang.__('data.exist', { msg }))
+      await checkSameValueinDbUpdate(TABLES.TODO, { name: value }, 'id', req?.params?.id, lang.__('data.exist', { msg }))
     }),
   (req, res, next) => { validateMiddleware(req, res, next) }
 ]

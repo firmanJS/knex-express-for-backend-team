@@ -1,5 +1,5 @@
 {
-	"SchemaColors": {
+	"SchemaTodo": {
 		"type": "object",
 		"properties": {
 			"id": {
@@ -31,10 +31,13 @@
 			}
 		}
 	},
-	"SchemaBodyColors": {
+	"SchemaBodyTodo": {
 		"type": "object",
 		"properties": {
 			"name": {
+				"type": "string"
+			},
+			"description": {
 				"type": "string"
 			}
 		}

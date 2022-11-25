@@ -11,11 +11,11 @@
 const repository = require('./postgre_repository')
 const {
   baseResponse, paginationResponse, paramsHttp, dynamicFilter, paging,
-  payloadWithUsers
+  dynamicOrder, bodyHttp
 } = require('../../utils')
 
 const store = async (req, res) => {
-  const payload = payloadWithUsers({ req, type: 'created-all' })
+  const payload = bodyHttp(req)
   const result = await repository.create(req, payload)
   return baseResponse(res, result)
 }
@@ -23,7 +23,9 @@ const store = async (req, res) => {
 const fetch = async (req, res) => {
   const where = dynamicFilter(req, repository.COLUMN)
   const filter = paging(req, repository.DEFAULT_SORT)
-  const result = await repository.get(req, where, filter)
+  const order = dynamicOrder(filter)
+  const options = { where, order, filter }
+  const result = await repository.get(req, options)
   return paginationResponse(req, res, result)
 }
 
@@ -36,14 +38,14 @@ const fetchByParam = async (req, res) => {
 const update = async (req, res) => {
   const where = paramsHttp(req)
   where.deleted_at = null
-  const payload = payloadWithUsers({ req, type: 'updated-all' })
+  const payload = bodyHttp(req)
   const result = await repository.update(req, where, payload)
   return baseResponse(res, result)
 }
 
 const softDelete = async (req, res) => {
   const where = paramsHttp(req)
-  const payload = payloadWithUsers({ req, type: 'deleted-all' })
+  const payload = bodyHttp(req)
   where.deleted_at = null
   const result = await repository.update(req, where, payload, 'name')
   return baseResponse(res, result)

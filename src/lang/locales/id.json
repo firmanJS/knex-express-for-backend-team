@@ -50,5 +50,6 @@
 	"knex.connect": "Mohon cek kembali koneksi basis data anda",
 	"knex.password": "Mohon cek kembali password / username basis data anda",
 	"knex.host": "Mohon cek kembali host basis data anda",
-	"knex.select": "Periksa kembali query anda atau nama table anda"
+	"knex.select": "Periksa kembali query anda atau nama table anda",
+	"data.exist": "data.exist"
 }

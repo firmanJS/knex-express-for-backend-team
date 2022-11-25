@@ -1,14 +1,13 @@
 const { pgCore } = require('../../config/database')
 const Repo = require('../../repository/postgres/core_postgres')
 const {
-  mappingSuccess, mappingError, manipulateDate,
-  MODEL_PROPERTIES: { TABLES }
+  mappingSuccess, mappingError,
+  MODEL_PROPERTIES: { TABLES, CREATED }
 } = require('../../utils')
 const { lang } = require('../../lang')
 
 const COLUMN = [
-  'id', 'name', 'description', 'created_at', 'created_by',
-  'updated_at', 'updated_by', 'deleted_at', 'deleted_by'
+  'id', 'name', 'description', ...CREATED
 ]
 const DEFAULT_SORT = [COLUMN[0], 'DESC']
 const condition = (builder, where, search) => {
@@ -48,24 +47,24 @@ const create = async (req, payload) => {
  * @param {*} filter
  * @return {*}
  */
-const get = async (req, where, filter, column = COLUMN) => {
+const get = async (req, options, column = COLUMN) => {
   try {
     const result = await pgCore(TABLES.TODO).select(column)
       .where((builder) => {
-        condition(builder, where, filter.search)
+        condition(builder, options?.where, options?.filter?.search)
       })
-      .orderBy(filter.direction, filter.order)
-      .limit(filter.limit)
-      .offset(((filter.page - 1) * filter.limit))
+      .orderBy(options?.order)
+      .limit(options?.filter?.limit)
+      .offset(((options.filter.page - 1) * options.filter.limit))
 
     const [rows] = await pgCore(TABLES.TODO)
       .where((builder) => {
-        condition(builder, where, filter.search)
+        condition(builder, options?.where, options?.filter?.search)
       })
       .count(column[0])
 
     return mappingSuccess(lang.__('get.success'), {
-      result: manipulateDate(result),
+      result,
       count: rows?.count
     })
   } catch (error) {

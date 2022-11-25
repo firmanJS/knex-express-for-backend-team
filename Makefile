@@ -24,6 +24,10 @@ docker-coverage:
 	docker-compose -f $(compose-file) exec knex-express-template yarn coverage
 docker-down:
 	docker-compose -f $(compose-file) down
+docker-top:
+	docker-compose -f $(compose-file) top
+image-pull:
+	docker-compose -f $(compose-file) pull
 docker-migrate:
 	docker-compose -f $(compose-file) exec knex-express-template knex migrate:latest --cwd=src
 docker-migrate-specific:
@@ -40,7 +44,3 @@ docker-seed:
 	docker-compose -f $(compose-file) exec knex-express-template knex seed:run --cwd=src
 docker-seed-specific:
 	docker-compose -f $(compose-file) exec knex-express-template knex seed:run --specific=$(seed-name) --cwd=src
-docker-top:
-	docker-compose -f $(compose-file) top
-image-pull:
-	docker-compose -f $(compose-file) pull

@@ -7,7 +7,7 @@ const queryHttp = (req) => ({
 })
 
 const bodyHttp = (req) => ({
-  ...req?.query
+  ...req?.body
 })
 
 const isNumeric = (str) => {

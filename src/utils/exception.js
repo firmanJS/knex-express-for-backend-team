@@ -89,15 +89,6 @@ const originResponse = (res, status, data) => {
 
 const baseResponse = (res, data) => res.status(data?.code ?? HTTP.OK).json(data?.data)
 
-const mappingSuccessPagination = (message, response = [], code = HTTP.OK, status = true) => ({
-  code,
-  data: {
-    status,
-    message,
-    response
-  }
-})
-
 const mappingSuccess = (message, data = [], code = HTTP.OK, status = true) => ({
   code,
   data: {
@@ -166,6 +157,5 @@ module.exports = {
   syntaxError,
   originResponse,
   mappingSuccess,
-  mappingError,
-  mappingSuccessPagination
+  mappingError
 }
