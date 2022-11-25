@@ -10,6 +10,8 @@ const COLUMN = [
   'id', 'name', 'description', ...CREATED
 ]
 const DEFAULT_SORT = [COLUMN[0], 'DESC']
+
+// function cloning
 const condition = (builder, where, search) => {
   if (search) {
     builder.where(where).whereILike('name', `%${search}%`).andWhere('deleted_at', null)
@@ -19,6 +21,17 @@ const condition = (builder, where, search) => {
   }
   return builder
 }
+
+const sql = (where, search = false) => {
+  const query = pgCore(TABLES.TODO)
+    .where((builder) => {
+      condition(builder, where, search)
+    })
+
+  return query
+}
+// end cloning
+
 /**
  *
  *
@@ -49,19 +62,13 @@ const create = async (req, payload) => {
  */
 const get = async (req, options, column = COLUMN) => {
   try {
-    const result = await pgCore(TABLES.TODO).select(column)
-      .where((builder) => {
-        condition(builder, options?.where, options?.filter?.search)
-      })
+    const result = await sql(options?.where, options?.filter?.search).clone()
+      .select(column)
       .orderBy(options?.order)
       .limit(options?.filter?.limit)
       .offset(((options.filter.page - 1) * options.filter.limit))
 
-    const [rows] = await pgCore(TABLES.TODO)
-      .where((builder) => {
-        condition(builder, options?.where, options?.filter?.search)
-      })
-      .count(column[0])
+    const [rows] = await sql(options?.where, options?.filter?.search).clone().count(column[0])
 
     return mappingSuccess(lang.__('get.success'), {
       result,
