@@ -95,40 +95,40 @@ const raw = async (query) => {
   return result
 }
 
-const checkSameValueinDb = async (table, where, name, message) => {
-  if (where) {
-    const result = await fetchByParam(table, where, [[name]])
+const checkSameValueinDb = async (table, options) => {
+  if (options?.where) {
+    const result = await fetchByParam(table, options?.where, [[options?.name]])
     if (result) {
-      throw new Error(message)
+      throw new Error(options?.message)
     }
   }
 }
 
-const checkSameValueinDbUpdate = async (table, where, column, name, message) => {
-  const result = await fetchByParam(table, where, column)
-  const id = result?.[column]
-  if (id && +id !== +name) {
-    throw new Error(message)
+const checkSameValueinDbUpdate = async (table, options) => {
+  const result = await fetchByParam(table, options?.where, options?.column)
+  const id = result?.[options?.column]
+  if (id && +id !== +options.name) {
+    throw new Error(options?.message)
   }
 }
 
-const checkSameValueinDbUpdateUuid = async (table, where, column, name, message) => {
-  const result = await fetchByParam(table, where, column)
-  const id = result?.[column]
-  if (id && id !== name) {
-    throw new Error(message)
+const checkSameValueinDbUpdateUuid = async (table, options) => {
+  const result = await fetchByParam(table, options?.where, options?.column)
+  const id = result?.[options?.column]
+  if (id && id !== options?.name) {
+    throw new Error(options?.message)
   }
 }
 
-const checkSameValue = async (table, where, column, value, message, flag) => {
-  let result = pgCore(table).where(where).count()
-  if (flag === 'update') {
-    result.whereNot({ [column]: value })
+const checkSameValue = async (table, options) => {
+  let result = pgCore(table).where(options?.where).count()
+  if (options?.flag === 'update') {
+    result.whereNot({ [options?.column]: options?.value })
   }
   result = await result;
 
   if (Number(result[0].count) > 0) {
-    throw new Error(message)
+    throw new Error(options?.message)
   }
 }
 

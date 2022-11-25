@@ -3,6 +3,7 @@ const {
   store, fetch, fetchByParam, update, softDelete
 } = require('./handler')
 const { postValidation, putValidation } = require('./validation')
+const { idMustBeUuid } = require('../../middlewares')
 
 const router = express.Router()
 
@@ -11,8 +12,8 @@ const router = express.Router()
 */
 router.post('/', postValidation, store)
 router.get('/', fetch)
-router.get('/:id', fetchByParam)
-router.put('/:id', putValidation, update)
-router.delete('/:id', softDelete)
+router.get('/:id', idMustBeUuid, fetchByParam)
+router.put('/:id', idMustBeUuid, putValidation, update)
+router.delete('/:id', idMustBeUuid, softDelete)
 
 module.exports = router

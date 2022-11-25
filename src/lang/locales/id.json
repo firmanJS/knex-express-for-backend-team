@@ -31,6 +31,7 @@
 	"validator.uuid": "{{field}} harus berupa uuid v4",
 	"validator.required": "{{field}} harus di isi",
 	"validator.string": "{{field}} harus bertipe string",
+	"validator.uuid": "{{field}} harus bertipe uuid v4",
 	"validator.email": "inputan email tidak valid",
 	"validator.password": "inputan password harus mengandung 1 Kapital, 1 huruf kecil, 1 angka, 1 simbol dan minimal 8 karakter",
 	"validator.num": "{{field}} harus bertipe angka",
@@ -51,5 +52,5 @@
 	"knex.password": "Mohon cek kembali password / username basis data anda",
 	"knex.host": "Mohon cek kembali host basis data anda",
 	"knex.select": "Periksa kembali query anda atau nama table anda",
-	"data.exist": "data.exist"
+	"data.exist": "{{msg}} sudah ada di database"
 }

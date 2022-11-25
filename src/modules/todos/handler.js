@@ -31,7 +31,8 @@ const fetch = async (req, res) => {
 
 const fetchByParam = async (req, res) => {
   const where = paramsHttp(req)
-  const result = await repository.getByParam(where)
+  const options = { where }
+  const result = await repository.getByParam(req, options)
   return baseResponse(res, result)
 }
 

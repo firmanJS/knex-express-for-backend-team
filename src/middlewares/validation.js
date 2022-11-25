@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator')
+const { validationResult, param } = require('express-validator')
 const { mappingError, baseResponse } = require('../utils')
 const { lang } = require('../lang')
 
@@ -34,15 +34,27 @@ const validateMiddleware = (req, res, next) => {
 
   if (!errors.isEmpty()) {
     const catchMessage = errors.array().map((err) => err.msg.split(' '))
-    console.error('error validateMiddleware', errors);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('error validateMiddleware', errors);
+    }
     const message = checkMessageError(catchMessage, errors)
     message.type_error = 'validation'
-    return baseResponse(res, mappingError(message))
+    return baseResponse(res, mappingError(req, message))
   }
 
   return next()
 }
 
+const idMustBeUuid = [
+  param('id')
+    .isUUID(4)
+    .withMessage(lang.__('validator.uuid', { field: 'id' }))
+    .notEmpty()
+    .withMessage(lang.__('validator.required', { field: 'id' })),
+  (req, res, next) => { validateMiddleware(req, res, next) }
+]
+
 module.exports = {
-  validateMiddleware
+  validateMiddleware,
+  idMustBeUuid
 }

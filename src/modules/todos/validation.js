@@ -13,11 +13,14 @@ const postValidation = [
     .notEmpty()
     .withMessage(lang.__('validator.required', { field: 'Name' }))
     .custom(async (value) => {
-      const msg = `Name ${value}`
-      const condition = {
-        name: value
+      const options = {
+        where: {
+          name: value
+        },
+        name: 'name',
+        message: lang.__('data.exist', { msg: `Name ${value}` })
       }
-      await checkSameValueinDb(TABLES.TODO, condition, 'name', lang.__('data.exist', { msg }))
+      await checkSameValueinDb(TABLES.TODO, options)
     }),
   (req, res, next) => { validateMiddleware(req, res, next) }
 ]

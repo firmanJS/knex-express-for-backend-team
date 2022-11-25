@@ -22,9 +22,9 @@ const condition = (builder, where, search) => {
 /**
  *
  *
- * @param {*} req
- * @param {*} payload
- * @return {*}
+ * @param {object} req
+ * @param {object} payload
+ * @return {object}
  */
 const create = async (req, payload) => {
   const trx = await pgCore.transaction();
@@ -42,10 +42,10 @@ const create = async (req, payload) => {
 /**
  *
  *
- * @param {*} req
- * @param {*} where
- * @param {*} filter
- * @return {*}
+ * @param {object} req
+ * @param {object} options
+ * @param {array} column
+ * @return {array of object}
  */
 const get = async (req, options, column = COLUMN) => {
   try {
@@ -80,14 +80,14 @@ const get = async (req, options, column = COLUMN) => {
  * @param {*} column
  * @return {*}
  */
-const getByParam = async (req, where, column = COLUMN) => {
+const getByParam = async (req, options, column = COLUMN) => {
   try {
-    where.deleted_at = null
-    const result = await Repo.fetchByParam(TABLES.TODO, where, column)
+    options.where.deleted_at = null
+    const result = await Repo.fetchByParam(TABLES.TODO, options.where, column)
     if (result) {
       return mappingSuccess(lang.__('get.success'), result)
     }
-    return mappingSuccess(lang.__('not.found.id', { id: where?.id }), result)
+    return mappingSuccess(lang.__('not.found.id', { id: options.where?.id }), result)
   } catch (error) {
     error.path_filename = __filename
     return mappingError(req, error)
