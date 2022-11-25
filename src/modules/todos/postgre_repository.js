@@ -108,19 +108,19 @@ const getByParam = async (req, options, column = COLUMN) => {
  * @param {*} payload
  * @return {*}
  */
-const update = async (req, where, payload, name = '') => {
+const update = async (req, options) => {
   try {
     let message = ''
-    if (payload.type_method === 'update') {
-      message = lang.__('updated.success', { id: where?.id })
+    if (options?.type_method === 'update') {
+      message = lang.__('updated.success', { id: options?.where?.id })
     } else {
-      message = lang.__('archive.success', { id: where?.id })
+      message = lang.__('archive.success', { id: options?.where?.id })
     }
-    const result = await Repo.updated(TABLES.TODO, where, payload, COLUMN[0], name)
+    const result = await Repo.updated(TABLES.TODO, COLUMN[0], options)
     if (result) {
       return mappingSuccess(message, result)
     }
-    return mappingSuccess(lang.__('not.found.id', { id: where?.id }), result)
+    return mappingSuccess(lang.__('not.found.id', { id: options?.where?.id }), result)
   } catch (error) {
     error.path_filename = __filename
     return mappingError(req, error)

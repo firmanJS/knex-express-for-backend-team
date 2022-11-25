@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable max-len */
 const { pgCore } = require('../../config/database')
 const { todayFormat } = require('../../utils')
@@ -34,8 +36,7 @@ const insertTrx = async (table, payload, options) => {
  * @return {*}
  */
 const fetchByParam = async (table, where, column = null) => {
-  const model = pgCore(table).where(where)
-  const [result] = column !== null ? await model.clone().where(where).select(column) : await model.clone().where(where)
+  const [result] = await pgCore(table).where(where).select(column)
   return result
 }
 
@@ -60,16 +61,18 @@ const fetchByParamPublic = async (table, where, column, order, limit = 1) => {
  * @param {*} payload
  * @return {*}
  */
-const updated = async (table, where, payload, column, name) => {
-  if (payload?.type_method === 'soft-delete') {
-    const rows = await fetchByParam(table, where, [name])
+const updated = async (table, column, options) => {
+  if (options?.type_method === 'soft-delete') {
+    options.payload.deleted_at = new Date().toISOString()
+    const rows = await fetchByParam(table, options?.where, options?.column)
     const format = todayFormat('YYYYMMDDhmmss')
-    if (rows?.[name]) {
-      payload[name] = `archived-${format}-${rows[name]}`
+    if (rows) {
+      for (const prop in options?.column) {
+        options.payload[options?.column[prop]] = `archived-${format}-${rows[options?.column[prop]]}`
+      }
     }
   }
-  delete payload?.type_method
-  const [result] = await pgCore(table).where(where).update(payload).returning(column)
+  const [result] = await pgCore(table).where(options?.where).update(options?.payload).returning(column)
 
   return result
 }
