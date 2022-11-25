@@ -14,6 +14,20 @@ const {
   dynamicOrder, bodyHttp
 } = require('../../utils')
 
+const optionsPayload = (req, type_method) => {
+  const where = paramsHttp(req)
+  const payload = bodyHttp(req)
+  where.deleted_at = null
+  const options = {
+    where,
+    type_method,
+    column: ['name'],
+    payload
+  }
+
+  return options
+}
+
 const store = async (req, res) => {
   const payload = bodyHttp(req)
   const result = await repository.create(req, payload)
@@ -37,29 +51,13 @@ const fetchByParam = async (req, res) => {
 }
 
 const update = async (req, res) => {
-  const where = paramsHttp(req)
-  const payload = bodyHttp(req)
-  where.deleted_at = null
-  const options = {
-    where,
-    type_method: 'update',
-    column: ['name'],
-    payload
-  }
+  const options = optionsPayload(req, 'update')
   const result = await repository.update(req, options)
   return baseResponse(res, result)
 }
 
 const softDelete = async (req, res) => {
-  const where = paramsHttp(req)
-  const payload = bodyHttp(req)
-  where.deleted_at = null
-  const options = {
-    where,
-    type_method: 'soft-delete',
-    column: ['name'],
-    payload
-  }
+  const options = optionsPayload(req, 'soft-delete')
   const result = await repository.update(req, options)
   return baseResponse(res, result)
 }
