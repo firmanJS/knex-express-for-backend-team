@@ -62,7 +62,7 @@ const fetchByParamPublic = async (table, where, column, order, limit = 1) => {
  * @return {*}
  */
 const updated = async (table, column, options) => {
-  if (options?.type_method === 'soft-delete') {
+  const condition = async () => {
     options.payload.deleted_at = new Date().toISOString()
     const rows = await fetchByParam(table, options?.where, options?.column)
     const format = todayFormat('YYYYMMDDhmmss')
@@ -71,6 +71,9 @@ const updated = async (table, column, options) => {
         options.payload[options?.column[prop]] = `archived-${format}-${rows[options?.column[prop]]}`
       }
     }
+  }
+  if (options?.type_method === 'soft-delete') {
+    await condition()
   }
   const [result] = await pgCore(table).where(options?.where).update(options?.payload).returning(column)
 
