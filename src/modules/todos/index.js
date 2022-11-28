@@ -1,8 +1,8 @@
 const express = require('express')
 const {
   store, fetch, fetchByParam, update
-} = require('./handler')
-const { postValidation, putValidation } = require('./validation')
+} = require('./todo_handler')
+const { postValidation, putValidation } = require('./todo_validation')
 const { idMustBeUuid } = require('../../middlewares')
 
 const router = express.Router()

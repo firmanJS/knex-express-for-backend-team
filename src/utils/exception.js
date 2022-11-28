@@ -2,7 +2,7 @@ const { HTTP, PAGE, LIMIT } = require('./constant')
 const { lang } = require('../lang')
 
 const notFoundHandler = (req, res) => {
-  const message = `Route : ${req.url} ${lang.__('not.found')}.`
+  const message = `Route : ${req.url} ${lang.__('notfound')}.`
   const err = new Error(message)
   res.status(HTTP.OK).json({
     error: err.toString(),
@@ -50,11 +50,18 @@ const syntaxError = (err, req, res, next) => {
 }
 
 const paginationResponse = (req, res, rows) => {
+  const options = { status: true, message: lang.__('get.success'), code: HTTP.OK }
+  let { status, message, code } = options
+  if (Number(rows?.data?.data?.count) === 0) {
+    status = false
+    message = lang.__('notfound')
+    code = HTTP.NOT_FOUND
+  }
   const limitPerPage = req.query?.limit || LIMIT
   const countTotal = Number(rows?.data?.data?.count) || +LIMIT
-  res.status(HTTP.OK).json({
-    message: lang.__('get.success'),
-    status: true,
+  res.status(code).json({
+    message,
+    status,
     data: rows?.data?.data?.result || [],
     _meta: {
       page: Number(req.query?.page) || +PAGE,
