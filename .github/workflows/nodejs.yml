@@ -24,7 +24,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
   build:
-    needs: innstall
+    needs: install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -43,7 +43,7 @@ jobs:
       #     echo CC_TEST_REPORTER_ID=${{ secrets.CC_TEST_REPORTER_ID }} >> .env
 
   coverage:
-    needs: [ create-env ]
+    needs: [ build ]
     name: coverage
     runs-on: ubuntu-latest
     steps:
