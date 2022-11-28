@@ -56,6 +56,9 @@ knex seed:run --cwd=src
 # Copy enviroment variables from .env.sample to .env
 cp .env.sample .env
 
+# Copy Makefile sesuai environment
+cp make/Makefile.dev Makefile
+
 # Build application
 docker-compose -f docker-compose-dev.yml up --build --remove-orphans --force-recreate
 
@@ -87,6 +90,9 @@ docker-compose -f docker-compose-dev.yml exec knex-express-template knex seed:ru
 ```bash
 # Copy enviroment variables from .env.sample to .env
 cp .env.sample .env
+
+# Copy Makefile sesuai environment
+cp make/Makefile.dev Makefile
 
 # Build application
 make docker-build
