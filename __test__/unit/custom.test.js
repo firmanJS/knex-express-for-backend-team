@@ -3,10 +3,7 @@ const custom = require('../../src/utils/custom')
 
 describe('all custom function testing', () => {
   it('is numeric function', () => {
-    expect(custom.isNumeric('2')).toBe(true)
-  })
-  it('is numeric function', () => {
-    expect(custom.isNumeric(2)).toBe(false)
+    expect(custom.isNumeric('2')).toBeTruthy()
   })
   it('is slug function', () => {
     expect(custom.convertToSlug('testing data')).toBe('testing-data')
