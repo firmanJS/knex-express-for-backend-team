@@ -68,7 +68,6 @@ const fetchByParamPublic = async (table, where, column, order, limit = 1) => {
 const updated = async (table, column, options) => {
   if (options?.type_method === 'soft-delete') {
     const rows = await fetchByParam(table, options?.where, options?.column)
-    options.payload.deleted_at = new Date().toISOString()
     if (rows) {
       for (const prop in options?.column) {
         options.payload[options?.column[prop]] = `archived-${format}-${rows[options?.column[prop]]}`
