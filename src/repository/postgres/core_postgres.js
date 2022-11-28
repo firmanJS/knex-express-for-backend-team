@@ -3,6 +3,9 @@
 /* eslint-disable max-len */
 const { pgCore } = require('../../config/database')
 const { todayFormat } = require('../../utils')
+
+const format = todayFormat('YYYYMMDDhmmss')
+
 /**
  *
  *
@@ -65,7 +68,6 @@ const updated = async (table, column, options) => {
   const condition = async () => {
     options.payload.deleted_at = new Date().toISOString()
     const rows = await fetchByParam(table, options?.where, options?.column)
-    const format = todayFormat('YYYYMMDDhmmss')
     if (rows) {
       for (const prop in options?.column) {
         options.payload[options?.column[prop]] = `archived-${format}-${rows[options?.column[prop]]}`
