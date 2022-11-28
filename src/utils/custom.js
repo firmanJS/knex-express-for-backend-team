@@ -45,14 +45,20 @@ const ucword = (str = '') => {
   }
 }
 
-const formatCurrency = (currency, language = 'id-ID', format = 'IDR') => {
+const formatCurrency = (currency, withRP = true, options = {
+  language: 'id-ID', format: 'IDR'
+}) => {
   try {
-    const moneyFormat = Intl.NumberFormat(language, {
+    const moneyFormat = Intl.NumberFormat(options?.language, {
       style: 'currency',
-      currency: format
+      currency: options?.format
     });
 
-    return moneyFormat.format(currency);
+    if (withRP === true) {
+      return moneyFormat.format(currency)
+    }
+    const removeRp = moneyFormat.format(currency).replaceAll('Rp', '')
+    return removeRp.replace(' ', '')
   } catch (error) {
     return error
   }
