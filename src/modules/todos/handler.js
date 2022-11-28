@@ -11,7 +11,7 @@
 const repository = require('./postgre_repository')
 const {
   baseResponse, paginationResponse, paramsHttp, dynamicFilter, paging,
-  dynamicOrder, bodyHttp
+  dynamicOrder, bodyHttp, METHOD
 } = require('../../utils')
 
 const optionsPayload = (req, type_method) => {
@@ -51,13 +51,13 @@ const fetchByParam = async (req, res) => {
 }
 
 const update = async (req, res) => {
-  const options = optionsPayload(req, 'update')
-  const result = await repository.update(req, options)
-  return baseResponse(res, result)
-}
-
-const softDelete = async (req, res) => {
-  const options = optionsPayload(req, 'soft-delete')
+  let type = ''
+  if (req?.method === METHOD.DEL) {
+    type = 'soft-delete'
+  } else {
+    type = 'update'
+  }
+  const options = optionsPayload(req, type)
   const result = await repository.update(req, options)
   return baseResponse(res, result)
 }
@@ -66,6 +66,5 @@ module.exports = {
   store,
   fetch,
   fetchByParam,
-  update,
-  softDelete
+  update
 }

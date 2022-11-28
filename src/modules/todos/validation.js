@@ -31,8 +31,13 @@ const putValidation = [
     .withMessage(lang.__('validator.string', { field: 'Name' }))
     .optional(true)
     .custom(async (value, { req }) => {
-      const msg = `Name ${value}`
-      await checkSameValueinDbUpdate(TABLES.TODO, { name: value }, 'id', req?.params?.id, lang.__('data.exist', { msg }))
+      const options = {
+        where: { name: value },
+        column: 'id',
+        name: req?.params?.id,
+        message: lang.__('data.exist', { msg: `Name ${value}` })
+      }
+      await checkSameValueinDbUpdate(TABLES.TODO, options)
     }),
   (req, res, next) => { validateMiddleware(req, res, next) }
 ]

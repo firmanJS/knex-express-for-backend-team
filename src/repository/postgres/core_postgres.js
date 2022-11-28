@@ -126,18 +126,6 @@ const checkSameValueinDbUpdateUuid = async (table, options) => {
   }
 }
 
-const checkSameValue = async (table, options) => {
-  let result = pgCore(table).where(options?.where).count()
-  if (options?.flag === 'update') {
-    result.whereNot({ [options?.column]: options?.value })
-  }
-  result = await result;
-
-  if (Number(result[0].count) > 0) {
-    throw new Error(options?.message)
-  }
-}
-
 module.exports = {
   insert,
   updated,
@@ -148,6 +136,5 @@ module.exports = {
   checkSameValueinDbUpdateUuid,
   fetchByParamPublic,
   raw,
-  checkSameValue,
   insertTrx
 }
