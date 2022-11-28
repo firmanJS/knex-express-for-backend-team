@@ -10,7 +10,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  install:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,8 +23,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-  create-env:
-    needs: build
+  build:
+    needs: innstall
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -33,14 +33,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Create env file
-        run: |
-          touch .env
-          echo PORT=${{ secrets.PORT }} >> .env
-          echo TZ=${{ secrets.TZ }} >> .env
-          echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
-          echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
-          echo CC_TEST_REPORTER_ID=${{ secrets.CC_TEST_REPORTER_ID }} >> .env
+      # - name: Create env file
+      #   run: |
+      #     touch .env
+      #     echo PORT=${{ secrets.PORT }} >> .env
+      #     echo TZ=${{ secrets.TZ }} >> .env
+      #     echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+      #     echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
+      #     echo CC_TEST_REPORTER_ID=${{ secrets.CC_TEST_REPORTER_ID }} >> .env
+
   coverage:
     needs: [ create-env ]
     name: coverage
