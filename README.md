@@ -25,6 +25,9 @@ running application three methods manually, using docker or via Makefile
 # Copy enviroment variables from .env.sample to .env
 cp .env.sample .env
 
+# Copy Makefile sesuai environment
+cp make/Makefile.dev Makefile
+
 # Install package via npm or yarn
 npm install
 
