@@ -82,10 +82,10 @@ const get = async (req, options, column = COLUMN) => {
 /**
  *
  *
- * @param {*} req
- * @param {*} where
- * @param {*} column
- * @return {*}
+ * @param {object} req
+ * @param {object} options
+ * @param {array} column
+ * @return {object}
  */
 const getByParam = async (req, options, column = COLUMN) => {
   try {
@@ -94,7 +94,7 @@ const getByParam = async (req, options, column = COLUMN) => {
     if (result) {
       return mappingSuccess(lang.__('get.success'), result)
     }
-    return mappingSuccess(lang.__('not.found.id', { id: options.where?.id }), result)
+    return mappingSuccess(lang.__('notfound.id', { id: options.where?.id }), result, 404, false)
   } catch (error) {
     error.path_filename = __filename
     return mappingError(req, error)
@@ -103,10 +103,9 @@ const getByParam = async (req, options, column = COLUMN) => {
 /**
  *
  *
- * @param {*} req
- * @param {*} where
- * @param {*} payload
- * @return {*}
+ * @param {object} req
+ * @param {object} options
+ * @return {object}
  */
 const update = async (req, options) => {
   try {
@@ -120,7 +119,7 @@ const update = async (req, options) => {
     if (result) {
       return mappingSuccess(message, result)
     }
-    return mappingSuccess(lang.__('not.found.id', { id: options?.where?.id }), result)
+    return mappingSuccess(lang.__('notfound.id', { id: options?.where?.id }), result, 404, false)
   } catch (error) {
     error.path_filename = __filename
     return mappingError(req, error)

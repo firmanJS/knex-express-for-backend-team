@@ -8,7 +8,7 @@
  * @return {JSON}
 */
 
-const repository = require('./postgre_repository')
+const repository = require('./todo_repository')
 const {
   baseResponse, paginationResponse, paramsHttp, dynamicFilter, paging,
   dynamicOrder, bodyHttp, METHOD

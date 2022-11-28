@@ -11,7 +11,7 @@ const format = todayFormat('YYYYMMDDhmmss')
  *
  * @param {*} table
  * @param {*} payload
- * @param {*} options
+ * @param {object} options
  * @return {*}
  */
 const insert = async (table, payload, options) => {
@@ -23,7 +23,7 @@ const insert = async (table, payload, options) => {
  *
  * @param {*} table
  * @param {*} payload
- * @param {*} options
+ * @param {object} options
  * @return {*}
  */
 const insertTrx = async (table, payload, options) => {
@@ -61,21 +61,19 @@ const fetchByParamPublic = async (table, where, column, order, limit = 1) => {
  *
  *
  * @param {*} where
- * @param {*} payload
+ * @param {array} column
+ * @param {object} options
  * @return {*}
  */
 const updated = async (table, column, options) => {
-  const condition = async (rows) => {
+  if (options?.type_method === 'soft-delete') {
+    const rows = await fetchByParam(table, options?.where, options?.column)
+    options.payload.deleted_at = new Date().toISOString()
     if (rows) {
       for (const prop in options?.column) {
         options.payload[options?.column[prop]] = `archived-${format}-${rows[options?.column[prop]]}`
       }
     }
-  }
-  if (options?.type_method === 'soft-delete') {
-    const rows = await fetchByParam(table, options?.where, options?.column)
-    options.payload.deleted_at = new Date().toISOString()
-    await condition(rows)
   }
   const [result] = await pgCore(table).where(options?.where).update(options?.payload).returning(column)
 
@@ -84,7 +82,9 @@ const updated = async (table, column, options) => {
 /**
  *
  *
- * @param {*} where
+ * @param {string} table
+ * @param {object} where
+ * @param {array} column
  * @return {*}
  */
 const deletePermanently = async (table, where, column) => {
