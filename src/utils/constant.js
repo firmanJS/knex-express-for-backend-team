@@ -19,6 +19,9 @@ module.exports = {
     DEV: '[:date[clf]] :remote-addr :remote-user \x1b[36m:method \x1b[36m:url \x1b[33m:status \x1b[32m:response-time\x1b[36m(ms)\x1b[0m',
     PROD: '[:date[clf]] :remote-addr :remote-user :method :url :status :response-time(ms)'
   },
+  ENUM: {
+    JABATAN: ['hr', 'developer', 'pm']
+  },
   METHOD: {
     DEL: 'DELETE',
     PUT: 'PUT',
@@ -27,7 +30,8 @@ module.exports = {
   },
   MODEL_PROPERTIES: {
     TABLES: {
-      TODO: 'mst_todo'
+      TODO: 'mst_todo',
+      STAFF: 'mst_staff'
     },
     PRIMARY_KEY: {
       ID: 'id'
