@@ -26,7 +26,7 @@ running application three methods manually, using docker or via Makefile
 cp .env.sample .env
 
 # Copy Makefile sesuai environment
-cp make/Makefile.dev Makefile
+cp Makefile.sample Makefile
 
 # Install package via npm or yarn
 npm install
@@ -57,7 +57,7 @@ knex seed:run --cwd=src
 cp .env.sample .env
 
 # Copy Makefile sesuai environment
-cp make/Makefile.dev Makefile
+cp Makefile.sample Makefile
 
 # Build application
 docker-compose -f docker-compose-dev.yml up --build --remove-orphans --force-recreate
@@ -92,7 +92,7 @@ docker-compose -f docker-compose-dev.yml exec knex-express-template knex seed:ru
 cp .env.sample .env
 
 # Copy Makefile sesuai environment
-cp make/Makefile.dev Makefile
+cp Makefile.sample Makefile
 
 # Build application
 make docker-build
