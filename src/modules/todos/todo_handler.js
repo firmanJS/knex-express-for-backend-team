@@ -10,10 +10,7 @@
 
 const repository = require('./todo_repository')
 const service = require('../../service')
-const {
-  baseResponse, paginationResponse, paramsHttp, dynamicFilter, paging,
-  dynamicOrder, bodyHttp, METHOD
-} = require('../../utils')
+const { paramsHttp, bodyHttp, METHOD } = require('../../utils')
 
 const optionsPayload = (req, type_method) => {
   const where = paramsHttp(req)
@@ -31,14 +28,7 @@ const optionsPayload = (req, type_method) => {
 
 const store = async (req, res) => service.store({ req, res, repository })
 const fetch = async (req, res) => service.fetch({ req, res, repository })
-
-const fetchByParam = async (req, res) => {
-  const where = paramsHttp(req)
-  const options = { where }
-  const result = await repository.getByParam(req, options)
-  return baseResponse(res, result)
-}
-
+const fetchByParam = async (req, res) => service.fetchByParam({ req, res, repository })
 const update = async (req, res) => {
   let type = ''
   if (req?.method === METHOD.DEL) {
@@ -46,9 +36,10 @@ const update = async (req, res) => {
   } else {
     type = 'update'
   }
-  const options = optionsPayload(req, type)
-  const result = await repository.update(req, options)
-  return baseResponse(res, result)
+  const condition = optionsPayload(req, type)
+  return service.update({
+    req, res, repository, condition
+  })
 }
 
 module.exports = {
