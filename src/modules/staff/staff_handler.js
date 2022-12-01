@@ -8,6 +8,7 @@
  * @return {JSON}
 */
 
+const service = require('../../service')
 const repository = require('./staff_repository')
 const {
   baseResponse, paginationResponse, paramsHttp, dynamicFilter, paging,
@@ -28,20 +29,8 @@ const optionsPayload = (req, type_method) => {
   return options
 }
 
-const store = async (req, res) => {
-  const payload = bodyHttp(req)
-  const result = await repository.create(req, payload)
-  return baseResponse(res, result)
-}
-
-const fetch = async (req, res) => {
-  const where = dynamicFilter(req, repository.COLUMN)
-  const filter = paging(req, repository.DEFAULT_SORT)
-  const order = dynamicOrder(filter)
-  const options = { where, order, filter }
-  const result = await repository.get(req, options)
-  return paginationResponse(req, res, result)
-}
+const store = async (req, res) => service.store({ req, res, repository })
+const fetch = async (req, res) => service.fetch({ req, res, repository })
 
 const fetchByParam = async (req, res) => {
   const where = paramsHttp(req)
