@@ -10,22 +10,8 @@
 
 const {
   baseResponse, paginationResponse, paramsHttp, dynamicFilter, paging,
-  dynamicOrder, bodyHttp, METHOD
+  dynamicOrder, bodyHttp
 } = require('../utils')
-
-// const optionsPayload = (req, type_method) => {
-//   const where = paramsHttp(req)
-//   const payload = bodyHttp(req)
-//   where.deleted_at = null
-//   const options = {
-//     where,
-//     type_method,
-//     column: ['name', 'email'],
-//     payload
-//   }
-
-//   return options
-// }
 
 const store = async (options) => {
   const payload = bodyHttp(options?.req)
@@ -42,7 +28,20 @@ const fetch = async (options) => {
   return paginationResponse(options?.req, options?.res, result)
 }
 
+const fetchByParam = async (options) => {
+  const where = paramsHttp(options?.req)
+  const condition = { where }
+  const result = await options?.repository.getByParam(options?.req, condition)
+  return baseResponse(options?.res, result)
+}
+
+const update = async (options) => {
+  const result = await options?.repository.update(options?.req, options?.condition)
+  return baseResponse(options?.res, result)
+}
 module.exports = {
   store,
-  fetch
+  fetch,
+  fetchByParam,
+  update
 }
