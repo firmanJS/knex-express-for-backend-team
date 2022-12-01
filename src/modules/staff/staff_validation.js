@@ -2,7 +2,7 @@ const { check } = require('express-validator')
 const { validateMiddleware } = require('../../middlewares')
 const { lang } = require('../../lang')
 const { MODEL_PROPERTIES: { TABLES }, ENUM } = require('../../utils')
-const { checkSameValueinDb, checkSameValueinDbUpdate } = require('../../repository/postgres/core_postgres')
+const { checkSameValueinDb, checkSameValueinDbUpdateUuid } = require('../../repository/postgres/core_postgres')
 /* RULE
   ** More Documentation in here https://express-validator.github.io/docs/
 */
@@ -57,7 +57,7 @@ const putValidation = [
         name: req?.params?.id,
         message: lang.__('data.exist', { msg: `Name ${value}` })
       }
-      await checkSameValueinDbUpdate(TABLES.STAFF, options)
+      await checkSameValueinDbUpdateUuid(TABLES.STAFF, options)
     }),
   check('email')
     .optional(true)
@@ -72,7 +72,7 @@ const putValidation = [
         name: req?.params?.id,
         message: lang.__('data.exist', { msg: `Email ${value}` })
       }
-      await checkSameValueinDbUpdate(TABLES.STAFF, options)
+      await checkSameValueinDbUpdateUuid(TABLES.STAFF, options)
     }),
   (req, res, next) => { validateMiddleware(req, res, next) }
 ]
