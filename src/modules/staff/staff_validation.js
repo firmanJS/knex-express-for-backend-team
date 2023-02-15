@@ -14,13 +14,14 @@ const postValidation = [
     .withMessage(lang.__('validator.required', { field: 'Name' }))
     .custom(async (value) => {
       const options = {
+        table: TABLES.STAFF,
         where: {
           name: value
         },
         name: 'name',
         message: lang.__('data.exist', { msg: `Name ${value}` })
       }
-      await checkSameValueinDb(TABLES.STAFF, options)
+      await checkSameValueinDb(options)
     }),
   check('email')
     .isEmail()
@@ -29,13 +30,14 @@ const postValidation = [
     .withMessage(lang.__('validator.required', { field: 'Email' }))
     .custom(async (value) => {
       const options = {
+        table: TABLES.STAFF,
         where: {
           email: value
         },
         name: 'email',
         message: lang.__('data.exist', { msg: `Email ${value}` })
       }
-      await checkSameValueinDb(TABLES.STAFF, options)
+      await checkSameValueinDb(options)
     }),
   check('jabatan')
     .isIn(ENUM.JABATAN)
@@ -55,9 +57,10 @@ const putValidation = [
         where: { name: value },
         column: 'id',
         name: req?.params?.id,
-        message: lang.__('data.exist', { msg: `Name ${value}` })
+        message: lang.__('data.exist', { msg: `Name ${value}` }),
+        table: TABLES.STAFF
       }
-      await checkSameValueinDbUpdateUuid(TABLES.STAFF, options)
+      await checkSameValueinDbUpdateUuid(options)
     }),
   check('email')
     .optional(true)
@@ -67,12 +70,13 @@ const putValidation = [
     .withMessage(lang.__('validator.required', { field: 'Email' }))
     .custom(async (value, { req }) => {
       const options = {
+        table: TABLES.STAFF,
         where: { email: value },
         column: 'id',
         name: req?.params?.id,
         message: lang.__('data.exist', { msg: `Email ${value}` })
       }
-      await checkSameValueinDbUpdateUuid(TABLES.STAFF, options)
+      await checkSameValueinDbUpdateUuid(options)
     }),
   (req, res, next) => { validateMiddleware(req, res, next) }
 ]

@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 const { LIMIT, PAGE } = require('./constant');
 
-const dynamicFilter = (req, column = []) => {
+exports.dynamicFilter = (req, column = []) => {
   const push = {};
   const asArray = Object.entries(req.query);
   const filtered = asArray.filter(([key]) => column.includes(key));
@@ -16,7 +16,7 @@ const dynamicFilter = (req, column = []) => {
   return push;
 };
 
-const paging = (req, defaultOrder = []) => {
+exports.paging = (req, defaultOrder = []) => {
   const direction = req.query.direction || defaultOrder[0];
   const order = req.query.order || defaultOrder[1];
   const page = +req.query.page || PAGE;
@@ -32,7 +32,7 @@ const paging = (req, defaultOrder = []) => {
   };
 };
 
-const dynamicFilterJoin = (req, column = []) => {
+exports.dynamicFilterJoin = (req, column = []) => {
   const request = Object.entries(req.query);
   const data = {};
 
@@ -45,7 +45,7 @@ const dynamicFilterJoin = (req, column = []) => {
   return data;
 };
 
-const dynamicOrder = (filter = {}) => {
+exports.dynamicOrder = (filter = {}) => {
   let order
   if (typeof filter.direction === 'string' && typeof filter.order === 'string') {
     order = [
@@ -63,10 +63,3 @@ const dynamicOrder = (filter = {}) => {
 
   return order
 }
-
-module.exports = {
-  paging,
-  dynamicFilter,
-  dynamicFilterJoin,
-  dynamicOrder
-};

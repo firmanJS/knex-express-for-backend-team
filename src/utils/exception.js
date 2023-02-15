@@ -135,10 +135,11 @@ const conditionCheck = (error, manipulate, message) => {
 exports.mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
   let { message, exception } = ['', '']
   const manipulate = error.toString().split(':')
-  message = conditionCheck(error, manipulate, message)
   console.error(`catch message ${error}`);
+  message = lang.__('error.db.transaction')
   if (process.env.NODE_ENV === 'development') {
     exception = error.toString()
+    message = conditionCheck(error, manipulate, message)
   }
   if (error?.type_error !== 'validation') {
     // sent alert
@@ -152,5 +153,11 @@ exports.mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
       exception,
       data: []
     }
+  }
+}
+
+exports.captureLog = (err) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.info('error validateMiddleware', err);
   }
 }

@@ -1,5 +1,5 @@
 const { validationResult, param } = require('express-validator')
-const { mappingError, baseResponse } = require('../utils')
+const { mappingError, baseResponse, captureLog } = require('../utils')
 const { lang } = require('../lang')
 
 const checkMessageError = (catchMessage, errors) => {
@@ -34,9 +34,7 @@ const validateMiddleware = (req, res, next) => {
 
   if (!errors.isEmpty()) {
     const catchMessage = errors.array().map((err) => err.msg.split(' '))
-    if (process.env.NODE_ENV === 'development') {
-      console.error('error validateMiddleware', errors);
-    }
+    captureLog(errors)
     const message = checkMessageError(catchMessage, errors)
     message.type_error = 'validation'
     return baseResponse(res, mappingError(req, message))

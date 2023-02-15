@@ -14,6 +14,7 @@
 	"error.db": "error di koneksi basis data, mohon cek kembali environment atau query anda",
 	"error.db.connection": "error di koneksi basis data, mohon cek environment",
 	"error.db.query": "Mohon periksa kembali query anda, kesalahan saat eksekusi query",
+	"error.db.transaction": "Kesalahan ketika melaukan insert data",
 	"get.id": "Data dengan id {{id}} berhasil di tampilkan",
 	"notfound": "Tidak di temukan",
 	"msg.notfound": "{{msg}} tidak di temukan",
