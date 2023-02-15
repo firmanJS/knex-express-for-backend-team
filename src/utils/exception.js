@@ -1,7 +1,7 @@
 const { HTTP, PAGE, LIMIT } = require('./constant')
 const { lang } = require('../lang')
 
-const notFoundHandler = (req, res) => {
+exports.notFoundHandler = (req, res) => {
   const message = `Route : ${req.url} ${lang.__('notfound')}.`
   const err = new Error(message)
   res.status(HTTP.OK).json({
@@ -11,7 +11,7 @@ const notFoundHandler = (req, res) => {
   })
 }
 
-const removeFavicon = (req, res, next) => {
+exports.removeFavicon = (req, res, next) => {
   if (req.url === '/favicon.ico') {
     res.writeHead(200, { 'Content-Type': 'image/x-icon' })
     res.end()
@@ -20,13 +20,13 @@ const removeFavicon = (req, res, next) => {
   }
 }
 
-const errorHandler = (_error, res) => res.status(HTTP.OK).json({
+exports.errorHandler = (_error, res) => res.status(HTTP.OK).json({
   status: true,
   message: lang.__('error.invalid.syntax'),
   data: [],
 })
 
-const syntaxError = (err, req, res, next) => {
+exports.syntaxError = (err, req, res, next) => {
   const result = {
     status: true,
     message: `syntax error ${err}`,
@@ -49,7 +49,7 @@ const syntaxError = (err, req, res, next) => {
   }
 }
 
-const paginationResponse = (req, res, rows) => {
+exports.paginationResponse = (req, res, rows) => {
   const options = { status: true, message: lang.__('get.success'), code: HTTP.OK }
   let { status, message, code } = options
   if (Number(rows?.data?.data?.count) === 0) {
@@ -73,7 +73,7 @@ const paginationResponse = (req, res, rows) => {
   })
 }
 
-const originResponse = (res, status, data) => {
+exports.originResponse = (res, status, data) => {
   let code
   switch (status) {
     case 'success':
@@ -94,9 +94,9 @@ const originResponse = (res, status, data) => {
   res.status(code).json(data)
 }
 
-const baseResponse = (res, data) => res.status(data?.code ?? HTTP.OK).json(data?.data)
+exports.baseResponse = (res, data) => res.status(data?.code ?? HTTP.OK).json(data?.data)
 
-const mappingSuccess = (message, data = [], code = HTTP.OK, status = true) => ({
+exports.mappingSuccess = (message, data = [], code = HTTP.OK, status = true) => ({
   code,
   data: {
     status,
@@ -132,7 +132,7 @@ const conditionCheck = (error, manipulate, message) => {
   return message
 }
 
-const mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
+exports.mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
   let { message, exception } = ['', '']
   const manipulate = error.toString().split(':')
   message = conditionCheck(error, manipulate, message)
@@ -153,16 +153,4 @@ const mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
       data: []
     }
   }
-}
-
-module.exports = {
-  notFoundHandler,
-  errorHandler,
-  baseResponse,
-  paginationResponse,
-  removeFavicon,
-  syntaxError,
-  originResponse,
-  mappingSuccess,
-  mappingError
 }

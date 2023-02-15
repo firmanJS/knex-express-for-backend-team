@@ -4,6 +4,7 @@ const { baseResponse, fullDateFormatIndo } = require('../utils')
 
 const router = express.Router()
 const { index } = require('../static')
+const { APP_ENV, APP_NAME } = require('../config')
 
 const getDurationInMilliseconds = (start = process.hrtime()) => {
   const NS_PER_SEC = 1e9
@@ -17,14 +18,14 @@ router.get('/', (req, res) => {
   baseResponse(res, {
     data: {
       response_time: `${getDurationInMilliseconds()}(ms)`,
-      welcome: process?.env?.APP_NAME,
+      welcome: APP_NAME,
       uptimes: process.uptime(),
       timestamp: fullDateFormatIndo(new Date().toISOString()),
       documentation: `http://${req.get('host')}/documentation`
     }
   })
 })
-if (process?.env?.NODE_ENV === 'development') {
+if (APP_ENV === 'development') {
   router.use('/documentation', swaggerUi.serve)
   router.get('/documentation', swaggerUi.setup(index, { isExplorer: false }))
 }

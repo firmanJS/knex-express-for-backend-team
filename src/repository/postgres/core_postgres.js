@@ -8,64 +8,38 @@ const format = todayFormat('YYYYMMDDhmmss')
 
 /**
  *
- *
- * @param {*} table
- * @param {*} payload
  * @param {object} options
  * @return {*}
  */
-const insert = async (table, payload, options) => {
-  const [result] = await pgCore(table).insert(payload).returning(options?.column)
+exports.insert = async (options) => {
+  const [result] = await pgCore(options?.table).insert(options?.payload).returning(options?.column)
   return result
 }
 /**
  *
- *
- * @param {*} table
- * @param {*} payload
  * @param {object} options
  * @return {*}
  */
-const insertTrx = async (table, payload, options) => {
-  const [result] = await pgCore(table).transacting(options?.trx).insert(payload).returning(options?.column)
+exports.insertTrx = async (options) => {
+  const [result] = await pgCore(options?.table).transacting(options?.trx).insert(options?.payload)
+    .returning(options?.column)
   return result
 }
 /**
  *
- *
- * @param {*} table
- * @param {*} where
- * @param {*} column
- * @return {*}
- */
-const fetchByParam = async (table, where, column = null) => {
-  const [result] = await pgCore(table).where(where).select(column)
-  return result
-}
-
-/**
- *
- *
- * @param {*} table
- * @param {*} where
- * @param {*} column
- * @return {*}
- */
-const fetchByParamPublic = async (table, where, column, order, limit = 1) => {
-  const [result] = await pgCore(table).where(where)
-    .select(column).order(order)
-    .limit(limit)
-  return result
-}
-/**
- *
- *
- * @param {*} where
- * @param {array} column
  * @param {object} options
  * @return {*}
  */
-const updated = async (table, column, options) => {
+const fetchByParam = async (options) => {
+  const [result] = await pgCore(options?.table).where(options?.where).select(options?.column)
+  return result
+}
+/**
+ *
+ * @param {object} options
+ * @return {*}
+ */
+const updated = async (options) => {
   const loop = (rows) => {
     options.payload.deleted_at = new Date().toISOString()
     for (const prop in options?.column) {
@@ -75,26 +49,23 @@ const updated = async (table, column, options) => {
     return options
   }
   if (options?.type_method === 'soft-delete') {
-    const rows = await fetchByParam(table, options?.where, options?.column)
+    const rows = await fetchByParam(options?.table, options?.where, options?.column)
     options.payload.deleted_at = new Date().toISOString()
     if (rows) {
       loop(rows, options)
     }
   }
-  const [result] = await pgCore(table).where(options?.where).update(options?.payload).returning(column)
+  const [result] = await pgCore(options?.table).where(options?.where).update(options?.payload).returning(options?.column)
 
   return result
 }
 /**
  *
- *
- * @param {string} table
- * @param {object} where
- * @param {array} column
+ * @param {object} options
  * @return {*}
  */
-const deletePermanently = async (table, where, column) => {
-  const [result] = await pgCore(table).where(where).del().returning(column)
+const deletePermanently = async (options) => {
+  const [result] = await pgCore(options?.table).where(options?.where).del().returning(options?.column)
   return result
 }
 /**
@@ -109,25 +80,25 @@ const raw = async (query) => {
   return result
 }
 
-const checkSameValueinDb = async (table, options) => {
+const checkSameValueinDb = async (options) => {
   if (options?.where) {
-    const result = await fetchByParam(table, options?.where, [[options?.name]])
+    const result = await fetchByParam(options?.table, options?.where, [[options?.name]])
     if (result) {
       throw new Error(options?.message)
     }
   }
 }
 
-const checkSameValueinDbUpdate = async (table, options) => {
-  const result = await fetchByParam(table, options?.where, options?.column)
+const checkSameValueinDbUpdate = async (options) => {
+  const result = await fetchByParam(options?.table, options?.where, options?.column)
   const id = result?.[options?.column]
   if (id && +id !== +options.name) {
     throw new Error(options?.message)
   }
 }
 
-const checkSameValueinDbUpdateUuid = async (table, options) => {
-  const result = await fetchByParam(table, options?.where, options?.column)
+const checkSameValueinDbUpdateUuid = async (options) => {
+  const result = await fetchByParam(options?.table, options?.where, options?.column)
   const id = result?.[options?.column]
   if (id && id !== options?.name) {
     throw new Error(options?.message)
@@ -135,14 +106,11 @@ const checkSameValueinDbUpdateUuid = async (table, options) => {
 }
 
 module.exports = {
-  insert,
   updated,
   fetchByParam,
   deletePermanently,
   checkSameValueinDb,
   checkSameValueinDbUpdate,
   checkSameValueinDbUpdateUuid,
-  fetchByParamPublic,
-  raw,
-  insertTrx
+  raw
 }

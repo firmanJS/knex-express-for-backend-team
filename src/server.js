@@ -1,6 +1,7 @@
 // make sure for crashing handler continues to run
 const fs = require('fs')
 const app = require('./app')
+const { APP_NAME, APP_PORT, APP_ENV } = require('./config')
 
 process.on('warning', (warning) => {
   console.warn(warning.name)
@@ -36,9 +37,9 @@ process.on('SIGTERM', () => {
 })
 
 app.listen(process.env.APP_PORT, () => {
-  if (process.env.NODE_ENV === 'development') {
-    console.info(`${process?.env.APP_NAME} running in port ${process.env.APP_PORT}`)
+  if (APP_ENV === 'development') {
+    console.info(`${APP_NAME} running in port ${APP_PORT} with env ${APP_ENV}`)
   } else {
-    console.info(`${process?.env.APP_NAME} is running`)
+    console.info(`${APP_NAME} is running with env ${APP_ENV}`)
   }
 })

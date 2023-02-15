@@ -3,7 +3,7 @@ const { MODEL_PROPERTIES: { TABLES } } = require('../../../utils')
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.seed = function (knex) {
+exports.seed = async (knex) => {
   // Deletes ALL existing entries
   const todos = [
     {

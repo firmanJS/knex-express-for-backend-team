@@ -1,4 +1,4 @@
-exports.up = async function (knex) {
+exports.up = async (knex) => {
   await knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
 };
 
@@ -6,6 +6,6 @@ exports.up = async function (knex) {
    * @param { import("knex").Knex } knex
    * @returns { Promise<void> }
    */
-exports.down = async function (knex) {
+exports.down = async (knex) => {
   await knex.raw('DROP EXTENSION "uuid-ossp"');
 };

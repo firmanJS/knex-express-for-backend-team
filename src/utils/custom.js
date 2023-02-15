@@ -1,21 +1,15 @@
-const paramsHttp = (req) => ({
-  ...req?.params
-})
+exports.paramsHttp = (req) => ({ ...req?.params })
 
-const queryHttp = (req) => ({
-  ...req?.query
-})
+exports.queryHttp = (req) => ({ ...req?.query })
 
-const bodyHttp = (req) => ({
-  ...req?.body
-})
+exports.bodyHttp = (req) => ({ ...req?.body })
 
-const isNumeric = (str) => {
+exports.isNumeric = (str) => {
   if (typeof str !== 'string') return false
   return !Number.isNaN(str) && !Number.isNaN(parseFloat(str))
 }
 
-const convertToSlug = (text = '') => {
+exports.convertToSlug = (text = '') => {
   try {
     return text.toLowerCase()
       .replace(/[^\w ]+/g, '')
@@ -25,7 +19,7 @@ const convertToSlug = (text = '') => {
   }
 }
 
-const replaceString = (str, from, to = '') => {
+exports.replaceString = (str, from, to = '') => {
   try {
     return str.replace(from, to)
   } catch (error) {
@@ -33,12 +27,12 @@ const replaceString = (str, from, to = '') => {
   }
 }
 
-const ucword = (str = '') => {
+exports.ucword = (str = '') => {
   if (typeof str !== 'string') return str
   return (`${str}`).replace(/^([a-z])|\s+([a-z])/g, ($1) => $1.toUpperCase())
 }
 
-const formatCurrency = (currency, options = {
+exports.formatCurrency = (currency, options = {
   language: 'id-ID', format: 'IDR'
 }) => {
   try {
@@ -51,15 +45,4 @@ const formatCurrency = (currency, options = {
   } catch (error) {
     return error.toString()
   }
-}
-
-module.exports = {
-  queryHttp,
-  paramsHttp,
-  bodyHttp,
-  isNumeric,
-  convertToSlug,
-  replaceString,
-  formatCurrency,
-  ucword
 }
