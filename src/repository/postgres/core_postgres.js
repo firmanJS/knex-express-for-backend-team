@@ -84,7 +84,7 @@ exports.raw = async (query) => {
 
 exports.checkSameValueinDb = async (options) => {
   if (options?.where) {
-    const result = await fetchByParam(options)
+    const [result] = await fetchByParam(options)
     if (result) {
       throw new Error(options?.message)
     }
@@ -92,7 +92,7 @@ exports.checkSameValueinDb = async (options) => {
 }
 
 exports.checkSameValueinDbUpdate = async (options) => {
-  const result = await fetchByParam(options)
+  const [result] = await fetchByParam(options)
   const id = result?.[options?.column]
   if (id && +id !== +options.name) {
     throw new Error(options?.message)
@@ -100,7 +100,7 @@ exports.checkSameValueinDbUpdate = async (options) => {
 }
 
 exports.checkSameValueinDbUpdateUuid = async (options) => {
-  const result = await fetchByParam(options)
+  const [result] = await fetchByParam(options)
   const id = result?.[options?.column]
   if (id && id !== options?.name) {
     throw new Error(options?.message)

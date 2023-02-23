@@ -49,10 +49,10 @@ exports.create = async (req, payload) => {
     const result = await Repo.insertTrx({
       table: TABLES.STAFF, payload, column: COLUMN[0], trx
     })
-    trx.commit()
+    await trx.commit()
     return mappingSuccess(lang.__('created.success'), result)
   } catch (error) {
-    trx.rollback()
+    await trx.rollback(error)
     error.path_filename = __filename
     return mappingError(req, error)
   }
@@ -95,7 +95,7 @@ exports.get = async (req, options, column = COLUMN) => {
 exports.getByParam = async (req, options, column = COLUMN) => {
   try {
     options.where.deleted_at = null
-    const result = await Repo.fetchByParam({ table: TABLES.STAFF, where: options.where, column })
+    const [result] = await Repo.fetchByParam({ table: TABLES.STAFF, where: options.where, column })
     if (result) {
       return mappingSuccess(lang.__('get.success'), result)
     }
