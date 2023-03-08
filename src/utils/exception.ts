@@ -140,7 +140,7 @@ const conditionCheck = (error, manipulate, message) => {
   return message
 }
 
-export const mappingError = (req:Request, error, code = Http.BAD_REQUEST) => {
+export const mappingError = (req:Request, error: any, code: number = Http.BAD_REQUEST): ErrorInterface => {
   let { message, exception } = ['', '']
   const manipulate = error.toString().split(':')
   console.error(`catch message ${error}`);
