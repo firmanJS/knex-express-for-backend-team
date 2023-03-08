@@ -1,6 +1,6 @@
 root = true
 
-[*js]
+[*ts]
 charset = utf-8
 end_of_line = lf
 insert_final_newline = true
@@ -17,7 +17,7 @@ indent_style = tab
 
 [*json]
 indent_style = tab
-indent_size = 3
+indent_size = 2
 
 [*.yml]
 indent_size = 2    

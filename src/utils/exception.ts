@@ -1,17 +1,21 @@
-const { HTTP, PAGE, LIMIT } = require('./constant')
-const { lang } = require('../lang')
+import { Http } from "./enum"
+import { Request, Response, NextFunction } from 'express'
+import { ResponseInterface } from "../interface/response_interface"
 
-exports.notFoundHandler = (req, res) => {
+export const notFoundHandler = (req: Request, res: Response): Response => {
   const message = `Route : ${req.url} ${lang.__('notfound')}.`
-  const err = new Error(message)
-  res.status(HTTP.OK).json({
-    error: err.toString(),
-    status: true,
+  const err: any = new Error(message)
+
+  const result: ResponseInterface = {
+    data: err.toString(),
+    status: false,
     message,
-  })
+  }
+
+  return res.status(Http.NOT_FOUND).json(result)
 }
 
-exports.removeFavicon = (req, res, next) => {
+export const removeFavicon = (req: Request, res: Response, next:NextFunction): void => {
   if (req.url === '/favicon.ico') {
     res.writeHead(200, { 'Content-Type': 'image/x-icon' })
     res.end()
@@ -20,13 +24,17 @@ exports.removeFavicon = (req, res, next) => {
   }
 }
 
-exports.errorHandler = (_error, res) => res.status(HTTP.OK).json({
-  status: true,
-  message: lang.__('error.invalid.syntax'),
-  data: [],
-})
+export const errorHandler = (req: Request, res: Response): Response => {
+  const result: ResponseInterface = {
+    data: [],
+    status: false,
+    message: lang.__('error.invalid.syntax'),
+  }
 
-exports.syntaxError = (err, req, res, next) => {
+  return res.status(Http.NOT_FOUND).json(result)
+}
+
+export const syntaxError = (err:any, req, res, next): void => {
   const result = {
     status: true,
     message: `syntax error ${err}`,
@@ -34,28 +42,28 @@ exports.syntaxError = (err, req, res, next) => {
   }
 
   if (err instanceof SyntaxError) {
-    res.status(HTTP.OK).send(result)
+    res.status(Http.OK).send(result)
   } else {
     next()
   }
 
   if (process.env.NODE_ENV === 'development') {
     console.info(err.toString())
-    res.status(HTTP.OK).send(result)
+    res.status(Http.OK).send(result)
   } else {
     // sent to sentry or whatever
     console.info(err.toString())
-    res.status(HTTP.OK).send(result)
+    res.status(Http.OK).send(result)
   }
 }
 
-exports.paginationResponse = (req, res, rows) => {
-  const options = { status: true, message: lang.__('get.success'), code: HTTP.OK }
+export const paginationResponse = (req, res, rows) => {
+  const options = { status: true, message: lang.__('get.success'), code: Http.OK }
   let { status, message, code } = options
   if (Number(rows?.data?.data?.count) === 0) {
     status = false
     message = lang.__('notfound')
-    code = HTTP.NOT_FOUND
+    code = Http.NOT_FOUND
   }
   const limitPerPage = req.query?.limit || LIMIT
   const countTotal = Number(rows?.data?.data?.count) || +LIMIT
@@ -73,30 +81,30 @@ exports.paginationResponse = (req, res, rows) => {
   })
 }
 
-exports.originResponse = (res, status, data) => {
+export const originResponse = (res, status, data) => {
   let code
   switch (status) {
     case 'success':
-      code = HTTP.OK
+      code = Http.OK
       break
     case 'created':
-      code = HTTP.OK
+      code = Http.OK
       break
     case 'not found':
-      code = HTTP.OK
+      code = Http.OK
       break
     case 'unauthorized':
-      code = HTTP.OK
+      code = Http.OK
       break
     default:
-      code = HTTP.OK
+      code = Http.OK
   }
   res.status(code).json(data)
 }
 
-exports.baseResponse = (res, data) => res.status(data?.code ?? HTTP.OK).json(data?.data)
+export const baseResponse = (res, data) => res.status(data?.code ?? Http.OK).json(data?.data)
 
-exports.mappingSuccess = (message, data = [], code = HTTP.OK, status = true) => ({
+export const mappingSuccess = (message, data = [], code = Http.OK, status = true) => ({
   code,
   data: {
     status,
@@ -132,7 +140,7 @@ const conditionCheck = (error, manipulate, message) => {
   return message
 }
 
-exports.mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
+export const mappingError = (req:Request, error, code = Http.BAD_REQUEST) => {
   let { message, exception } = ['', '']
   const manipulate = error.toString().split(':')
   console.error(`catch message ${error}`);
@@ -156,7 +164,7 @@ exports.mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
   }
 }
 
-exports.captureLog = (err) => {
+export const captureLog = (err:any): void => {
   if (process.env.NODE_ENV === 'development') {
     console.info('error validateMiddleware', err);
   }
