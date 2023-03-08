@@ -1,0 +1,36 @@
+import express, { Application } from 'express'
+import compression from 'compression'
+import helmet from 'helmet'
+import cors from 'cors'
+import 'dotenv/config'
+// import RestHttp from './transport/rest/v1'
+// import Exceptions from './utils/exceptions'
+// import { connectMonggo } from './config/database'
+
+class App {
+  public app: Application
+
+  constructor() {
+    this.app = express()
+    this.plugins()
+    this.routes()
+  }
+
+  protected plugins(): void {
+    this.app.use(compression())
+    this.app.use(helmet())
+    this.app.use(cors())
+    this.app.use(express.json({ limit: '200kb' }))
+  }
+
+  protected routes(): void {
+    // this.app.use(RestHttp)
+    // this.app.use(Exceptions.notFoundHandler)
+    // this.app.use(Exceptions.syntaxError)
+    // this.app.use(Exceptions.errorHandler)
+  }
+}
+
+const { app } = new App()
+
+export default app
