@@ -15,3 +15,12 @@ export enum Http {
   UNPROCESSABLE_ENTITY = 422,
   INTERNAL_SERVER_ERROR = 500
 }
+
+export enum MORGAN_FORMAT {
+  DEV = '[:date[clf]] :remote-addr :remote-user \x1b[36m:method \x1b[36m:url \x1b[33m:status \x1b[32m:response-time\x1b[36m(ms)\x1b[0m',
+  PROD = '[:date[clf]] :remote-addr :remote-user :method :url :status :response-time(ms)'
+}
+
+export enum Table {
+  TODO = 'mst_todo'
+}

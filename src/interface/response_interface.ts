@@ -1,8 +1,9 @@
 
 export interface ResponseInterface {
-  status?: boolean,
-  message?: string,
-  data?: any | []
+  status: boolean,
+  message: string,
+  exception?: string,
+  data: any | []
 }
 interface MetaInterface {
   current_page?: number,
@@ -26,20 +27,13 @@ export interface ResultBoolInterface {
   status?: boolean
 }
 
-// export interface NumberResponseInterface {
-//   [name: string]: number
-// }
-
 export interface DeletedResponseInterface {
   deletedCount: number
 }
 
-export interface UpdatedResponseInterface {
-  acknowledged?: boolean,
-  modifiedCount: number,
-  upsertedId?: unknown,
-  upsertedCount?: number,
-  matchedCount?: number
+export interface DtoInterface {
+  code?: number,
+  data?: ResponseInterface
 }
 
 export interface DataInterface {

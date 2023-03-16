@@ -1,0 +1,21 @@
+{
+	"SchemaTodo": {
+		"type": "object",
+		"properties": {
+			"name": {
+				"type": "string"
+			},
+			"description": {
+				"type": "string"
+			}
+		}
+	},
+	"SchemaTodoRequest": {
+		"type": "object",
+		"properties": {
+			"run_id": {
+				"type": "string"
+			}
+		}
+	}
+}

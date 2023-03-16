@@ -1,9 +1,12 @@
-import { Http } from "./enum"
+import { Environment, Http } from './enum'
+import { LIMIT, PAGE } from './constant'
 import { Request, Response, NextFunction } from 'express'
-import { ResponseInterface } from "../interface/response_interface"
+import { DtoInterface, ResponseInterface } from '../interface/response_interface'
+import Translate from '../lang'
+import config from '../config'
 
 export const notFoundHandler = (req: Request, res: Response): Response => {
-  const message = `Route : ${req.url} ${lang.__('notfound')}.`
+  const message = `Route : ${req.url} ${Translate.__('notfound')}.`
   const err: any = new Error(message)
 
   const result: ResponseInterface = {
@@ -15,7 +18,7 @@ export const notFoundHandler = (req: Request, res: Response): Response => {
   return res.status(Http.NOT_FOUND).json(result)
 }
 
-export const removeFavicon = (req: Request, res: Response, next:NextFunction): void => {
+export const removeFavicon = (req: Request, res: Response, next:NextFunction) => {
   if (req.url === '/favicon.ico') {
     res.writeHead(200, { 'Content-Type': 'image/x-icon' })
     res.end()
@@ -24,17 +27,18 @@ export const removeFavicon = (req: Request, res: Response, next:NextFunction): v
   }
 }
 
+
 export const errorHandler = (req: Request, res: Response): Response => {
   const result: ResponseInterface = {
     data: [],
     status: false,
-    message: lang.__('error.invalid.syntax'),
+    message: Translate.__('error.invalid.syntax'),
   }
 
   return res.status(Http.NOT_FOUND).json(result)
 }
 
-export const syntaxError = (err:any, req, res, next): void => {
+export const syntaxError = (err:any, req: Request, res: Response, next:NextFunction): void => {
   const result = {
     status: true,
     message: `syntax error ${err}`,
@@ -57,17 +61,21 @@ export const syntaxError = (err:any, req, res, next): void => {
   }
 }
 
-export const paginationResponse = (req, res, rows) => {
-  const options = { status: true, message: lang.__('get.success'), code: Http.OK }
+export const paginationResponse = (req: Request, res: Response, rows:any): Response => {
+  const options = {
+    status: true,
+    message: Translate.__('get.success'),
+    code: Http.OK
+  }
   let { status, message, code } = options
   if (Number(rows?.data?.data?.count) === 0) {
     status = false
-    message = lang.__('notfound')
+    message = Translate.__('notfound')
     code = Http.NOT_FOUND
   }
-  const limitPerPage = req.query?.limit || LIMIT
-  const countTotal = Number(rows?.data?.data?.count) || +LIMIT
-  res.status(code).json({
+  const limitPerPage: number = Number(req.query?.limit) || +LIMIT
+  const countTotal: number = Number(rows?.data?.data?.count) || +LIMIT
+  return res.status(code).json({
     message,
     status,
     data: rows?.data?.data?.result || [],
@@ -81,30 +89,9 @@ export const paginationResponse = (req, res, rows) => {
   })
 }
 
-export const originResponse = (res, status, data) => {
-  let code
-  switch (status) {
-    case 'success':
-      code = Http.OK
-      break
-    case 'created':
-      code = Http.OK
-      break
-    case 'not found':
-      code = Http.OK
-      break
-    case 'unauthorized':
-      code = Http.OK
-      break
-    default:
-      code = Http.OK
-  }
-  res.status(code).json(data)
-}
+export const baseResponse = (res: Response, data: any): Response => res.status(data?.code ?? Http.OK).json(data?.data)
 
-export const baseResponse = (res, data) => res.status(data?.code ?? Http.OK).json(data?.data)
-
-export const mappingSuccess = (message, data = [], code = Http.OK, status = true) => ({
+export const mappingSuccess = (message: string, data:[] = [], code = Http.OK, status = true): DtoInterface => ({
   code,
   data: {
     status,
@@ -113,19 +100,19 @@ export const mappingSuccess = (message, data = [], code = Http.OK, status = true
   }
 })
 
-const conditionCheck = (error, manipulate, message) => {
+const conditionCheck = (error:string, manipulate:string, message: string): string => {
   switch (manipulate[0]) {
     case 'JsonWebTokenError':
       message = error
       break
     case 'Error':
-      message = lang.__('error.db.connection')
+      message = Translate.__('error.db.connection')
       break
     case 'TypeError':
       message = `error in code ${manipulate.toString()}`
       break
     case 'AggregateError':
-      message = lang.__('error.db.query')
+      message = Translate.__('error.db.query')
       break
     case 'MongoServerError':
       message = manipulate.toString()
@@ -140,18 +127,19 @@ const conditionCheck = (error, manipulate, message) => {
   return message
 }
 
-export const mappingError = (req:Request, error: any, code: number = Http.BAD_REQUEST): ErrorInterface => {
-  let { message, exception } = ['', '']
-  const manipulate = error.toString().split(':')
-  console.error(`catch message ${error}`);
-  message = lang.__('error.db.transaction')
-  if (process.env.NODE_ENV === 'development') {
+export const mappingError = (req:Request, error: any, code: number = Http.BAD_REQUEST): DtoInterface => {
+  let message: string = ''
+  let exception: string = ''
+  const manipulate: string = error.toString().split(':')
+  console.error(`catch message ${JSON.stringify(error)}`);
+  message = Translate.__('error.db.transaction')
+  if (config?.app?.env === Environment.DEV) {
     exception = error.toString()
     message = conditionCheck(error, manipulate, message)
   }
   if (error?.type_error !== 'validation') {
     // sent alert
-    console.info('sent alert', error, req)
+    console.info('sent alert', error)
   }
   return {
     code,
@@ -165,7 +153,7 @@ export const mappingError = (req:Request, error: any, code: number = Http.BAD_RE
 }
 
 export const captureLog = (err:any): void => {
-  if (process.env.NODE_ENV === 'development') {
+  if (config?.app?.env === Environment.DEV) {
     console.info('error validateMiddleware', err);
   }
 }
