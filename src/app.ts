@@ -3,9 +3,10 @@ import compression from 'compression'
 import helmet from 'helmet'
 import cors from 'cors'
 import 'dotenv/config'
-// import RestHttp from './transport/rest/v1'
-// import Exceptions from './utils/exceptions'
-// import { connectMonggo } from './config/database'
+import RestHttp from './route/V1'
+import config from './config'
+import morgan from 'morgan'
+import utils from './utils'
 
 class App {
   public app: Application
@@ -17,17 +18,34 @@ class App {
   }
 
   protected plugins(): void {
-    this.app.use(compression())
+    this.app.use(helmet.hidePoweredBy())
     this.app.use(helmet())
+    this.app.use((_req, res, next) => {
+      res.setHeader('Permissions-Policy', config?.app?.permission_policy)
+      res.setHeader('X-XSS-Protection', config?.app?.protetcion)
+      next()
+    })
+    this.app.use(cors({
+      methods: config?.app?.method,
+      allowedHeaders: config?.app?.allow_header,
+      exposedHeaders: config?.app?.expose_header
+    })) // cors setup
     this.app.use(cors())
-    this.app.use(express.json({ limit: '200kb' }))
+    this.app.use(compression()) // gzip compression
+    this.app.use(express.json({ limit: config?.app?.limit })) // json limit
+    if (config?.app?.env === utils?.Environment.PROD) {
+      this.app.use(morgan(utils?.MORGAN_FORMAT.PROD))
+    } else {
+      this.app.use(morgan(utils?.MORGAN_FORMAT.DEV, { stream: process.stderr }))
+    }
   }
 
   protected routes(): void {
-    // this.app.use(RestHttp)
-    // this.app.use(Exceptions.notFoundHandler)
-    // this.app.use(Exceptions.syntaxError)
-    // this.app.use(Exceptions.errorHandler)
+    this.app.use(RestHttp)
+    this.app.use(utils?.notFoundHandler)
+    this.app.use(utils?.syntaxError)
+    this.app.use(utils?.errorHandler)
+    this.app.use(utils?.removeFavicon)
   }
 }
 

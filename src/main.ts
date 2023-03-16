@@ -36,7 +36,7 @@ process.on('SIGTERM', () => {
   console.info('SIGTERM received')
 })
 
-app.listen(process.env.APP_PORT, () => {
+app.listen(config?.app?.port, () => {
   if (config?.app?.env === 'development') {
     console.info(`${config?.app?.name} running in port ${config?.app?.port} with env ${config?.app?.env}`)
   } else {

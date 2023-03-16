@@ -1,0 +1,8 @@
+{
+	"validator.required": "validator.required",
+	"error.db.transaction": "error.db.transaction",
+	"error.invalid.syntax": "error.invalid.syntax",
+	"validator.requried": "validator.requried",
+	"validator.string": "validator.string",
+	"notfound": "notfound"
+}
