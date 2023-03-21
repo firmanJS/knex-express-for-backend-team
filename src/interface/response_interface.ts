@@ -1,4 +1,3 @@
-
 export interface ResponseInterface {
   status: boolean,
   message: string,
@@ -6,29 +5,16 @@ export interface ResponseInterface {
   data: any | []
 }
 interface MetaInterface {
-  current_page?: number,
-  page?: number
-  limit_per_page?: number
-  total_page?: number
-  count_total?: number
+  page: number,
+  limit_per_page: number,
+  total_page: number,
+  count_per_page: number,
+  count_total: number
 }
 
 export interface WithMetaInterface extends ResponseInterface {
-  _link?: string,
+  link?: string,
   meta?: MetaInterface
-}
-
-export interface PaginationResponseInterface {
-  rows: object,
-  count: number,
-}
-
-export interface ResultBoolInterface {
-  status?: boolean
-}
-
-export interface DeletedResponseInterface {
-  deletedCount: number
 }
 
 export interface DtoInterface {
@@ -36,6 +22,8 @@ export interface DtoInterface {
   data?: ResponseInterface
 }
 
-export interface DataInterface {
-  data?: object
+export interface OptionsInterface {
+  status: boolean,
+  message: string,
+  code?: number
 }

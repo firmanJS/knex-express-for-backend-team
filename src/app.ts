@@ -3,9 +3,9 @@ import compression from 'compression'
 import helmet from 'helmet'
 import cors from 'cors'
 import 'dotenv/config'
+import morgan from 'morgan'
 import RestHttp from './route/V1'
 import config from './config'
-import morgan from 'morgan'
 import utils from './utils'
 
 class App {
@@ -41,11 +41,11 @@ class App {
   }
 
   protected routes(): void {
+    this.app.use(utils?.removeFavicon)
     this.app.use(RestHttp)
     this.app.use(utils?.notFoundHandler)
     this.app.use(utils?.syntaxError)
     this.app.use(utils?.errorHandler)
-    this.app.use(utils?.removeFavicon)
   }
 }
 

@@ -1,21 +1,18 @@
 import { Request, Response, NextFunction } from 'express'
 import Joi from 'joi'
-import { validationResult } from 'express-validator'
-import Translate from '../lang'
+import { Http } from '../utils/enum'
 import { baseResponse, mappingError } from '../utils/exception'
 
 const getValidationErrors = (validationErrors: Joi.ValidationErrorItem[]) => {
-  const errors: Record<string, string> = {}
+  // const errors: Record<string, string> = {}
+  const errors: string[] = Array();
 
   validationErrors.forEach((item) => {
-    const { path, message } = item
-    const key = path.join('.')
-    errors[key] = message
+    const { message } = item
+    errors.push(message)
   })
-
   return errors
 }
-
 
 export const validate = (schema: Joi.Schema, values: any) => {
   const { error, value } = schema.validate(values, {
@@ -42,45 +39,26 @@ export const validate = (schema: Joi.Schema, values: any) => {
   }
 }
 
-const checkMessageError = (catchMessage:[string], errors:any) :string => {
-  let message
-  const extractedErrors: [string] = ['']
-  errors.array().map((err: any) => extractedErrors.push(err.msg))
-  switch (catchMessage[0][0]) {
-    case 'database':
-      message = Translate.__('knex.db')
-      break
-    case 'connect':
-      message = Translate.__('knex.connect')
-      break
-    case 'password':
-      message = Translate.__('knex.password')
-      break
-    case 'select':
-      message = Translate.__('knex.select')
-      break
-    case 'getaddrinfo':
-      message = Translate.__('knex.host')
-      break
-    case 'Please':
-      message = errors.array()
-      break
-    default:
-      message = extractedErrors
+export const validateRequestBody = (schema: Joi.Schema) =>
+(req: Request, res: Response, next: NextFunction) =>{
+  const { error } = schema.validate(req?.body, {
+    abortEarly: false,
+    stripUnknown: true,
+    errors: {
+      wrap: {
+        label: '',
+      },
+    },
+    cache: true,
+  })
+
+  if (error) {
+    const extractedErrors: string[] = Array();
+    error.details.map((err) => extractedErrors.push(err.message.replace(/"/g, '')))
+    const err = mappingError(req, extractedErrors, Http.UNPROCESSABLE_ENTITY)
+    return baseResponse(res, err)
+  } else {
+    next()
   }
 
-  return message
 }
-
-export const validateMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    const catchMessage : any = errors.array().map((err) => err.msg.split(' '))
-    console.error('error validateMiddleware', errors);
-    const message = checkMessageError(catchMessage, errors)
-    return baseResponse(res, mappingError(req, message))
-  }
-
-  return next()
-}
-

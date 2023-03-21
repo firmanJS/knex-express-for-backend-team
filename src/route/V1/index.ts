@@ -7,7 +7,7 @@ import TodoRoutes from '../../modules/todo'
 class Rest extends BaseRest {
   public routes(): void {
     this.router.use(HealthRest)
-    this.router.use('/api/v1/todo',TodoRoutes)
+    this.router.use('/api/v1/todo', TodoRoutes)
     // this.router.use(`${tagVersionOne}`)
   }
 }

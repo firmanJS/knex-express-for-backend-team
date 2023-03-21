@@ -24,3 +24,10 @@ export enum MORGAN_FORMAT {
 export enum Table {
   TODO = 'mst_todo'
 }
+
+export enum Method {
+  DEL = 'DELETE',
+  PUT = 'PUT',
+  POST = 'POST',
+  GET = 'GET',
+}

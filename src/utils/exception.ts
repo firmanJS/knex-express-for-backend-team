@@ -1,9 +1,18 @@
+import { Request, Response, NextFunction } from 'express'
 import { Environment, Http } from './enum'
 import { LIMIT, PAGE } from './constant'
-import { Request, Response, NextFunction } from 'express'
-import { DtoInterface, ResponseInterface } from '../interface/response_interface'
+import { DtoInterface, OptionsInterface, ResponseInterface, WithMetaInterface } from '../interface/response_interface'
 import Translate from '../lang'
 import config from '../config'
+
+const optionCustom = () :OptionsInterface => {
+  const data: OptionsInterface = {
+    status: true,
+    message: Translate.__('get.success'),
+  }
+
+  return data
+}
 
 export const notFoundHandler = (req: Request, res: Response): Response => {
   const message = `Route : ${req.url} ${Translate.__('notfound')}.`
@@ -18,15 +27,14 @@ export const notFoundHandler = (req: Request, res: Response): Response => {
   return res.status(Http.NOT_FOUND).json(result)
 }
 
-export const removeFavicon = (req: Request, res: Response, next:NextFunction) => {
+export const removeFavicon = (req: Request, res: Response, next:NextFunction): void => {
   if (req.url === '/favicon.ico') {
-    res.writeHead(200, { 'Content-Type': 'image/x-icon' })
+    res.writeHead(Http.OK, { 'Content-Type': 'image/x-icon' })
     res.end()
   } else {
     next()
   }
 }
-
 
 export const errorHandler = (req: Request, res: Response): Response => {
   const result: ResponseInterface = {
@@ -35,63 +43,81 @@ export const errorHandler = (req: Request, res: Response): Response => {
     message: Translate.__('error.invalid.syntax'),
   }
 
-  return res.status(Http.NOT_FOUND).json(result)
+  return res.status(Http.BAD_REQUEST).json(result)
 }
 
-export const syntaxError = (err:any, req: Request, res: Response, next:NextFunction): void => {
-  const result = {
+export const syntaxError = (err:any, req: Request, res: Response, next:NextFunction): Response => {
+  const result: ResponseInterface = {
     status: true,
     message: `syntax error ${err}`,
     data: []
   }
 
   if (err instanceof SyntaxError) {
-    res.status(Http.OK).send(result)
+    result.status = false
+    return res.status(Http.BAD_REQUEST).send(result)
   } else {
     next()
   }
 
   if (process.env.NODE_ENV === 'development') {
     console.info(err.toString())
-    res.status(Http.OK).send(result)
+    return res.status(Http.OK).send(result)
   } else {
     // sent to sentry or whatever
     console.info(err.toString())
-    res.status(Http.OK).send(result)
+    return res.status(Http.OK).send(result)
   }
 }
 
-export const paginationResponse = (req: Request, res: Response, rows:any): Response => {
-  const options = {
-    status: true,
-    message: Translate.__('get.success'),
-    code: Http.OK
-  }
-  let { status, message, code } = options
-  if (Number(rows?.data?.data?.count) === 0) {
+const logicPagination = (rows: any, totalData: number) => {
+  let code: number = rows?.code || Http.OK
+  const options: OptionsInterface = optionCustom()
+  let { status, message } = options
+  if (totalData === 0) {
     status = false
     message = Translate.__('notfound')
     code = Http.NOT_FOUND
   }
+
+  if (rows?.code === Http.BAD_REQUEST) {
+    status = false
+    message = rows?.data?.exception
+    code = Http.BAD_REQUEST
+  }
+
+  return {
+    status,
+    code,
+    message
+  }
+}
+
+export const paginationResponse = (req: Request, res: Response, rows:any): Response => {
+  const totalData: number = +rows?.data?.data?.count ?? 0
+  const { status, message, code } = logicPagination(rows, totalData)
   const limitPerPage: number = Number(req.query?.limit) || +LIMIT
-  const countTotal: number = Number(rows?.data?.data?.count) || +LIMIT
-  return res.status(code).json({
+  const countTotal: number = totalData || +LIMIT
+  const result: WithMetaInterface = {
     message,
     status,
     data: rows?.data?.data?.result || [],
-    _meta: {
+    meta: {
       page: Number(req.query?.page) || +PAGE,
       limit_per_page: +limitPerPage,
       total_page: Math.ceil(countTotal / limitPerPage),
       count_per_page: rows?.data?.response?.result?.length || 0,
       count_total: countTotal
     }
-  })
+  }
+  return res.status(code).json(result)
 }
 
 export const baseResponse = (res: Response, data: any): Response => res.status(data?.code ?? Http.OK).json(data?.data)
 
-export const mappingSuccess = (message: string, data:[] = [], code = Http.OK, status = true): DtoInterface => ({
+export const mappingSuccess = (
+  message: string, data:[] | {} = [], code: number = Http.OK, status:boolean = true
+  ): DtoInterface => ({
   code,
   data: {
     status,

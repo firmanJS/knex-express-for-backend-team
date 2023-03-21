@@ -39,6 +39,17 @@
 		"no-underscore-dangle": 0,
 		"no-param-reassign": "off",
 		"camelcase": 1,
-		"semi": "off"
+		"semi": "off",
+		"import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "": "never",
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+   ]
 	}
 }

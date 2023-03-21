@@ -15,10 +15,10 @@ module.exports = {
     debug: process?.env?.APP_ENV === 'development',
     migrations: {
       tableName: 'migrations',
-      directory: path.join(__dirname, 'src/repository/postgres/migrations'),
+      directory: path.join(__dirname, 'src/models/migrations'),
     },
     seeds: {
-      directory: path.join(__dirname, 'src/repository/postgres/seeders'),
+      directory: path.join(__dirname, 'src/models/seeders'),
     }
   }
 }
