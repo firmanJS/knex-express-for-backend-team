@@ -1,4 +1,6 @@
-import config from "../config"
+import paths from './path'
+import schemas from './schema'
+import config from '../config'
 
 const info: object = {
   description: 'This is API , Made with ❤ by <a href="https://github.com/firmanJS" target="_blank">@firmanjs.</a>',
@@ -24,14 +26,12 @@ const servers: object = [
   // }
 ]
 
-// const paths = require('./path')
-// const schemas = require('./schema')
 
 export const swaggerInit: object = {
   openapi: '3.0.0',
   info,
   servers,
-  // paths,
+  paths,
   components: {
     securitySchemes: {
       bearerAuth: {
@@ -40,6 +40,6 @@ export const swaggerInit: object = {
         bearerFormat: 'JWT'
       }
     },
-    // schemas
+    schemas
   }
 }

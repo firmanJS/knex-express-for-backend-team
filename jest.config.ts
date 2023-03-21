@@ -1,4 +1,4 @@
-import type config from '@jest/types'
+import type { Config } from '@jest/types'
 
 export default async (): Promise<Config.InitialOptions> => ({
   bail: 1,

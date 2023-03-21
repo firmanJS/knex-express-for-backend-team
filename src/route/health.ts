@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
+import swaggerUi from 'swagger-ui-express'
 import config from '../config'
 import BaseRest from './base'
-import swaggerUi  from 'swagger-ui-express'
 import { Environment } from '../utils/enum'
 import { swaggerInit } from '../static'
 
@@ -15,18 +15,16 @@ const getDurationInMilliseconds = (start = process.hrtime()) => {
 
 class HealthRest extends BaseRest {
   public routes(): void {
-    this.router.get('/', async (req: Request, res:Response):  Promise<Response> => {
-      return res.json({
-        status: true,
-        message: `Welcome to api ${config?.app?.name}`,
-        data: {
-          response_time: `${getDurationInMilliseconds()}(ms)`,
-          uptimes: process.uptime(),
-          timestamp: new Date().toISOString(),
-          documentation: `http://${req.get('host')}/documentation`
-        }
-      })
-    })
+    this.router.get('/', async (req: Request, res:Response): Promise<Response> => res.json({
+      status: true,
+      message: `Welcome to api ${config?.app?.name}`,
+      data: {
+        response_time: `${getDurationInMilliseconds()}(ms)`,
+        uptimes: process.uptime(),
+        timestamp: new Date().toISOString(),
+        documentation: `http://${req.get('host')}/documentation`
+      }
+    }))
 
     if (config?.app?.env === Environment.DEV) {
       this.router.use('/documentation', swaggerUi.serve)
