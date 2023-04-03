@@ -26,7 +26,6 @@ const servers: object = [
   // }
 ]
 
-
 export const swaggerInit: object = {
   openapi: '3.0.0',
   info,

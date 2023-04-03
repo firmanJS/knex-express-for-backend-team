@@ -6,21 +6,17 @@ import { CountInterface, RepositoryInterface } from '../../interface/repository_
 import { RequestOptionsInterface } from '../../interface/request_interface'
 import { DtoInterface } from '../../interface/response_interface'
 import Translate from '../../lang'
-import CoreRepository from '../../models/core'
 import utils from '../../utils'
 import { Http, Table } from '../../utils/enum'
 import { RequestRepoOptions } from '../../utils/request'
 import { TodoPost } from './todo_interface'
+
 interface TodoInterface extends LogInterface {
   readonly id?: string
   readonly name?: string
   readonly description?: string
 }
-
 const table: string = Table.TODO
-const column: string[] = ['id', 'name', 'description']
-const sort: string[] = ['id', 'ASC']
-
 const condition = (builder: any, options: RequestOptionsInterface | any) => {
   builder.where(options?.where)
   builder.andWhere('deleted_at', null)
@@ -40,22 +36,28 @@ const sql = (options: RequestOptionsInterface) => {
   return query
 }
 
-class TodoRepository implements RepositoryInterface {
-
-  private mapOutput = async (options:RequestOptionsInterface, query: any): Promise<TodoInterface> => {
-    let result: TodoInterface
-    if (options.type === 'array') {
-      result = await query
-    } else {
-      result = await query.first()
-    }
-
-    return result
+const mapOutput = async (options:RequestOptionsInterface, query: any): Promise<TodoInterface> => {
+  let result: TodoInterface
+  if (options.type === 'array') {
+    result = await query
+  } else {
+    result = await query.first()
   }
 
-  create = async (req: Request, payload: TodoPost): Promise<DtoInterface> => {
+  return result
+}
+
+export default new class TodoRepository implements RepositoryInterface {
+  private readonly table: string = table
+
+  private readonly column: [string] = ['id']
+
+  private readonly sort: string[] = ['id', 'ASC']
+
+  async create(req: Request, payload: TodoPost): Promise<DtoInterface> {
     try {
-      const [result]: TodoInterface[] = await pgCore(table).insert(payload).returning(column[0])
+      const [result]: TodoInterface[] = await pgCore(this.table)
+        .insert(payload).returning(this.column[0])
       return utils?.mappingSuccess(Translate.__('created.success'), result)
     } catch (error: any) {
       error.path_filename = __filename
@@ -63,12 +65,12 @@ class TodoRepository implements RepositoryInterface {
     }
   }
 
-  get = async (req: Request, options: RequestOptionsInterface | any): Promise<DtoInterface> => {
+  async get(req: Request, options: RequestOptionsInterface): Promise<DtoInterface> {
     try {
-      let query: Knex.QueryBuilder = sql(options).clone().select(column)
+      let query: Knex.QueryBuilder = sql(options).clone().select(this.column)
       query = RequestRepoOptions(options, query)
-      const result: TodoInterface = await this.mapOutput(options, query)
-      const [rows]: CountInterface[] = await sql(options).clone().count(column[0])
+      const result: TodoInterface = await mapOutput(options, query)
+      const [rows]: CountInterface[] = await sql(options).clone().count(this.column[0])
       return utils?.mappingSuccess(Translate.__('get.success'), {
         result,
         count: rows?.count
@@ -79,22 +81,26 @@ class TodoRepository implements RepositoryInterface {
     }
   }
 
-  getByParam = async (req: Request, options: RequestOptionsInterface | any): Promise<DtoInterface> => {
+  async getByParam(req: Request, options: RequestOptionsInterface): Promise<DtoInterface> {
     try {
-      let query: Knex.QueryBuilder = sql(options).clone().select(column)
+      let query: Knex.QueryBuilder = sql(options).clone().select(this.column)
       query = RequestRepoOptions(options, query)
-      const result: TodoInterface = await this.mapOutput(options, query)
+      const result: TodoInterface = await mapOutput(options, query)
       if (result) {
         return utils?.mappingSuccess(Translate.__('get.success'), result)
       }
-      return utils?.mappingSuccess(Translate.__('notfound.id', { id: options?.where?.id }), result, Http.NOT_FOUND)
+      return utils?.mappingSuccess(
+        Translate.__('notfound.id', { id: options?.where?.id }),
+        result,
+        Http.NOT_FOUND
+      )
     } catch (error: any) {
       error.path_filename = __filename
       return utils?.mappingError(req, error)
     }
   }
 
-  update = async (req: Request, options: RequestOptionsInterface | any) => {
+  async update(req: Request, options: RequestOptionsInterface | any) {
     try {
       let message = ''
       if (options?.type_method === 'update') {
@@ -102,9 +108,9 @@ class TodoRepository implements RepositoryInterface {
       } else {
         message = Translate.__('archive.success', { id: options?.where?.id })
       }
-      options.table = table
-      options.column = column[0]
-      const result = await CoreRepository.updated(options)
+      options.table = this.table
+      options.column = this.column['0']
+      const result: any = {}
       if (result) {
         return utils?.mappingSuccess(message, result)
       }
@@ -115,9 +121,7 @@ class TodoRepository implements RepositoryInterface {
     }
   }
 
-  COLUMN(): string[] { return column }
+  COLUMN(): string[] { return this.column }
 
-  SORT(): string[] { return sort }
-}
-
-export default TodoRepository
+  SORT(): string[] { return this.sort }
+}()
