@@ -1,11 +1,11 @@
-import express, { Application } from 'express'
 import compression from 'compression'
-import helmet from 'helmet'
 import cors from 'cors'
 import 'dotenv/config'
+import express, { Application } from 'express'
+import helmet from 'helmet'
 import morgan from 'morgan'
-import RestHttp from './route/V1'
 import config from './config'
+import RestHttp from './route/V1'
 import utils from './utils'
 
 class App {
@@ -34,9 +34,9 @@ class App {
     this.app.use(compression()) // gzip compression
     this.app.use(express.json({ limit: config?.app?.limit })) // json limit
     if (config?.app?.env === utils?.Environment.PROD) {
-      this.app.use(morgan(utils?.MORGAN_FORMAT.PROD))
+      this.app.use(morgan(utils?.MORGAN_FORMAT.PROD_FORMAT))
     } else {
-      this.app.use(morgan(utils?.MORGAN_FORMAT.DEV, { stream: process.stderr }))
+      this.app.use(morgan(utils?.MORGAN_FORMAT.DEV_FORMAT, { stream: process.stderr }))
     }
   }
 

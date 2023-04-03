@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 import { knex } from 'knex';
 
 const knexfile = require('../../knexfile.js');

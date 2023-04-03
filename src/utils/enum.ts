@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-unused-vars */
 export enum Environment {
   DEV = 'development',
   STG = 'staging',
@@ -17,8 +19,8 @@ export enum Http {
 }
 
 export enum MORGAN_FORMAT {
-  DEV = '[:date[clf]] :remote-addr :remote-user \x1b[36m:method \x1b[36m:url \x1b[33m:status \x1b[32m:response-time\x1b[36m(ms)\x1b[0m',
-  PROD = '[:date[clf]] :remote-addr :remote-user :method :url :status :response-time(ms)'
+  DEV_FORMAT = '[:date[clf]] :remote-addr :remote-user \x1b[36m:method \x1b[36m:url \x1b[33m:status \x1b[32m:response-time\x1b[36m(ms)\x1b[0m',
+  PROD_FORMAT = '[:date[clf]] :remote-addr :remote-user :method :url :status :response-time(ms)'
 }
 
 export enum Table {

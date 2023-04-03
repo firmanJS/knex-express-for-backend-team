@@ -1,9 +1,11 @@
-import { Request, Response, NextFunction } from 'express'
-import { Environment, Http } from './enum'
-import { LIMIT, PAGE } from './constant'
-import { DtoInterface, OptionsInterface, ResponseInterface, WithMetaInterface } from '../interface/response_interface'
-import Translate from '../lang'
+import { NextFunction, Request, Response } from 'express'
 import config from '../config'
+import {
+  DtoInterface, OptionsInterface, ResponseInterface, WithMetaInterface
+} from '../interface/response_interface'
+import Translate from '../lang'
+import { LIMIT, PAGE } from './constant'
+import { Environment, Http } from './enum'
 
 const optionCustom = () :OptionsInterface => {
   const data: OptionsInterface = {
@@ -56,18 +58,16 @@ export const syntaxError = (err:any, req: Request, res: Response, next:NextFunct
   if (err instanceof SyntaxError) {
     result.status = false
     return res.status(Http.BAD_REQUEST).send(result)
-  } else {
-    next()
   }
+  next()
 
   if (process.env.NODE_ENV === 'development') {
     console.info(err.toString())
     return res.status(Http.OK).send(result)
-  } else {
-    // sent to sentry or whatever
-    console.info(err.toString())
-    return res.status(Http.OK).send(result)
   }
+  // sent to sentry or whatever
+  console.info(err.toString())
+  return res.status(Http.OK).send(result)
 }
 
 const logicPagination = (rows: any, totalData: number) => {
@@ -94,7 +94,7 @@ const logicPagination = (rows: any, totalData: number) => {
 }
 
 export const paginationResponse = (req: Request, res: Response, rows:any): Response => {
-  const totalData: number = +rows?.data?.data?.count ?? 0
+  const totalData: number = Number(rows?.data?.data?.count) ?? 0
   const { status, message, code } = logicPagination(rows, totalData)
   const limitPerPage: number = Number(req.query?.limit) || +LIMIT
   const countTotal: number = totalData || +LIMIT
@@ -113,11 +113,16 @@ export const paginationResponse = (req: Request, res: Response, rows:any): Respo
   return res.status(code).json(result)
 }
 
-export const baseResponse = (res: Response, data: any): Response => res.status(data?.code ?? Http.OK).json(data?.data)
+export const baseResponse = (res: Response, data: any)
+: Response => res.status(data?.code ?? Http.OK).json(data?.data)
 
 export const mappingSuccess = (
-  message: string, data:[] | {} = [], code: number = Http.OK, status:boolean = true
-  ): DtoInterface => ({
+  message: string,
+  data:[] | {} = [],
+  code: number = Http.OK,
+  status:boolean = true
+)
+: DtoInterface => ({
   code,
   data: {
     status,
@@ -153,7 +158,8 @@ const conditionCheck = (error:string, manipulate:string, message: string): strin
   return message
 }
 
-export const mappingError = (req:Request, error: any, code: number = Http.BAD_REQUEST): DtoInterface => {
+export const mappingError = (req:Request, error: any, code: number = Http.BAD_REQUEST)
+: DtoInterface => {
   let message: string = ''
   let exception: string = ''
   const manipulate: string = error.toString().split(':')

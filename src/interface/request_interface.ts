@@ -11,7 +11,7 @@ export interface RequestOptionsInterface {
   readonly order?: object
   readonly filter?: object
   readonly type?: string
-  readonly type_method?: string
+  readonly typeMethod?: string
   readonly id?: string
   readonly table?: string
   readonly column?: string | any
@@ -33,8 +33,7 @@ export interface RequestQueryParamInterface {
 
 export interface RequestSoftInterface {
   readonly where?: Object[]
-  readonly type_method?: string
+  readonly typeMethod?: string
   readonly column?: string[]
   readonly payload?: Object[]
 }
-

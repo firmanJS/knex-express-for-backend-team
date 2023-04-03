@@ -1,20 +1,21 @@
-import { LIMIT, PAGE } from './constant'
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 import { Request } from 'express'
 import {
   RequestOptionsInterface, RequestOrderInterface, RequestQueryInterface,
   RequestQueryParamInterface, RequestSoftInterface
 } from '../interface/request_interface'
+import { LIMIT, PAGE } from './constant'
 
 export const paging = (req: Request): RequestQueryInterface => {
-  const page = +req?.query?.page! || PAGE
-  const limit = +req?.query?.limit! || LIMIT
+  const page = Number(req?.query?.page) || PAGE
+  const limit = Number(req?.query?.limit) || LIMIT
   const search = req?.query?.search as string || ''
 
   return {
     page, limit, search
   }
 }
-
 
 export const dynamicFilter = (req: Request, column: string[] = []): RequestQueryParamInterface => {
   const push: any = {}
@@ -30,11 +31,11 @@ export const dynamicFilter = (req: Request, column: string[] = []): RequestQuery
   return push
 }
 
-
-export const dynamicOrder = (req: Request | any, defaultOrder: string[] = []) : RequestOrderInterface => {
+export const dynamicOrder = (req: Request | any, defaultOrder: string[] = [])
+: RequestOrderInterface => {
   let order: object
   const orders = req?.query?.order || defaultOrder[1]
-  const direction = req?.query?.direction  || defaultOrder[0]
+  const direction = req?.query?.direction || defaultOrder[0]
   if (typeof orders === 'string' && typeof direction === 'string') {
     order = [
       { column: direction, order: orders }
@@ -50,7 +51,7 @@ export const dynamicOrder = (req: Request | any, defaultOrder: string[] = []) : 
   return order
 }
 
-export const RequestRepoOptions = (options:RequestOptionsInterface | any, query:any) :void | any => {
+export const RequestRepoOptions = (options:RequestOptionsInterface | any, query:any):void | any => {
   if (options?.order && options?.order) {
     query.orderBy(options.order)
   }
@@ -64,12 +65,12 @@ export const RequestRepoOptions = (options:RequestOptionsInterface | any, query:
   return query
 }
 
-export const optionsPayload = (req: Request, type_method: string) : RequestSoftInterface => {
+export const optionsPayload = (req: Request, typeMethod: string) : RequestSoftInterface => {
   const where: any = req?.params
   const payload = req?.body
   const options: RequestSoftInterface = {
     where,
-    type_method,
+    typeMethod,
     column: ['name'],
     payload
   }
