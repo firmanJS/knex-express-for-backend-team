@@ -47,7 +47,7 @@ const mapOutput = async (options:RequestOptionsInterface, query: any): Promise<T
   return result
 }
 
-export default new class TodoRepository implements RepositoryInterface {
+export default class TodoRepository implements RepositoryInterface {
   private readonly table: string = table
 
   private readonly column: [string] = ['id']
@@ -124,4 +124,4 @@ export default new class TodoRepository implements RepositoryInterface {
   COLUMN(): string[] { return this.column }
 
   SORT(): string[] { return this.sort }
-}()
+}
