@@ -7,7 +7,7 @@ class TodoRoutes extends BaseRest {
   public routes(): void {
     this.router.post('/', bodyValidate(postValidation), TodoHandler.store)
     this.router.get('/', TodoHandler.fetch)
-    this.router.get('/:id', TodoHandler.fetchByParam)
+    // this.router.get('/:id', TodoHandler.fetchByParam)
   }
 }
 
