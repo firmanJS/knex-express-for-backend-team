@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
+import BaseHandlerInterface from '../../interface/handler_interface'
 import { RequestOptionsInterface } from '../../interface/request_interface'
-import utils from '../../utils'
-import { Method } from '../../utils/enum'
+import { Constant, Exception, RequestUtils } from '../../utils'
 import { optionsPayload } from '../../utils/request'
 import { TodoPost } from './todo_interface'
 import TodoRepository from './todo_repository'
@@ -12,45 +12,50 @@ import TodoRepository from './todo_repository'
 //   stores(req: Request, res: Response): Promise<Response>
 // }
 
-const repo: TodoRepository = new TodoRepository()
-export default class TodoHandler {
-  static async store(req: Request, res: Response): Promise<Response> {
-    const payload: TodoPost = req?.body
-    const result = await repo.create(req, payload)
-    return utils.baseResponse(res, result)
+export default new class TodoHandler implements BaseHandlerInterface {
+  repo: TodoRepository
+
+  constructor() {
+    this.repo = new TodoRepository()
   }
 
-  static async fetch(req: Request, res: Response): Promise<Response> {
-    const where = utils.dynamicFilter(req, ['id'])
-    const filter = utils.paging(req)
-    const order = utils.dynamicOrder(req, ['id', 'asc'])
+  async store(req: Request, res: Response): Promise<Response> {
+    const payload: TodoPost = req?.body
+    const result = await this.repo.create(req, payload)
+    return Exception.baseResponse(res, result)
+  }
+
+  async fetch(req: Request, res: Response): Promise<Response> {
+    const where = RequestUtils.dynamicFilter(req, this.repo.COLUMN())
+    const filter = RequestUtils.paging(req)
+    const order = RequestUtils.dynamicOrder(req, this.repo.SORT())
     const options = {
       where, order, filter, type: 'array'
     }
-    const result = await repo.get(req, options)
-    return utils.paginationResponse(req, res, result)
+    const result = await this.repo.get(req, options)
+    return Exception.paginationResponse(req, res, result)
   }
 
-  static async fetchByParam(req: Request, res: Response): Promise<Response> {
+  async fetchByParam(req: Request, res: Response): Promise<Response> {
     const options: RequestOptionsInterface = {
       where: {
         id: req?.params?.id
       },
       type: 'object'
     }
-    const result = await repo.getByParam(req, options)
-    return utils.baseResponse(res, result)
+    const result = await this.repo.getByParam(req, options)
+    return Exception.baseResponse(res, result)
   }
 
-  static async update(req: Request, res: Response): Promise<Response> {
-    let type = ''
-    if (req?.method === Method.DEL) {
+  async update(req: Request, res: Response): Promise<Response> {
+    let type: string = ''
+    if (req?.method === Constant.Method.DEL) {
       type = 'soft-delete'
     } else {
       type = 'update'
     }
     const options = optionsPayload(req, type)
-    const result = await repo.update(req, options)
-    return utils.baseResponse(res, result)
+    const result = await this.repo.update(req, options)
+    return Exception.baseResponse(res, result)
   }
-}
+}()

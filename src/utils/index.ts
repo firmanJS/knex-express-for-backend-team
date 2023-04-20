@@ -1,11 +1,4 @@
-import * as constant from './constant'
-import * as enums from './enum'
-import * as exception from './exception'
-import * as request from './request'
-
-export default {
-  ...constant,
-  ...enums,
-  ...exception,
-  ...request
-}
+export { default as Constant } from './constant';
+export { default as Exception } from './exception';
+export { default as RequestUtils } from './request';
+// import * as request from './request'

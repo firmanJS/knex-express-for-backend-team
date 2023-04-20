@@ -4,9 +4,13 @@ import {
   DtoInterface, OptionsInterface, ResponseInterface, WithMetaInterface
 } from '../interface/response_interface'
 import Translate from '../lang'
-import { LIMIT, PAGE } from './constant'
-import { Environment, Http } from './enum'
+import {
+  Environment,
+  Http,
+  LIMIT, PAGE
+} from './constant'
 
+namespace Exception {
 const optionCustom = () :OptionsInterface => {
   const data: OptionsInterface = {
     status: true,
@@ -189,3 +193,6 @@ export const captureLog = (err:any): void => {
     console.info('error validateMiddleware', err);
   }
 }
+}
+
+export = Exception

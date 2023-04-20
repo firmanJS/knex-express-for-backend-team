@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import swaggerUi from 'swagger-ui-express'
 import config from '../config'
-import BaseRest from './base'
-import { Environment } from '../utils/enum'
 import { swaggerInit } from '../static'
+import { Environment } from '../utils/constant'
+import BaseRest from './base'
 
 const getDurationInMilliseconds = (start = process.hrtime()) => {
   const NS_PER_SEC = 1e9

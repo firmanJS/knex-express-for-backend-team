@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { Environment } from '../utils/enum'
+import { Environment } from '../utils/constant'
 
 export const envSchema = Joi.object({
   APP_LANGUAGE: Joi.string().required(),
