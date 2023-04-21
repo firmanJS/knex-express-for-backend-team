@@ -1,30 +1,27 @@
 import dotenv from 'dotenv'
 import { Config } from './config_interface'
-import configValidate from './config_validate'
 
 dotenv.config()
 
-const env = configValidate(process?.env)
-
 const config: Config = {
   app: {
-    name: env.APP_NAME,
-    env: env.APP_ENV,
-    port: env.APP_PORT,
-    language: env.APP_LANGUAGE,
-    permission_policy: env.APP_PERMISSION_POLICY,
-    protetcion: env.APP_PROTECTION,
-    method: env.APP_METHOD,
-    allow_header: env.APP_ALLOW_HEADER,
-    expose_header: env.APP_EXPOSE_HEADER,
-    limit: env.APP_LIMIT
+    name: process?.env?.APP_NAME || 'app',
+    env: process?.env?.APP_ENV || 'development',
+    port: Number(process?.env?.APP_PORT || 2001),
+    language: process?.env?.APP_LANGUAGE || 'id',
+    permission_policy: process?.env?.APP_PERMISSION_POLICY || '',
+    protetcion: process?.env?.APP_PROTECTION || '',
+    method: process?.env?.APP_METHOD || '',
+    allow_header: process?.env?.APP_ALLOW_HEADER || '',
+    expose_header: process?.env?.APP_EXPOSE_HEADER || '',
+    limit: process?.env?.APP_LIMIT || ''
   },
   db: {
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    username: env.DB_USER,
-    password: env.DB_PASS,
-    name: env.DB_NAME,
+    host: process?.env?.DB_HOST || '',
+    port: Number(process?.env?.DB_PORT || 5432),
+    username: process?.env?.DB_USER || '',
+    password: process?.env?.DB_PASS || '',
+    name: process?.env?.DB_NAME || '',
   },
 }
 

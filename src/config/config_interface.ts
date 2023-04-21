@@ -7,9 +7,9 @@ export interface Config {
     permission_policy: string
     protetcion: string
     limit: string
-    method: []
-    allow_header: []
-    expose_header: []
+    method: [] | string
+    allow_header: [] | string
+    expose_header: [] | string
   }
   db: {
     host: string
