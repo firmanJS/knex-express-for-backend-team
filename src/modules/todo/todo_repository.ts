@@ -107,7 +107,7 @@ export default class TodoRepository implements RepositoryInterface {
       if (result) {
         return Exception.mappingSuccess(message, result)
       }
-      return Exception.mappingSuccess(Translate.__('notfound.id', { id: options?.where?.id }), result, 404, false)
+      return Exception.mappingSuccess(Translate.__('notfound.id', { id: options?.where?.id }), result, Constant.Http.NOT_FOUND, false)
     } catch (error: any) {
       error.path_filename = __filename
       return Exception.mappingError(req, error)
