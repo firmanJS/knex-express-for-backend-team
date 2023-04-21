@@ -15,6 +15,7 @@ export interface RequestOptionsInterface {
   readonly id?: string
   readonly table?: string
   readonly column?: string | any
+  readonly column_archived?: string | any
   readonly payload?: object | any
 }
 

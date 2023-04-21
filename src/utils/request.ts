@@ -5,7 +5,7 @@ import {
   RequestOptionsInterface, RequestOrderInterface, RequestQueryInterface,
   RequestQueryParamInterface, RequestSoftInterface
 } from '../interface/request_interface'
-import { LIMIT, PAGE } from './constant'
+import Constant, { LIMIT, PAGE } from './constant'
 
 namespace RequestUtils {
   export const paging = (req: Request): RequestQueryInterface => {
@@ -36,8 +36,8 @@ namespace RequestUtils {
   export const dynamicOrder = (req: Request | any, defaultOrder: string[] = [])
   : RequestOrderInterface => {
     let order: object
-    const orders = req?.query?.order || defaultOrder[1]
     const direction = req?.query?.direction || defaultOrder[0]
+    const orders = req?.query?.order || defaultOrder[1]
     if (typeof orders === 'string' && typeof direction === 'string') {
       order = [
         { column: direction, order: orders }
@@ -68,9 +68,15 @@ namespace RequestUtils {
     return query
   }
 
-  export const optionsPayload = (req: Request, typeMethod: string) : RequestSoftInterface => {
+  export const optionsPayload = (req: Request) : RequestSoftInterface => {
     const where: any = req?.params
     const payload = req?.body
+    let typeMethod: string = ''
+    if (req?.method === Constant.Method.DEL) {
+      typeMethod = 'soft-delete'
+    } else {
+      typeMethod = 'update'
+    }
     const options: RequestSoftInterface = {
       where,
       typeMethod,
