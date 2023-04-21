@@ -5,6 +5,7 @@ import { CountInterface, RepositoryInterface } from '../../interface/repository_
 import { RequestOptionsInterface } from '../../interface/request_interface'
 import { DtoInterface } from '../../interface/response_interface'
 import Translate from '../../lang'
+import { coreUpdate } from '../../models/core'
 import { Constant, Exception, RequestUtils } from '../../utils'
 import { TodoInterface, TodoPost } from './todo_interface'
 
@@ -38,7 +39,6 @@ const mapOutput = async (options:RequestOptionsInterface, query: any): Promise<T
 
   return result
 }
-
 export default class TodoRepository implements RepositoryInterface {
   private readonly table: string = table
 
@@ -95,14 +95,15 @@ export default class TodoRepository implements RepositoryInterface {
   async update(req: Request, options: RequestOptionsInterface | any): Promise<DtoInterface> {
     try {
       let message = ''
-      if (options?.type_method === 'update') {
+      if (options?.typeMethod === 'update') {
         message = Translate.__('updated.success', { id: options?.where?.id })
       } else {
         message = Translate.__('archive.success', { id: options?.where?.id })
       }
       options.table = this.table
-      options.column = this.column['0']
-      const result: any = {}
+      options.column = [this.column[0], this.column[1]]
+      options.column_archived = [this.column[1]]
+      const result = await coreUpdate(options)
       if (result) {
         return Exception.mappingSuccess(message, result)
       }

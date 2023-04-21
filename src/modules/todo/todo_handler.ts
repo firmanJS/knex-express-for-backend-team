@@ -1,12 +1,11 @@
 import { Request, Response } from 'express'
 import BaseHandlerInterface from '../../interface/handler_interface'
 import { RequestOptionsInterface } from '../../interface/request_interface'
-import { Constant, Exception, RequestUtils } from '../../utils'
+import { Exception, RequestUtils } from '../../utils'
 import { optionsPayload } from '../../utils/request'
 import { TodoPost } from './todo_interface'
 import TodoRepository from './todo_repository'
 
-// const repos: RepositoryInterface = TodoRepository
 // custom interface extends
 // interface CustomInterface extends BaseHandlerInterface {
 //   stores(req: Request, res: Response): Promise<Response>
@@ -48,13 +47,7 @@ export default new class TodoHandler implements BaseHandlerInterface {
   }
 
   async update(req: Request, res: Response): Promise<Response> {
-    let type: string = ''
-    if (req?.method === Constant.Method.DEL) {
-      type = 'soft-delete'
-    } else {
-      type = 'update'
-    }
-    const options = optionsPayload(req, type)
+    const options = optionsPayload(req)
     const result = await this.repo.update(req, options)
     return Exception.baseResponse(res, result)
   }

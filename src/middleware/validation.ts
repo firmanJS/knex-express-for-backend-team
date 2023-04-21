@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 import Joi from 'joi'
-import { Http } from '../utils/constant'
+import Translate from '../lang'
+import { Constant } from '../utils'
 import { baseResponse, mappingError } from '../utils/exception'
 
 const getValidationErrors = (validationErrors: Joi.ValidationErrorItem[]) => {
-  // const errors: Record<string, string> = {}
   const errors: string[] = [];
 
   validationErrors.forEach((item) => {
@@ -52,11 +52,9 @@ const optionsJoi: Record<string, any> = {
 
 const errorFunc = (req: Request, res: Response, error:any, next: NextFunction): any => {
   if (error) {
-    console.log(error);
-
     const extractedErrors: string[] = [];
     error.details.map((err: any) => extractedErrors.push(err.message.replace(/"/g, '')))
-    const err = mappingError(req, extractedErrors, Http.UNPROCESSABLE_ENTITY)
+    const err = mappingError(req, extractedErrors, Constant.Http.UNPROCESSABLE_ENTITY)
     return baseResponse(res, err)
   }
   return next()
@@ -74,8 +72,28 @@ const paramValidate = (schema: Joi.Schema) => (req: Request, res: Response, next
   return errorFunc(req, res, error, next)
 }
 
+const queryValidate = (schema: Joi.Schema) => (req: Request, res: Response, next: NextFunction) => {
+  const { error } = schema.validate(req?.query, optionsJoi)
+
+  return errorFunc(req, res, error, next)
+}
+
+const uuidValidation = Joi.object({
+  id: Joi.string().guid({
+    version: [
+      'uuidv4',
+      'uuidv5'
+    ]
+  }).required().messages({
+    'any.required': `{{#label}} ${Translate.__('validator.required')}`,
+    'guid.base': `{{#label}} ${Translate.__('validator.required')}`
+  }),
+})
+
 export {
   validate,
   bodyValidate,
-  paramValidate
+  paramValidate,
+  queryValidate,
+  uuidValidation,
 }
