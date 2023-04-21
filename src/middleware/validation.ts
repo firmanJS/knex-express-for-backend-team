@@ -1,99 +1,57 @@
 import { NextFunction, Request, Response } from 'express'
-import Joi from 'joi'
+import { param, validationResult } from 'express-validator'
 import Translate from '../lang'
-import { Constant } from '../utils'
+import { Http } from '../utils/constant'
 import { baseResponse, mappingError } from '../utils/exception'
 
-const getValidationErrors = (validationErrors: Joi.ValidationErrorItem[]) => {
-  const errors: string[] = [];
-
-  validationErrors.forEach((item) => {
-    const { message } = item
-    errors.push(message)
-  })
-  return errors
-}
-
-const validate = (schema: Joi.Schema, values: any) => {
-  const { error, value } = schema.validate(values, {
-    abortEarly: false,
-    stripUnknown: true,
-    errors: {
-      wrap: {
-        label: '',
-      },
-    },
-    cache: true,
-  })
-
-  if (!error) {
-    return {
-      errors: error,
-      value,
-    }
+const checkMessageError = (catchMessage:any, errors: any): string | any => {
+  let message
+  const extractedErrors: any = []
+  errors.array().map((err:any) => extractedErrors.push(err.msg))
+  switch (catchMessage[0][0]) {
+    case 'database':
+      message = Translate.__('knex.db')
+      break
+    case 'connect':
+      message = Translate.__('knex.connect')
+      break
+    case 'password':
+      message = Translate.__('knex.password')
+      break
+    case 'select':
+      message = Translate.__('knex.select')
+      break
+    case 'getaddrinfo':
+      message = Translate.__('knex.host')
+      break
+    case 'Please':
+      message = errors.array()
+      break
+    default:
+      message = extractedErrors
   }
 
-  return {
-    errors: getValidationErrors(error.details),
-    value,
-  }
+  return message
 }
 
-const optionsJoi: Record<string, any> = {
-  abortEarly: false,
-  stripUnknown: true,
-  errors: {
-    wrap: {
-      label: '',
-    },
-  },
-  cache: true,
-}
+export const validate = (req: Request, res: Response, next: NextFunction) => {
+  const errors = validationResult(req)
 
-const errorFunc = (req: Request, res: Response, error:any, next: NextFunction): any => {
-  if (error) {
-    const extractedErrors: string[] = [];
-    error.details.map((err: any) => extractedErrors.push(err.message.replace(/"/g, '')))
-    const err = mappingError(req, extractedErrors, Constant.Http.UNPROCESSABLE_ENTITY)
-    return baseResponse(res, err)
+  if (!errors.isEmpty()) {
+    const catchMessage = errors.array().map((err) => err.msg.split(' '))
+    console.error('error validate', errors);
+    const message = checkMessageError(catchMessage, errors)
+    return baseResponse(res, mappingError(req, message, Http.UNPROCESSABLE_ENTITY))
   }
+
   return next()
 }
 
-const bodyValidate = (schema: Joi.Schema) => (req: Request, res: Response, next: NextFunction) => {
-  const { error } = schema.validate(req?.body, optionsJoi)
-
-  return errorFunc(req, res, error, next)
-}
-
-const paramValidate = (schema: Joi.Schema) => (req: Request, res: Response, next: NextFunction) => {
-  const { error } = schema.validate(req?.params, optionsJoi)
-
-  return errorFunc(req, res, error, next)
-}
-
-const queryValidate = (schema: Joi.Schema) => (req: Request, res: Response, next: NextFunction) => {
-  const { error } = schema.validate(req?.query, optionsJoi)
-
-  return errorFunc(req, res, error, next)
-}
-
-const uuidValidation = Joi.object({
-  id: Joi.string().guid({
-    version: [
-      'uuidv4',
-      'uuidv5'
-    ]
-  }).required().messages({
-    'any.required': `{{#label}} ${Translate.__('validator.required')}`,
-    'guid.base': `{{#label}} ${Translate.__('validator.required')}`
-  }),
-})
-
-export {
-  validate,
-  bodyValidate,
-  paramValidate,
-  queryValidate,
-  uuidValidation,
-}
+export const uuidValidation = [
+  param('id')
+    .isUUID(4)
+    .withMessage(Translate.__('validator.uuid', { field: 'id' }))
+    .notEmpty()
+    .withMessage(Translate.__('validator.required', { field: 'id' })),
+  (req: Request, res: Response, next: NextFunction) => { validate(req, res, next) }
+]

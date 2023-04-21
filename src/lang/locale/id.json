@@ -30,7 +30,7 @@
 	"delete.id": "Data dengan id {{id}} berhasil di hapus",
 	"validator": "Kesalahan validasi data",
 	"validator.uuid": "{{field}} harus berupa uuid v4",
-	"validator.required": "harus di isi",
+	"validator.required": "{{field}} harus di isi",
 	"validator.string": "{{field}} harus bertipe string",
 	"validator.email": "inputan email tidak valid",
 	"validator.password": "inputan password harus mengandung 1 Kapital, 1 huruf kecil, 1 angka, 1 simbol dan minimal 8 karakter",

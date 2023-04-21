@@ -14,8 +14,8 @@ export interface RequestOptionsInterface {
   readonly typeMethod?: string
   readonly id?: string
   readonly table?: string
+  readonly message?: string | any
   readonly column?: string | any
-  readonly column_archived?: string | any
   readonly payload?: object | any
 }
 

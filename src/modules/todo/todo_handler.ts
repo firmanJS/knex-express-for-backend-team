@@ -12,7 +12,7 @@ import TodoRepository from './todo_repository'
 // }
 
 export default new class TodoHandler implements BaseHandlerInterface {
-  repo: TodoRepository
+  private readonly repo: TodoRepository
 
   constructor() {
     this.repo = new TodoRepository()

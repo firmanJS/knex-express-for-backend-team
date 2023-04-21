@@ -16,6 +16,7 @@ const condition = (builder: any, options: RequestOptionsInterface | any) => {
   if (options?.filter?.search) {
     builder.whereILike('name', `%${options?.filter?.search}%`)
     builder.orWhereILike('description', `%${options?.filter?.search}%`)
+    builder.andWhere(`${table}.deleted_at`, null)
   }
   return builder
 }
@@ -102,7 +103,6 @@ export default class TodoRepository implements RepositoryInterface {
       }
       options.table = this.table
       options.column = [this.column[0], this.column[1]]
-      options.column_archived = [this.column[1]]
       const result = await coreUpdate(options)
       if (result) {
         return Exception.mappingSuccess(message, result)
