@@ -10,8 +10,7 @@ const checkMessageError = (catchMessage: any, errors: any): string | any => {
   const extractedErrors: any = [];
   errors.array().map((err: any) => extractedErrors.push(err.msg));
   switch (catchMessage[0][0]) {
-    case 'database':
-      message = Translate.__('knex.db');
+    case 'database': message = Translate.__('knex.db');
       break;
     case 'connect':
       message = Translate.__('knex.connect');
