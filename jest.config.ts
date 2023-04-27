@@ -1,4 +1,4 @@
-import type { Config } from '@jest/types'
+import type { Config } from '@jest/types';
 
 export default async (): Promise<Config.InitialOptions> => ({
   bail: 1,
@@ -19,8 +19,6 @@ export default async (): Promise<Config.InitialOptions> => ({
   transform: {
     '^.+\\.ts?$': 'ts-jest',
   },
-  setupFilesAfterEnv: [
-    'jest-extended'
-  ],
+  setupFilesAfterEnv: ['jest-extended'],
   verbose: true,
-})
+});
