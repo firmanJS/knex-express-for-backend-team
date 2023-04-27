@@ -1,22 +1,23 @@
 export interface RequestQueryInterface {
-  readonly page?: number
-  readonly limit?: number
-  readonly order?: string
-  readonly direction?: string
-  readonly search?: string
+  readonly page?: number;
+  readonly limit?: number;
+  readonly order?: string;
+  readonly direction?: string;
+  readonly search?: string;
 }
 
 export interface RequestOptionsInterface {
-  readonly where?: object | any
-  readonly order?: object
-  readonly filter?: object
-  readonly type?: string
-  readonly typeMethod?: string
-  readonly id?: string
-  readonly table?: string
-  readonly message?: string | any
-  readonly column?: string | any
-  readonly payload?: object | any
+  readonly where?: object | any;
+  readonly order?: object;
+  readonly filter?: object;
+  readonly type?: string;
+  readonly typeMethod?: string;
+  readonly id?: string;
+  readonly table?: string;
+  readonly message?: string | any;
+  readonly column?: string | any;
+  readonly name?: string | any;
+  readonly payload?: object | any;
 }
 
 export interface ColumnReqInterface {
@@ -25,16 +26,16 @@ export interface ColumnReqInterface {
 }
 
 export interface RequestOrderInterface {
-  readonly order?: ColumnReqInterface[]
+  readonly order?: ColumnReqInterface[];
 }
 
 export interface RequestQueryParamInterface {
-  readonly [key: string]: Object[]
+  readonly [key: string]: Object[];
 }
 
 export interface RequestSoftInterface {
-  readonly where?: Object[]
-  readonly typeMethod?: string
-  readonly column?: string[]
-  readonly payload?: Object[]
+  readonly where?: Object[];
+  readonly typeMethod?: string;
+  readonly column?: string[];
+  readonly payload?: Object[];
 }

@@ -10,6 +10,10 @@ ENV NODE_ENV development
 
 COPY package.json /usr/apps/knex-express-template/
 
-RUN yarn install && yarn global add knex && yarn cache clean --all
+COPY . /usr/apps/knex-express-template/
+
+COPY src/lang/locale build/lang/locale
+
+RUN yarn install && yarn global add ts-node && yarn global add knex && yarn cache clean --all
 
 CMD ["yarn", "dev"]

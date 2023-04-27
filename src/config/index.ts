@@ -1,7 +1,7 @@
-import dotenv from 'dotenv'
-import { Config } from './config_interface'
+import dotenv from 'dotenv';
+import { Config } from './config_interface';
 
-dotenv.config()
+dotenv.config();
 
 const config: Config = {
   app: {
@@ -21,8 +21,8 @@ const config: Config = {
     port: Number(process?.env?.DB_PORT || 5432),
     username: process?.env?.DB_USER || '',
     password: process?.env?.DB_PASS || '',
-    name: process?.env?.DB_NAME || '',
-  },
-}
+    name: process?.env?.DB_NAME || ''
+  }
+};
 
-export default config
+export default config;

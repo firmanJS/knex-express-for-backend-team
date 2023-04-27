@@ -1,12 +1,12 @@
 {
-  "editor.formatOnSave": true,
-  "eslint.enable": true,
+	"editor.formatOnSave": true,
+	"eslint.enable": true,
 	"eslint.codeActionsOnSave.mode": "all",
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true,
 		"source.fixAll": true,
 		"source.organizeImports": true
 	},
-	"eslint.validate": ["typescript","javascript"],
-	"eslint.format.enable": true,
+	"eslint.validate": ["typescript", "javascript"],
+	"eslint.format.enable": true
 }

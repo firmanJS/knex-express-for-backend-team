@@ -1,17 +1,38 @@
-FROM node:18.12.1-buster-slim
+FROM node:18.12.1-buster-slim AS builder
+
+RUN rm -rf /var/cache/apk/*
 
 LABEL maintainer="firman"
 
-WORKDIR /usr/apps/logique-express-api
+WORKDIR /usr/apps/knex-express-template
 
-ENV NODE_ENV production
+COPY package.json ./
 
-COPY package.json /usr/apps/logique-express-api
+COPY tsconfig.json ./
 
-COPY ./src /usr/apps/logique-express-api
+RUN yarn install
 
-RUN yarn install --frozen-lockfile --production && yarn global add knex && yarn cache clean --all
+COPY . .
 
-USER node
+RUN yarn build
+
+# Build Stage 2
+# This build takes the production build from staging build
+#
+FROM node:18.12.1-buster-slim
+
+WORKDIR /usr/apps/knex-express-template
+
+COPY package.json ./
+
+ENV NODE_ENV=production
+
+RUN yarn install --frozen-lockfile --production
+
+COPY knexfile.js ./
+
+COPY src/lang/locale build/lang/locale
+
+COPY --from=builder /usr/apps/knex-express-template/build ./build
 
 CMD ["yarn", "start"]

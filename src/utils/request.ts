@@ -1,90 +1,99 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
-import { Request } from 'express'
+import { Request } from 'express';
 import {
-  RequestOptionsInterface, RequestOrderInterface, RequestQueryInterface,
-  RequestQueryParamInterface, RequestSoftInterface
-} from '../interface/request_interface'
-import Constant, { LIMIT, PAGE } from './constant'
+  RequestOptionsInterface,
+  RequestOrderInterface,
+  RequestQueryInterface,
+  RequestQueryParamInterface,
+  RequestSoftInterface,
+} from '../interface/request_interface';
+import Constant, { LIMIT, PAGE } from './constant';
 
 namespace RequestUtils {
   export const paging = (req: Request): RequestQueryInterface => {
-    const page = Number(req?.query?.page) || PAGE
-    const limit = Number(req?.query?.limit) || LIMIT
-    const search = req?.query?.search as string || ''
+    const page = Number(req?.query?.page) || PAGE;
+    const limit = Number(req?.query?.limit) || LIMIT;
+    const search = (req?.query?.search as string) || '';
 
     return {
-      page, limit, search
-    }
-  }
+      page,
+      limit,
+      search,
+    };
+  };
 
-  export const dynamicFilter = (req: Request, column: string[] = [])
-  : RequestQueryParamInterface => {
-    const push: any = {}
-    const asArray = Object.entries(req?.query)
-    const filtered = asArray.filter(([key]) => column.includes(key))
-    const newObject = Object.fromEntries(filtered)
+  export const dynamicFilter = (
+    req: Request,
+    column: string[] = []
+  ): RequestQueryParamInterface => {
+    const push: any = {};
+    const asArray = Object.entries(req?.query);
+    const filtered = asArray.filter(([key]) => column.includes(key));
+    const newObject = Object.fromEntries(filtered);
 
     for (const prop in newObject) {
       if (prop) {
-        push[prop] = newObject[prop]
+        push[prop] = newObject[prop];
       }
     }
-    return push
-  }
+    return push;
+  };
 
-  export const dynamicOrder = (req: Request | any, defaultOrder: string[] = [])
-  : RequestOrderInterface => {
-    let order: object
-    const direction = req?.query?.direction || defaultOrder[0]
-    const orders = req?.query?.order || defaultOrder[1]
+  export const dynamicOrder = (
+    req: Request | any,
+    defaultOrder: string[] = []
+  ): RequestOrderInterface => {
+    let order: object;
+    const direction = req?.query?.direction || defaultOrder[0];
+    const orders = req?.query?.order || defaultOrder[1];
     if (typeof orders === 'string' && typeof direction === 'string') {
-      order = [
-        { column: direction, order: orders }
-      ]
+      order = [{ column: direction, order: orders }];
     } else {
-      const content = []
+      const content = [];
       for (const a in direction) {
-        content.push({ column: direction[a], order: orders[a] })
+        content.push({ column: direction[a], order: orders[a] });
       }
-      order = content
+      order = content;
     }
 
-    return order
-  }
+    return order;
+  };
 
-  export const RequestRepoOptions = (options:RequestOptionsInterface | any, query:any)
-  :void | any => {
+  export const RequestRepoOptions = (
+    options: RequestOptionsInterface | any,
+    query: any
+  ): void | any => {
     if (options?.order && options?.order) {
-      query.orderBy(options.order)
+      query.orderBy(options.order);
     }
     if (options?.filter?.limit) {
-      query.limit(options.filter.limit)
+      query.limit(options.filter.limit);
     }
     if (options?.filter?.page && options?.filter?.limit) {
-      query.offset(((options.filter.page - 1) * options.filter.limit))
+      query.offset((options.filter.page - 1) * options.filter.limit);
     }
 
-    return query
-  }
+    return query;
+  };
 
-  export const optionsPayload = (req: Request) : RequestSoftInterface => {
-    const where: any = req?.params
-    const payload = req?.body
-    let typeMethod: string = ''
+  export const optionsPayload = (req: Request): RequestSoftInterface => {
+    const where: any = req?.params;
+    const payload = req?.body;
+    let typeMethod: string = '';
     if (req?.method === Constant.Method.DEL) {
-      typeMethod = 'soft-delete'
+      typeMethod = 'soft-delete';
     } else {
-      typeMethod = 'update'
+      typeMethod = 'update';
     }
     const options: RequestSoftInterface = {
       where,
       typeMethod,
       column: ['name'],
-      payload
-    }
+      payload,
+    };
 
-    return options
-  }
+    return options;
+  };
 }
-export = RequestUtils
+export = RequestUtils;
