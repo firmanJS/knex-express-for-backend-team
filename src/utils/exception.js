@@ -1,5 +1,7 @@
+// const { captureLog } = require('express-logger-logique')
 const { HTTP, PAGE, LIMIT } = require('./constant')
 const { lang } = require('../lang')
+// const { todayFormat } = require('./date')
 
 exports.notFoundHandler = (req, res) => {
   const message = `Route : ${req.url} ${lang.__('notfound')}.`
@@ -137,12 +139,14 @@ exports.mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
   const manipulate = error.toString().split(':')
   console.error(`catch message ${error}`);
   message = lang.__('error.db.transaction')
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.APP_ENV === 'development') {
     exception = error.toString()
     message = conditionCheck(error, manipulate, message)
   }
   if (error?.type_error !== 'validation') {
     // sent alert
+    // const msg = `\n ${todayFormat()} - ${error.toString()}`
+    // captureLog({ type: 'transactions', file_name: 'transaction.log' }).write(msg)
     console.info('sent alert', error)
   }
   return {

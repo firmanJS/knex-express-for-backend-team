@@ -53,12 +53,14 @@ const sql = (options) => {
 const create = async (req, payload) => {
   const trx = await pgCore.transaction();
   try {
-    const options = { column: COLUMN[0], trx }
-    const result = await Repo.insertTrx(TABLES.TODO, payload, options)
-    trx.commit()
+    const options = {
+      table: TABLES.TODO, payload, column: COLUMN[0], trx
+    }
+    const result = await Repo.insertTrx(options)
+    await trx.commit()
     return mappingSuccess(lang.__('created.success'), result)
   } catch (error) {
-    trx.rollback()
+    await trx.rollback()
     error.path_filename = __filename
     return mappingError(req, error)
   }
