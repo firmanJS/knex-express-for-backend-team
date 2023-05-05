@@ -6,7 +6,7 @@ checks:
       languages:
       - javascript
   duplication:
-    enabled: true
+    enabled: false
     config:
       languages:
       - javascript
