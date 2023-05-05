@@ -45,7 +45,7 @@ exports.updated = async (options) => {
     for (const prop in options?.column) {
       options.payload[options?.column[prop]] = `archived-${format}-${rows[options?.column[prop]]}`
     }
-
+    console.log(options);
     return options
   }
 

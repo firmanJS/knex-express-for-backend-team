@@ -63,3 +63,22 @@ exports.dynamicOrder = (filter = {}) => {
 
   return order
 }
+
+exports.requestOptions = (options, query) => {
+  if (options?.order) {
+    query.orderBy(options.order);
+  }
+  if (options?.filter?.limit) {
+    query.limit(options.filter.limit);
+  }
+  if (options?.filter?.page && options?.filter?.limit) {
+    query.offset((options.filter.page - 1) * options.filter.limit);
+  }
+  return query;
+};
+
+exports.isSoftDeleted = (where, builder, isSingle) => {
+  builder.where(where);
+  if (isSingle) builder.andWhere('deleted_at', null);
+  return builder;
+};

@@ -2,7 +2,9 @@ const { pgCore } = require('../../config/database')
 const Repo = require('../../repository/postgres/core_postgres')
 const {
   mappingSuccess, mappingError,
-  MODEL_PROPERTIES: { TABLES, CREATED }
+  MODEL_PROPERTIES: { TABLES, CREATED },
+  isSoftDeleted,
+  requestOptions
 } = require('../../utils')
 const { lang } = require('../../lang')
 
@@ -11,21 +13,30 @@ const COLUMN = [
 ]
 const DEFAULT_SORT = [COLUMN[0], 'DESC']
 
-// function cloning
-const condition = (builder, where, search) => {
-  if (search) {
-    builder.where(where).whereILike('name', `%${search}%`).andWhere('deleted_at', null)
+const mapOutput = async (options, query) => {
+  let result;
+  if (options.type === 'array') {
+    result = await query;
   } else {
-    builder.where(where)
-    builder.andWhere('deleted_at', null)
+    result = await query.first();
   }
-  return builder
+  return result;
+};
+// function cloning
+const condition = (builder, options) => {
+  const single = true;
+  builder = isSoftDeleted(options.where, builder, single);
+  if (options?.filter?.search) {
+    builder.whereILike('name', `%${options?.filter?.search}%`);
+    builder.andWhere('deleted_at', null);
+  }
+  return builder;
 }
 
-const sql = (where, search = false) => {
+const sql = (options) => {
   const query = pgCore(TABLES.TODO)
     .where((builder) => {
-      condition(builder, where, search)
+      condition(builder, options)
     })
 
   return query
@@ -58,18 +69,14 @@ const create = async (req, payload) => {
  * @param {object} req
  * @param {object} options
  * @param {array} column
- * @return {array of object}
+ * @return {*}
  */
 const get = async (req, options, column = COLUMN) => {
   try {
-    const result = await sql(options?.where, options?.filter?.search).clone()
-      .select(column)
-      .orderBy(options?.order)
-      .limit(options?.filter?.limit)
-      .offset(((options.filter.page - 1) * options.filter.limit))
-
-    const [rows] = await sql(options?.where, options?.filter?.search).clone().count(column[0])
-
+    let query = sql(options).clone().select(column);
+    query = requestOptions(options, query);
+    const result = await mapOutput(options, query);
+    const [rows] = await sql(options).clone().count(column[0]);
     return mappingSuccess(lang.__('get.success'), {
       result,
       count: rows?.count
@@ -89,8 +96,9 @@ const get = async (req, options, column = COLUMN) => {
  */
 const getByParam = async (req, options, column = COLUMN) => {
   try {
-    options.where.deleted_at = null
-    const result = await Repo.fetchByParam(TABLES.TODO, options.where, column)
+    let query = sql(options).clone().select(column);
+    query = requestOptions(options, query);
+    const result = await mapOutput(options, query);
     if (result) {
       return mappingSuccess(lang.__('get.success'), result)
     }
@@ -115,10 +123,10 @@ const update = async (req, options) => {
     } else {
       message = lang.__('archive.success', { id: options?.where?.id })
     }
-    const result = await Repo.updated(TABLES.TODO, COLUMN[0], options)
-    if (result) {
-      return mappingSuccess(message, result)
-    }
+    options.table = TABLES.TODO
+    options.column = [COLUMN[1]]
+    const result = await Repo.updated(options)
+    if (result) return mappingSuccess(message, result)
     return mappingSuccess(lang.__('notfound.id', { id: options?.where?.id }), result, 404, false)
   } catch (error) {
     error.path_filename = __filename

@@ -143,7 +143,7 @@ exports.mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
   }
   if (error?.type_error !== 'validation') {
     // sent alert
-    console.info('sent alert', error, req)
+    console.info('sent alert', error)
   }
   return {
     code,
