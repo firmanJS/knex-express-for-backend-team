@@ -1,0 +1,36 @@
+{
+	"SchemaAuth": {
+		"type": "object",
+		"properties": {
+			"name": {
+				"id": "string"
+			},
+			"username": {
+				"type": "string"
+			},
+			"full_name": {
+				"type": "string"
+			},
+			"email": {
+				"type": "string"
+			}
+		}
+	},
+	"SchemaAuthRequest": {
+		"type": "object",
+		"properties": {
+			"username": {
+				"type": "string"
+			},
+			"full_name": {
+				"type": "string"
+			},
+			"email": {
+				"type": "string"
+			},
+			"password": {
+				"type": "string"
+			}
+		}
+	}
+}

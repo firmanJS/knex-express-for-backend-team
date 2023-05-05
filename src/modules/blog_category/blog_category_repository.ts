@@ -11,9 +11,9 @@ import Translate from '../../lang';
 import { coreUpdate } from '../../models/core';
 import { Constant, Exception, RequestUtils } from '../../utils';
 import { isSoftDeleted } from '../../utils/request';
-import { TodoInterface, TodoPost } from './todo_interface';
+import { BlogCategoryInterface, BlogCategoryPost } from './blog_category_interface';
 
-const table: string = Constant.Table.TODO;
+const table: string = Constant.Table.BLOG_CAT;
 const condition = (builder: any, options: RequestOptionsInterface | any) => {
   const single: boolean = true;
   builder = isSoftDeleted(options.where, builder, single);
@@ -26,7 +26,7 @@ const condition = (builder: any, options: RequestOptionsInterface | any) => {
 };
 
 const sql = (options: RequestOptionsInterface) => {
-  const query = pgCore(table).where((builder) => {
+  const query = pgCore(table).andWhere((builder) => {
     condition(builder, options);
   });
 
@@ -36,8 +36,8 @@ const sql = (options: RequestOptionsInterface) => {
 const mapOutput = async (
   options: RequestOptionsInterface,
   query: any
-): Promise<TodoInterface> => {
-  let result: TodoInterface;
+): Promise<BlogCategoryInterface> => {
+  let result: BlogCategoryInterface;
   if (options.type === 'array') {
     result = await query;
   } else {
@@ -53,9 +53,9 @@ export default class TodoRepository implements RepositoryInterface {
 
   private readonly sort: string[] = [this.column[0], 'ASC'];
 
-  async create(req: Request, payload: TodoPost): Promise<DtoInterface> {
+  async create(req: Request, payload: BlogCategoryPost): Promise<DtoInterface> {
     try {
-      const [result]: TodoInterface[] = await pgCore(this.table)
+      const [result]: BlogCategoryInterface[] = await pgCore(this.table)
         .insert(payload)
         .returning(this.column[0]);
       return Exception.mappingSuccess(Translate.__('created.success'), result);
@@ -72,7 +72,7 @@ export default class TodoRepository implements RepositoryInterface {
     try {
       let query: Knex.QueryBuilder = sql(options).clone().select(this.column);
       query = RequestUtils.RequestRepoOptions(options, query);
-      const result: TodoInterface = await mapOutput(options, query);
+      const result: BlogCategoryInterface = await mapOutput(options, query);
       const [rows]: CountInterface[] = await sql(options)
         .clone()
         .count(this.column[0]);
@@ -93,7 +93,7 @@ export default class TodoRepository implements RepositoryInterface {
     try {
       let query: Knex.QueryBuilder = sql(options).clone().select(this.column);
       query = RequestUtils.RequestRepoOptions(options, query);
-      const result: TodoInterface = await mapOutput(options, query);
+      const result: BlogCategoryInterface = await mapOutput(options, query);
       if (result) {
         return Exception.mappingSuccess(Translate.__('get.success'), result);
       }

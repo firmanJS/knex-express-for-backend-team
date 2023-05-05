@@ -73,8 +73,17 @@ namespace RequestUtils {
     if (options?.filter?.page && options?.filter?.limit) {
       query.offset((options.filter.page - 1) * options.filter.limit);
     }
-
     return query;
+  };
+
+  export const isSoftDeleted = (
+    where:RequestSoftInterface,
+    builder:any,
+    type: boolean
+  ): void | any => {
+    builder.where(where);
+    if (type) builder.andWhere('deleted_at', null);
+    return builder;
   };
 
   export const optionsPayload = (req: Request): RequestSoftInterface => {

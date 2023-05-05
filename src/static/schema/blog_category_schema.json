@@ -1,5 +1,5 @@
 {
-	"SchemaTodo": {
+	"SchemaBlogCategory": {
 		"type": "object",
 		"properties": {
 			"name": {
@@ -10,7 +10,7 @@
 			}
 		}
 	},
-	"SchemaTodoRequest": {
+	"SchemaBlogCategoryRequest": {
 		"type": "object",
 		"properties": {
 			"name": {

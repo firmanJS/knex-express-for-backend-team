@@ -15,7 +15,7 @@ export const postValidation = [
     .withMessage(Translate.__('validator.required', { field: 'name' }))
     .custom(async (value) => {
       const options: Record<string, any> = {
-        table: Table.TODO,
+        table: Table.BLOG_CAT,
         where: {
           name: value,
           deleted_at: null
@@ -44,7 +44,7 @@ export const putValidation = [
     .withMessage(Translate.__('validator.required', { field: 'name' }))
     .custom(async (value, { req }) => {
       const options: Record<string, any> = {
-        table: Table.TODO,
+        table: Table.BLOG_CAT,
         where: {
           name: value,
           deleted_at: null

@@ -25,6 +25,8 @@ namespace Constant {
   };
   export const Table: Record<string, string> = {
     TODO: 'mst_todo',
+    USERS: 'users',
+    BLOG_CAT: 'mst_category_blog',
   };
   export const Method: Record<string, string> = {
     DEL: 'DELETE',

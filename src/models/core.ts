@@ -8,12 +8,12 @@ export const coreUpdate = async (options: RequestOptionsInterface) => {
   const loop = (rows: any) => {
     options.payload.deleted_at = new Date().toISOString();
     // eslint-disable-next-line guard-for-in
-    for (const prop in options?.column.shift()) {
+    for (const prop in options?.column) {
       options.payload[options?.column[prop]] = `archived-${format}-${
         rows[options?.column[prop]]
       }`;
     }
-
+    delete options.payload?.id;
     return options;
   };
 
@@ -21,7 +21,6 @@ export const coreUpdate = async (options: RequestOptionsInterface) => {
     const [rows] = await pgCore(options?.table)
       .where(options?.where)
       .select(options?.column);
-    options.payload.deleted_at = new Date().toISOString();
     if (rows) {
       loop(rows);
     }
