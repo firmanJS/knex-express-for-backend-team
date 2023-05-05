@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = {
   APP_PORT: process?.env?.APP_PORT ?? 3000,
-  APP_ENV: process?.env?.NODE_ENV ?? 'development',
+  APP_ENV: process?.env?.APP_ENV ?? 'development',
   APP_NAME: process?.env?.APP_NAME ?? 'boilerplate-app',
   APP_LIMIT: process?.env?.JSON_LIMIT ?? '12800kb',
   APP_METHOD: process?.env?.APP_METHOD.split(',') ?? ['POST', 'PUT', 'DELETE', 'GET', 'OPTIONS'],

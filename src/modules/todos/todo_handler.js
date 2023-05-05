@@ -38,7 +38,9 @@ const fetch = async (req, res) => {
   const where = dynamicFilter(req, repository.COLUMN)
   const filter = paging(req, repository.DEFAULT_SORT)
   const order = dynamicOrder(filter)
-  const options = { where, order, filter }
+  const options = {
+    where, order, filter, type: 'array'
+  }
   const result = await repository.get(req, options)
   return paginationResponse(req, res, result)
 }
