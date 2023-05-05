@@ -13,4 +13,3 @@ checks:
 exclude_patterns:
 - node_modules/
 - __test__/
-- **/*_validation.js
