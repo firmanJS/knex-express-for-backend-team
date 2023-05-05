@@ -1,12 +1,15 @@
 FROM node:18.12.1-buster-slim
 
+WORKDIR /usr/apps/knex-express-template
+
 RUN rm -rf /var/cache/apk/*
+RUN apk add --no-cache alpine-conf && \
+    setup-timezone -z Asia/Jakarta
 
 LABEL maintainer="firmanjs"
 
-WORKDIR /usr/apps/knex-express-template
-
 ENV NODE_ENV development
+ENV TZ Asia/Jakarta
 
 COPY package.json /usr/apps/knex-express-template/
 

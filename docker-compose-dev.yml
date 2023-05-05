@@ -11,6 +11,8 @@ services:
     networks:
       express-template-network:
     restart: unless-stopped
+    env_file:
+      - .env
     volumes:
       - .:/usr/apps/knex-express-template
       - /usr/apps/knex-express-template/node_modules

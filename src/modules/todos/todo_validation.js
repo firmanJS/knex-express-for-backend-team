@@ -17,10 +17,11 @@ const postValidation = [
         where: {
           name: value
         },
+        table: TABLES.TODO,
         name: 'name',
         message: lang.__('data.exist', { msg: `Name ${value}` })
       }
-      await checkSameValueinDb(TABLES.TODO, options)
+      await checkSameValueinDb(options)
     }),
   (req, res, next) => { validateMiddleware(req, res, next) }
 ]
@@ -35,9 +36,10 @@ const putValidation = [
         where: { name: value },
         column: 'id',
         name: req?.params?.id,
-        message: lang.__('data.exist', { msg: `Name ${value}` })
+        message: lang.__('data.exist', { msg: `Name ${value}` }),
+        table: TABLES.TODO,
       }
-      await checkSameValueinDbUpdateUuid(TABLES.TODO, options)
+      await checkSameValueinDbUpdateUuid(options)
     }),
   (req, res, next) => { validateMiddleware(req, res, next) }
 ]

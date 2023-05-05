@@ -1,7 +1,7 @@
 const moment = require('moment')
 
 const TZ = process?.env?.TZ ?? 'Asia/Jakarta'
-const DATE_FORMAT_INDO = 'DD MMMM YYYY, H:mm:ss'
+const DATE_FORMAT_INDO = 'DD-MM-YYYY, HH:mm:ss'
 const LOG_FORMAT = 'DD-MM-YYYY'
 
 exports.fullDateFormatIndo = (date) => {
@@ -17,7 +17,7 @@ exports.nowWithUtc = (date = Date.now(), formatDate = LOG_FORMAT) => {
   return format
 }
 
-exports.todayFormat = (format, date = new Date().toISOString()) => {
+exports.todayFormat = (format = DATE_FORMAT_INDO, date = new Date().toISOString()) => {
   const newDate = moment(new Date(date)).format(format)
   return newDate
 }
