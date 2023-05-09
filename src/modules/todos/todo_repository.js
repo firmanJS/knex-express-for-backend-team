@@ -5,8 +5,8 @@ const {
   MODEL_PROPERTIES: { TABLES, CREATED },
   isSoftDeleted,
   requestOptions
-} = require('../../utils');
-const { lang } = require('../../lang');
+} = require('../../utils')
+const { lang } = require('../../lang')
 
 const COLUMN = [
   'id', 'name', 'description', ...CREATED
@@ -31,13 +31,13 @@ const condition = (builder, options) => {
     builder.andWhere('deleted_at', null);
   }
   return builder;
-};
+}
 
 const sql = (options) => {
   const query = pgCore(TABLES.TODO)
     .where((builder) => {
-      condition(builder, options);
-    });
+      condition(builder, options)
+    })
 
   return query;
 };
@@ -55,14 +55,14 @@ const create = async (req, payload) => {
   try {
     const options = {
       table: TABLES.TODO, payload, column: COLUMN[0], trx
-    };
-    const result = await Repo.insertTrx(options);
-    await trx.commit();
-    return mappingSuccess(lang.__('created.success'), result);
+    }
+    const result = await Repo.insertTrx(options)
+    await trx.commit()
+    return mappingSuccess(lang.__('created.success'), result)
   } catch (error) {
-    await trx.rollback();
-    error.path_filename = __filename;
-    return mappingError(req, error);
+    await trx.rollback()
+    error.path_filename = __filename
+    return mappingError(req, error)
   }
 };
 /**
@@ -123,13 +123,13 @@ const update = async (req, options) => {
     if (options?.type_method === 'update') {
       message = lang.__('updated.success', { id: options?.where?.id });
     } else {
-      message = lang.__('archive.success', { id: options?.where?.id });
+      message = lang.__('archive.success', { id: options?.where?.id })
     }
-    options.table = TABLES.TODO;
-    options.column = [COLUMN[1]];
-    const result = await Repo.updated(options);
-    if (result) return mappingSuccess(message, result);
-    return mappingSuccess(lang.__('notfound.id', { id: options?.where?.id }), result, 404, false);
+    options.table = TABLES.TODO
+    options.column = [COLUMN[1]]
+    const result = await Repo.updated(options)
+    if (result) return mappingSuccess(message, result)
+    return mappingSuccess(lang.__('notfound.id', { id: options?.where?.id }), result, 404, false)
   } catch (error) {
     error.path_filename = __filename;
     return mappingError(req, error);

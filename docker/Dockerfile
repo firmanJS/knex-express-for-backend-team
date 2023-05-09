@@ -8,10 +8,12 @@ RUN apt-get update && \
     ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
 
+RUN rm -rf /var/cache/apk/*
+RUN apk add --no-cache alpine-conf && \
+    setup-timezone -z Asia/Jakarta
+
 ENV NODE_ENV production
 ENV TZ Asia/Jakarta
-
-WORKDIR /usr/apps/logique-express-api
 
 COPY package.json /usr/apps/logique-express-api
 COPY ./src /usr/apps/logique-express-api

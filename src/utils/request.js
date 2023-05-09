@@ -62,8 +62,8 @@ exports.dynamicOrder = (filter = {}) => {
     order = content;
   }
 
-  return order;
-};
+  return order
+}
 
 exports.requestOptions = (options, query) => {
   if (options?.order) {
@@ -82,29 +82,4 @@ exports.isSoftDeleted = (where, builder, isSingle) => {
   builder.where(where);
   if (isSingle) builder.andWhere('deleted_at', null);
   return builder;
-};
-
-exports.optionsPayload = (req, type_method, column) => {
-  const where = paramsHttp(req);
-  const payload = bodyHttp(req);
-  where.deleted_at = null;
-  const options = {
-    where,
-    type_method,
-    column,
-    payload
-  };
-
-  return options;
-};
-
-exports.updateType = (req) => {
-  let type = '';
-  if (req?.method === METHOD.DEL) {
-    type = 'soft-delete';
-  } else {
-    type = 'update';
-  }
-
-  return type;
 };
