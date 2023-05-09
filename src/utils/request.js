@@ -1,7 +1,7 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 const { LIMIT, PAGE, METHOD } = require('./constant');
-const { paramsHttp, bodyHttp } = require('./custom');
+const { reqParam, reqBody } = require('./custom');
 
 exports.dynamicFilter = (req, column = []) => {
   const push = {};
@@ -62,8 +62,8 @@ exports.dynamicOrder = (filter = {}) => {
     order = content;
   }
 
-  return order
-}
+  return order;
+};
 
 exports.requestOptions = (options, query) => {
   if (options?.order) {
@@ -82,4 +82,29 @@ exports.isSoftDeleted = (where, builder, isSingle) => {
   builder.where(where);
   if (isSingle) builder.andWhere('deleted_at', null);
   return builder;
+};
+
+exports.optionsPayload = (req, type_method, column) => {
+  const where = reqParam(req);
+  const payload = reqBody(req);
+  where.deleted_at = null;
+  const options = {
+    where,
+    type_method,
+    column,
+    payload
+  };
+
+  return options;
+};
+
+exports.updateType = (req) => {
+  let type = '';
+  if (req?.method === METHOD.DEL) {
+    type = 'soft-delete';
+  } else {
+    type = 'update';
+  }
+
+  return type;
 };

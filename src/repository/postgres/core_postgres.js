@@ -46,8 +46,8 @@ exports.updated = async (options) => {
       options.payload[options?.column[prop]] = `archived-${format}-${rows[options?.column[prop]]}`;
     }
     console.log(options);
-    return options
-  }
+    return options;
+  };
 
   if (options?.type_method === 'soft-delete') {
     const [rows] = await fetchByParam(options);

@@ -29,7 +29,7 @@
 	"token.invalid": "Format token tidak sesuai/tidak diijinkan",
 	"delete.id": "Data dengan id {{id}} berhasil di hapus",
 	"validator": "Kesalahan validasi data",
-	"validator.uuid": "{{field}} harus berupa uuid v4",
+	"validator.uuid": "format {{field}} tidak sesuai",
 	"validator.required": "{{field}} harus di isi",
 	"validator.string": "{{field}} harus bertipe string",
 	"validator.email": "inputan email tidak valid",

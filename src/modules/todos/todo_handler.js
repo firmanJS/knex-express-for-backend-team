@@ -10,7 +10,7 @@
 
 const repository = require('./todo_repository');
 const {
-  baseResponse, paginationResponse, reqParams, dynamicFilter, paging,
+  baseResponse, paginationResponse, reqParam, dynamicFilter, paging,
   dynamicOrder, reqBody, optionsPayload, updateType
 } = require('../../utils');
 
@@ -21,18 +21,18 @@ const store = async (req, res) => {
 };
 
 const fetch = async (req, res) => {
-  const where = dynamicFilter(req, repository.COLUMN)
-  const filter = paging(req, repository.DEFAULT_SORT)
-  const order = dynamicOrder(filter)
+  const where = dynamicFilter(req, repository.COLUMN);
+  const filter = paging(req, repository.DEFAULT_SORT);
+  const order = dynamicOrder(filter);
   const options = {
     where, order, filter, type: 'array'
-  }
-  const result = await repository.get(req, options)
-  return paginationResponse(req, res, result)
-}
+  };
+  const result = await repository.get(req, options);
+  return paginationResponse(req, res, result);
+};
 
 const fetchByParam = async (req, res) => {
-  const where = reqParams(req);
+  const where = reqParam(req);
   const options = { where };
   const result = await repository.getByParam(req, options);
   return baseResponse(res, result);
