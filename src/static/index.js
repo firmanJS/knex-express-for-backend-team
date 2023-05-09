@@ -9,7 +9,7 @@ const info = {
     name: 'MIT',
     url: 'https://opensource.org/licenses/MIT'
   }
-}
+};
 
 const servers = [
   {
@@ -20,10 +20,10 @@ const servers = [
     url: 'https://balailelang-api-gateway.d.logique.co.id/',
     description: 'Gateway server'
   }
-]
+];
 
-const paths = require('./path')
-const schemas = require('./schema')
+const paths = require('./path');
+const schemas = require('./schema');
 
 const index = {
   openapi: '3.0.0',
@@ -40,8 +40,8 @@ const index = {
     },
     schemas
   }
-}
+};
 
 module.exports = {
   index
-}
+};

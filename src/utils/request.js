@@ -1,6 +1,7 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
-const { LIMIT, PAGE } = require('./constant');
+const { LIMIT, PAGE, METHOD } = require('./constant');
+const { paramsHttp, bodyHttp } = require('./custom');
 
 exports.dynamicFilter = (req, column = []) => {
   const push = {};
@@ -46,23 +47,23 @@ exports.dynamicFilterJoin = (req, column = []) => {
 };
 
 exports.dynamicOrder = (filter = {}) => {
-  let order
+  let order;
   if (typeof filter.direction === 'string' && typeof filter.order === 'string') {
     order = [
       { column: filter.direction, order: filter.order }
-    ]
+    ];
   } else {
-    const dir = filter.direction
-    const or = filter.order
-    const content = []
+    const dir = filter.direction;
+    const or = filter.order;
+    const content = [];
     for (const a in dir) {
-      content.push({ column: dir[a], order: or[a] })
+      content.push({ column: dir[a], order: or[a] });
     }
-    order = content
+    order = content;
   }
 
-  return order
-}
+  return order;
+};
 
 exports.requestOptions = (options, query) => {
   if (options?.order) {
@@ -81,4 +82,29 @@ exports.isSoftDeleted = (where, builder, isSingle) => {
   builder.where(where);
   if (isSingle) builder.andWhere('deleted_at', null);
   return builder;
+};
+
+exports.optionsPayload = (req, type_method, column) => {
+  const where = paramsHttp(req);
+  const payload = bodyHttp(req);
+  where.deleted_at = null;
+  const options = {
+    where,
+    type_method,
+    column,
+    payload
+  };
+
+  return options;
+};
+
+exports.updateType = (req) => {
+  let type = '';
+  if (req?.method === METHOD.DEL) {
+    type = 'soft-delete';
+  } else {
+    type = 'update';
+  }
+
+  return type;
 };

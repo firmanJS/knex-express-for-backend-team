@@ -1,36 +1,36 @@
-exports.paramsHttp = (req) => ({ ...req?.params })
+exports.reqParam = (req) => ({ ...req?.params });
 
-exports.queryHttp = (req) => ({ ...req?.query })
+exports.reqQuery = (req) => ({ ...req?.query });
 
-exports.bodyHttp = (req) => ({ ...req?.body })
+exports.reqBody = (req) => ({ ...req?.body });
 
 exports.isNumeric = (str) => {
-  if (typeof str !== 'string') return false
-  return !Number.isNaN(str) && !Number.isNaN(parseFloat(str))
-}
+  if (typeof str !== 'string') return false;
+  return !Number.isNaN(str) && !Number.isNaN(parseFloat(str));
+};
 
 exports.convertToSlug = (text = '') => {
   try {
     return text.toLowerCase()
       .replace(/[^\w ]+/g, '')
-      .replace(/ +/g, '-')
+      .replace(/ +/g, '-');
   } catch (error) {
-    return error.toString()
+    return error.toString();
   }
-}
+};
 
 exports.replaceString = (str, from, to = '') => {
   try {
-    return str.replace(from, to)
+    return str.replace(from, to);
   } catch (error) {
-    return error.toString()
+    return error.toString();
   }
-}
+};
 
 exports.ucword = (str = '') => {
-  if (typeof str !== 'string') return str
-  return (`${str}`).replace(/^([a-z])|\s+([a-z])/g, ($1) => $1.toUpperCase())
-}
+  if (typeof str !== 'string') return str;
+  return (`${str}`).replace(/^([a-z])|\s+([a-z])/g, ($1) => $1.toUpperCase());
+};
 
 exports.formatCurrency = (currency, options = {
   language: 'id-ID', format: 'IDR'
@@ -41,8 +41,8 @@ exports.formatCurrency = (currency, options = {
       currency: options?.format
     });
 
-    return moneyFormat.format(currency)
+    return moneyFormat.format(currency);
   } catch (error) {
-    return error.toString()
+    return error.toString();
   }
-}
+};

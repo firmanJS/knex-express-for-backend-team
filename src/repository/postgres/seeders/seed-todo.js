@@ -1,4 +1,4 @@
-const { MODEL_PROPERTIES: { TABLES } } = require('../../../utils')
+const { MODEL_PROPERTIES: { TABLES } } = require('../../../utils');
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
@@ -10,7 +10,7 @@ exports.seed = async (knex) => {
       name: 'todo 1',
       description: ' lorem ipsum'
     }
-  ]
+  ];
   return knex(TABLES.TODO).del()
     .then(() => knex(TABLES.TODO).insert(todos));
 };

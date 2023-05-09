@@ -1,47 +1,47 @@
-const { validationResult, param } = require('express-validator')
-const { mappingError, baseResponse, captureLog } = require('../utils')
-const { lang } = require('../lang')
+const { validationResult, param } = require('express-validator');
+const { mappingError, baseResponse, captureLog } = require('../utils');
+const { lang } = require('../lang');
 
 const checkMessageError = (catchMessage, errors) => {
-  let message
-  const extractedErrors = []
-  errors.array().map((err) => extractedErrors.push(err.msg))
+  let message;
+  const extractedErrors = [];
+  errors.array().map((err) => extractedErrors.push(err.msg));
   switch (catchMessage[0][0]) {
     case 'database':
-      message = lang.__('knex.db')
-      break
+      message = lang.__('knex.db');
+      break;
     case 'connect':
-      message = lang.__('knex.connect')
-      break
+      message = lang.__('knex.connect');
+      break;
     case 'password':
-      message = lang.__('knex.password')
-      break
+      message = lang.__('knex.password');
+      break;
     case 'select':
-      message = lang.__('knex.select')
-      break
+      message = lang.__('knex.select');
+      break;
     case 'getaddrinfo':
-      message = lang.__('knex.host')
-      break
+      message = lang.__('knex.host');
+      break;
     default:
-      message = extractedErrors
+      message = extractedErrors;
   }
 
-  return message
-}
+  return message;
+};
 
 const validateMiddleware = (req, res, next) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    const catchMessage = errors.array().map((err) => err.msg.split(' '))
-    captureLog(errors)
-    const message = checkMessageError(catchMessage, errors)
-    message.type_error = 'validation'
-    return baseResponse(res, mappingError(req, message))
+    const catchMessage = errors.array().map((err) => err.msg.split(' '));
+    captureLog(errors);
+    const message = checkMessageError(catchMessage, errors);
+    message.type_error = 'validation';
+    return baseResponse(res, mappingError(req, message));
   }
 
-  return next()
-}
+  return next();
+};
 
 const idMustBeUuid = [
   param('id')
@@ -49,10 +49,10 @@ const idMustBeUuid = [
     .withMessage(lang.__('validator.uuid', { field: 'id' }))
     .notEmpty()
     .withMessage(lang.__('validator.required', { field: 'id' })),
-  (req, res, next) => { validateMiddleware(req, res, next) }
-]
+  (req, res, next) => { validateMiddleware(req, res, next); }
+];
 
 module.exports = {
   validateMiddleware,
   idMustBeUuid
-}
+};

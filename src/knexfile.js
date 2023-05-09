@@ -1,5 +1,5 @@
-const path = require('path')
-require('dotenv').config({ path: path.join(__dirname, '../.env') })
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const connection = {
   CLIENT: process?.env?.DB_DRIVER ?? 'pg',
@@ -8,7 +8,7 @@ const connection = {
   user: process?.env?.DB_USER ?? 'example',
   password: process?.env?.DB_PASS ?? 'example',
   database: process?.env?.DB_NAME ?? 'example'
-}
+};
 module.exports = {
   [process?.env?.APP_ENV]: {
     client: process?.env?.DB_DRIVER,
@@ -22,4 +22,4 @@ module.exports = {
       directory: path.join(__dirname, 'repository/postgres/seeders'),
     }
   }
-}
+};

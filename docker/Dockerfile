@@ -1,15 +1,17 @@
-FROM node:18.12.1-buster-slim
+FROM node:18.16.0-slim
 
 LABEL maintainer="firman"
 
-WORKDIR /usr/apps/logique-express-api
-
 RUN rm -rf /var/cache/apk/*
-RUN apk add --no-cache alpine-conf && \
-    setup-timezone -z Asia/Jakarta
+RUN apt-get update && \
+    apt-get install -yq tzdata && \
+    ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 
 ENV NODE_ENV production
 ENV TZ Asia/Jakarta
+
+WORKDIR /usr/apps/logique-express-api
 
 COPY package.json /usr/apps/logique-express-api
 COPY ./src /usr/apps/logique-express-api

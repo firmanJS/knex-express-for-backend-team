@@ -1,8 +1,8 @@
-const { check } = require('express-validator')
-const { validateMiddleware } = require('../../middlewares')
-const { lang } = require('../../lang')
-const { MODEL_PROPERTIES: { TABLES } } = require('../../utils')
-const { checkSameValueinDb, checkSameValueinDbUpdateUuid } = require('../../repository/postgres/core_postgres')
+const { check } = require('express-validator');
+const { validateMiddleware } = require('../../middlewares');
+const { lang } = require('../../lang');
+const { MODEL_PROPERTIES: { TABLES } } = require('../../utils');
+const { checkSameValueinDb, checkSameValueinDbUpdateUuid } = require('../../repository/postgres/core_postgres');
 /* RULE
   ** More Documentation in here https://express-validator.github.io/docs/
 */
@@ -20,11 +20,11 @@ const postValidation = [
         table: TABLES.TODO,
         name: 'name',
         message: lang.__('data.exist', { msg: `Name ${value}` })
-      }
-      await checkSameValueinDb(options)
+      };
+      await checkSameValueinDb(options);
     }),
-  (req, res, next) => { validateMiddleware(req, res, next) }
-]
+  (req, res, next) => { validateMiddleware(req, res, next); }
+];
 
 const putValidation = [
   check('name')
@@ -38,10 +38,10 @@ const putValidation = [
         name: req?.params?.id,
         message: lang.__('data.exist', { msg: `Name ${value}` }),
         table: TABLES.TODO,
-      }
-      await checkSameValueinDbUpdateUuid(options)
+      };
+      await checkSameValueinDbUpdateUuid(options);
     }),
-  (req, res, next) => { validateMiddleware(req, res, next) }
-]
+  (req, res, next) => { validateMiddleware(req, res, next); }
+];
 
-module.exports = { postValidation, putValidation }
+module.exports = { postValidation, putValidation };

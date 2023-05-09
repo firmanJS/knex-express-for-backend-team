@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 
 module.exports = {
   APP_PORT: process?.env?.APP_PORT ?? 3000,
@@ -15,4 +15,4 @@ module.exports = {
   APP_EXPOSE_HEADER: process?.env?.APP_EXPOSE_HEADER.split(',') ?? ['Content-Length', 'Content-Type'],
   APP_PROTECTION: process?.env?.APP_PROTECTION ?? '1; mode=block;',
   APP_PERMISSION_POLICY: process?.env?.APP_PERMISSION_POLICY ?? 'autoplay=(self), camera=(), encrypted-media=(self), fullscreen=(), geolocation=(self), gyroscope=(self), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=(self), usb=()'
-}
+};
