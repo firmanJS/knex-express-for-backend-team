@@ -1,0 +1,21 @@
+version: '3'
+services:
+
+  # Nodejs
+  knex-express-template:
+    image: firmanjs/knex-express-template:prod
+    container_name: knex-express-template
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    networks:
+      express-template-network:
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+
+networks:
+  express-template-network:
+    driver: bridge
