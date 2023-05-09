@@ -14,13 +14,13 @@ describe('all custom function testing', () => {
     // next = jest.fn()
   });
   it('is paramsHttp', () => {
-    expect(custom.paramsHttp(req)).toStrictEqual({});
+    expect(custom.reqParam(req)).toStrictEqual({});
   });
   it('is reqQuery', () => {
     expect(custom.reqQuery(req)).toStrictEqual({});
   });
   it('is bodyHttp', () => {
-    expect(custom.bodyHttp(req)).toStrictEqual({});
+    expect(custom.reqBody(req)).toStrictEqual({});
   });
   it('is numeric function', () => {
     expect(custom.isNumeric('2')).toBeTruthy();
