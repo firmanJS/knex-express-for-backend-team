@@ -32,5 +32,34 @@
 				}
 			}
 		}
+	},
+	"/auth/login": {
+		"post": {
+			"tags": [
+				"Auth"
+			],
+			"requestBody": {
+				"required": false,
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/SchemaAuthLogin"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "OK",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SchemaAuthLoginResponse"
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

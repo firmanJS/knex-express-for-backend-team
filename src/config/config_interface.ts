@@ -10,6 +10,10 @@ export interface Config {
     method: [] | string;
     allow_header: [] | string;
     expose_header: [] | string;
+    secret_key: string;
+    jwt_expired: string;
+    algorithm: string | any;
+    refresh_token_expired: string;
   };
   db: {
     host: string;

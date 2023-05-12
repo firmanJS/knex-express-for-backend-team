@@ -70,3 +70,21 @@ export const postValidation = [
     validate(req, res, next);
   },
 ];
+
+export const registerValidation = [
+  check('username')
+    .isString()
+    .withMessage(Translate.__('validator.string', { field: 'username' }))
+    .notEmpty()
+    .withMessage(Translate.__('validator.required', { field: 'username' })),
+  check('password')
+    .isLength({ min: 8, max: 12 })
+    .withMessage(Translate.__('validator.password.length'))
+    .notEmpty()
+    .withMessage(Translate.__('validator.required', { field: 'password' }))
+    .isStrongPassword()
+    .withMessage(Translate.__('validator.password')),
+  (req: Request, res: Response, next: NextFunction) => {
+    validate(req, res, next);
+  },
+];

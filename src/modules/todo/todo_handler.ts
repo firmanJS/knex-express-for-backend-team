@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { BaseHandlerInterface } from '../../interface/handler_interface';
 import { RequestOptionsInterface } from '../../interface/request_interface';
 import { Exception, RequestUtils } from '../../utils';
-import { optionsPayload } from '../../utils/request';
+import { isCreated, optionsPayload } from '../../utils/request';
 import { TodoPost } from './todo_interface';
 import TodoRepository from './todo_repository';
 
@@ -19,12 +19,14 @@ export default new (class TodoHandler implements BaseHandlerInterface {
   }
 
   async store(req: Request, res: Response): Promise<Response> {
-    const payload: TodoPost = req?.body;
+    /* if not using created at and created by using this */
+    // const payload: TodoPost = req.body
+    const payload: TodoPost = isCreated(req);
     const result = await this.repo.create(req, payload);
     return Exception.baseResponse(res, result);
   }
 
-  async fetch(req: Request, res: Response): Promise<Response> {
+  async fetch(req: Request | any, res: Response): Promise<Response> {
     const where = RequestUtils.dynamicFilter(req, this.repo.COLUMN());
     const filter = RequestUtils.paging(req);
     const order = RequestUtils.dynamicOrder(req, this.repo.SORT());

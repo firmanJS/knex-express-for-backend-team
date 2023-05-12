@@ -6,7 +6,6 @@ const format = todayFormat('YYYYMMDDhmmss');
 export const coreUpdate = async (options: RequestOptionsInterface) => {
   /* eslint-disable no-restricted-syntax */
   const loop = (rows: any) => {
-    options.payload.deleted_at = new Date().toISOString();
     // eslint-disable-next-line guard-for-in
     for (const prop in options?.column) {
       options.payload[options?.column[prop]] = `archived-${format}-${
@@ -50,7 +49,7 @@ export const checkSameValueinDbUpdate = async (
     .select(options?.column);
   const id = rows?.[options?.column];
   if (options?.type === 'uuid') {
-    if (id !== options?.name) {
+    if (id && id !== options?.name) {
       throw new Error(options.message);
     }
   } else if (+id !== Number(options?.name)) {

@@ -1,3 +1,4 @@
+import { tokenValidation } from '../../middleware/auth';
 import AuthRoutes from '../../modules/auth';
 import BlogCategoryRoutes from '../../modules/blog_category';
 import TodoRoutes from '../../modules/todo';
@@ -11,7 +12,7 @@ class Rest extends BaseRest {
     this.router.use(HealthRest);
     this.router.use('/api/v1/auth', AuthRoutes);
     this.router.use('/api/v1/blog-category', BlogCategoryRoutes);
-    this.router.use('/api/v1/todo', TodoRoutes);
+    this.router.use('/api/v1/todo', tokenValidation, TodoRoutes);
   }
 }
 

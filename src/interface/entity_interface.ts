@@ -5,6 +5,10 @@ export interface LogInterface {
   readonly udpated_by?: string;
 }
 
+export interface JwtInterface {
+  readonly access_token: string;
+  readonly refresh_token: string;
+}
 // example generic
 // interface Pair<F, S> {
 //   first: F;

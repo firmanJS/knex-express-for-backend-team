@@ -90,7 +90,7 @@ namespace Exception {
     let { status, message } = options;
     if (totalData === 0) {
       status = false;
-      message = Translate.__('notfound');
+      message = Translate.__('msg.notfound', { msg: 'Data' });
       code = Http.NOT_FOUND;
     }
 
@@ -132,7 +132,7 @@ namespace Exception {
   };
 
   export const baseResponse = (res: Response, data: any)
-  : Response => res.status(data?.code ?? Http.OK).json(data?.data);
+    : Response => res.status(data?.code ?? Http.OK).json(data?.data);
 
   export const mappingSuccess = (
     message: string,

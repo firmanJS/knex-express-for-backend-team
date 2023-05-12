@@ -86,15 +86,39 @@ namespace RequestUtils {
     return builder;
   };
 
+  export const isCreated = (
+    req:Request | any
+  ): void | any => {
+    const payload = req?.body;
+    payload.created_by = req?.users_info?.id;
+    payload.created_at = new Date().toISOString();
+    return payload;
+  };
+
+  const isSoftDeletedCase = (
+    req:Request | any,
+    type: string
+  ): void | any => {
+    const payload = req?.body;
+    if (type === 'update') {
+      payload.updated_by = req?.users_info?.id;
+      payload.updated_at = new Date().toISOString();
+    } else {
+      payload.deleted_by = req?.users_info?.id;
+      payload.deleted_at = new Date().toISOString();
+    }
+    return payload;
+  };
+
   export const optionsPayload = (req: Request): RequestSoftInterface => {
     const where: any = req?.params;
-    const payload = req?.body;
     let typeMethod: string = '';
     if (req?.method === Constant.Method.DEL) {
       typeMethod = 'soft-delete';
     } else {
       typeMethod = 'update';
     }
+    const payload = isSoftDeletedCase(req, typeMethod);
     const options: RequestSoftInterface = {
       where,
       typeMethod,

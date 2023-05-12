@@ -15,11 +15,13 @@ export interface AuthResponseInterface extends LogInterface {
   readonly username?: string;
   readonly email?: string;
   readonly full_name?: string;
+  readonly password?: string;
+  readonly salt?: string;
 }
 
 export interface AuthContractInterface {
-  register(req: Request, payload: object): Promise<DtoInterface>;
-  login(req: Request, payload: object): Promise<DtoInterface>;
+  register(req: Request, payload: Record<string, string>): Promise<DtoInterface>;
+  login(req: Request, payload: Record<string, string>): Promise<DtoInterface>;
 }
 
 export interface AuthHandlerInterface {

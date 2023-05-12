@@ -32,5 +32,28 @@
 				"type": "string"
 			}
 		}
+	},
+	"SchemaAuthLogin": {
+		"type": "object",
+		"properties": {
+			"username": {
+				"type": "string",
+				"summary": "username or email"
+			},
+			"password": {
+				"type": "string"
+			}
+		}
+	},
+	"SchemaAuthLoginResponse": {
+		"type": "object",
+		"properties": {
+			"access_token": {
+				"type": "string"
+			},
+			"refresh_token": {
+				"type": "string"
+			}
+		}
 	}
 }
