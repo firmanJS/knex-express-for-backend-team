@@ -1,7 +1,6 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 const { LIMIT, PAGE, METHOD } = require('./constant');
-const { reqParam, reqBody } = require('./custom');
 
 exports.dynamicFilter = (req, column = []) => {
   const push = {};
@@ -84,15 +83,38 @@ exports.isSoftDeleted = (where, builder, isSingle) => {
   return builder;
 };
 
+exports.isCreated = (req) => {
+  const payload = req?.body;
+  payload.created_by = req?.users_info?.id;
+  payload.created_at = new Date().toISOString();
+  return payload;
+};
+
+const isSoftDeletedCase = (req, type) => {
+  const payload = req?.body;
+  if (type === 'update') {
+    payload.updated_by = req?.users_info?.id;
+    payload.updated_at = new Date().toISOString();
+  } else {
+    payload.deleted_by = req?.users_info?.id;
+    payload.deleted_at = new Date().toISOString();
+  }
+  return payload;
+};
+
 exports.optionsPayload = (req, type_method, column) => {
-  const where = reqParam(req);
-  const payload = reqBody(req);
-  where.deleted_at = null;
+  const where = req?.params;
+  if (req?.method === METHOD.DEL) {
+    type_method = 'soft-delete';
+  } else {
+    type_method = 'update';
+  }
+  const payload = isSoftDeletedCase(req, type_method);
   const options = {
     where,
     type_method,
     column,
-    payload
+    payload,
   };
 
   return options;

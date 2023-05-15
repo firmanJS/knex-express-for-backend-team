@@ -21,6 +21,7 @@ const postValidation = [
         name: 'name',
         message: lang.__('data.exist', { msg: `Name ${value}` })
       };
+      console.log(options);
       await checkSameValueinDb(options);
     }),
   (req, res, next) => { validateMiddleware(req, res, next); }

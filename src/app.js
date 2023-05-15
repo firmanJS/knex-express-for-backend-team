@@ -2,8 +2,7 @@ const express = require('express');
 
 const app = express();
 const compress = require('compression');
-const methodOverride = require('method-override');
-const xss = require('xss-clean');
+const { xss } = require('express-xss-sanitizer');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -36,14 +35,15 @@ app.use(cors({
 })); // cors setup
 
 app.use(compress()); // gzip compression
-app.use(methodOverride()); // lets you use HTTP verbs
-app.use(xss()); // handler xss attack
 app.use(express.json({ limit: APP_LIMIT })); // json limit
 if (APP_ENV === 'production') {
   app.use(morgan(MORGAN_FORMAT.PROD));
 } else {
   app.use(morgan(MORGAN_FORMAT.DEV, { stream: process.stderr }));
 }
+app.use(xss({
+  allowedTags: ['p']
+})); // handler xss attack
 app.use(healthCheck); // routing
 app.use(apiV1); // routing
 app.use('/public', express.static('public')); // for public folder
