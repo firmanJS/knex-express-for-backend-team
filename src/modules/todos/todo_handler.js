@@ -11,11 +11,11 @@
 const repository = require('./todo_repository');
 const {
   baseResponse, paginationResponse, reqParam, dynamicFilter, paging,
-  dynamicOrder, reqBody, optionsPayload, updateType
+  dynamicOrder, optionsPayload, updateType, isCreated
 } = require('../../utils');
 
 const store = async (req, res) => {
-  const payload = reqBody(req);
+  const payload = isCreated(req);
   const result = await repository.create(req, payload);
   return baseResponse(res, result);
 };
@@ -39,7 +39,7 @@ const fetchByParam = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  const options = optionsPayload(req, updateType(req));
+  const options = optionsPayload(req, updateType(req), ['name']);
   const result = await repository.update(req, options);
   return baseResponse(res, result);
 };
