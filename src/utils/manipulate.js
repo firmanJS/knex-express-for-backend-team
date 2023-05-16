@@ -23,13 +23,10 @@ exports.manipulateDate = (result, isArray = true) => {
       if (r?.deleted_at) r.deleted_at = customFormat(r.deleted_at);
       return r;
     });
-  } else {
-    if (result?.created_at) result.created_at = customFormat(result.created_at);
-    if (result?.updated_at) result.updated_at = customFormat(result.updated_at);
-    if (result?.deleted_at) result.deleted_at = customFormat(result.deleted_at);
-    manipulate = result;
-    return manipulate;
   }
-
+  if (result?.created_at) result.created_at = customFormat(result.created_at);
+  if (result?.updated_at) result.updated_at = customFormat(result.updated_at);
+  if (result?.deleted_at) result.deleted_at = customFormat(result.deleted_at);
+  manipulate = result;
   return manipulate;
 };
