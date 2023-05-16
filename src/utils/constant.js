@@ -28,6 +28,10 @@ module.exports = {
     POST: 'POST',
     GET: 'GET',
   },
+  METHOD_TYPE: {
+    UPDATE: 'updated',
+    SOFT_DELETE: 'soft-delete'
+  },
   MODEL_PROPERTIES: {
     TABLES: {
       TODO: 'mst_todo',

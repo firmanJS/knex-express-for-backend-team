@@ -7,11 +7,15 @@ const {
   requestOptions
 } = require('../../utils');
 const { lang } = require('../../lang');
+const { messageUpdateType, manipulateDate } = require('../../utils/manipulate');
 
 const COLUMN = [
   'id', 'name', 'description', ...CREATED
 ];
 const DEFAULT_SORT = [COLUMN[0], 'DESC'];
+
+module.exports.COLUMN = COLUMN;
+module.exports.DEFAULT_SORT = DEFAULT_SORT;
 
 const mapOutput = async (options, query) => {
   let result;
@@ -50,7 +54,7 @@ const sql = (options) => {
  * @param {object} payload
  * @return {object}
  */
-const create = async (req, payload) => {
+exports.create = async (req, payload) => {
   const trx = await pgCore.transaction();
   try {
     const options = {
@@ -73,14 +77,14 @@ const create = async (req, payload) => {
  * @param {array} column
  * @return {*}
  */
-const get = async (req, options, column = COLUMN) => {
+exports.get = async (req, options, column = COLUMN) => {
   try {
     let query = sql(options).clone().select(column);
     query = requestOptions(options, query);
     const result = await mapOutput(options, query);
     const [rows] = await sql(options).clone().count(column[0]);
     return mappingSuccess(lang.__('get.success'), {
-      result,
+      result: manipulateDate(result),
       count: rows?.count
     });
   } catch (error) {
@@ -96,13 +100,13 @@ const get = async (req, options, column = COLUMN) => {
  * @param {array} column
  * @return {object}
  */
-const getByParam = async (req, options, column = COLUMN) => {
+exports.getByParam = async (req, options, column = COLUMN) => {
   try {
     let query = sql(options).clone().select(column);
     query = requestOptions(options, query);
     const result = await mapOutput(options, query);
     if (result) {
-      return mappingSuccess(lang.__('get.success'), result);
+      return mappingSuccess(lang.__('get.success'), manipulateDate(result, false));
     }
     return mappingSuccess(lang.__('notfound.id', { id: options.where?.id }), result, 404, false);
   } catch (error) {
@@ -117,14 +121,9 @@ const getByParam = async (req, options, column = COLUMN) => {
  * @param {object} options
  * @return {object}
  */
-const update = async (req, options) => {
+exports.update = async (req, options) => {
   try {
-    let message = '';
-    if (options?.type_method === 'update') {
-      message = lang.__('updated.success', { id: options?.where?.id });
-    } else {
-      message = lang.__('archive.success', { id: options?.where?.id });
-    }
+    const message = messageUpdateType(options, options?.where?.id);
     options.table = TABLES.TODO;
     options.column = [COLUMN[1]];
     const result = await Repo.updated(options);
@@ -134,13 +133,4 @@ const update = async (req, options) => {
     error.path_filename = __filename;
     return mappingError(req, error);
   }
-};
-
-module.exports = {
-  create,
-  get,
-  update,
-  getByParam,
-  COLUMN,
-  DEFAULT_SORT
 };
