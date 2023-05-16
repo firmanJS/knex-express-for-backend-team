@@ -10,7 +10,7 @@
 
 const repository = require('./todo_repository');
 const {
-  baseResponse, paginationResponse, reqParam, dynamicFilter, paging,
+  baseResponse, paginationResponse, dynamicFilter, paging,
   dynamicOrder, optionsPayload, updateType,
 } = require('../../utils');
 
@@ -33,7 +33,7 @@ exports.fetch = async (req, res) => {
 };
 
 exports.fetchByParam = async (req, res) => {
-  const where = reqParam(req);
+  const where = req?.params;
   const options = { where };
   const result = await repository.getByParam(req, options);
   return baseResponse(res, result);
