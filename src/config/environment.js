@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 module.exports = {
+  APP_TZ: process?.env?.TZ ?? 'Asia/Jakarta',
   APP_PORT: process?.env?.APP_PORT ?? 3000,
   APP_ENV: process?.env?.APP_ENV ?? 'development',
   APP_NAME: process?.env?.APP_NAME ?? 'boilerplate-app',

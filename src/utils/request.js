@@ -1,6 +1,8 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
-const { LIMIT, PAGE, METHOD } = require('./constant');
+const {
+  LIMIT, PAGE, METHOD, METHOD_TYPE
+} = require('./constant');
 
 exports.dynamicFilter = (req, column = []) => {
   const push = {};
@@ -92,7 +94,7 @@ exports.isCreated = (req) => {
 
 const isSoftDeletedCase = (req, type) => {
   const payload = req?.body;
-  if (type === 'update') {
+  if (type === METHOD_TYPE.UPDATE) {
     payload.updated_by = req?.users_info?.id;
     payload.updated_at = new Date().toISOString();
   } else {
@@ -104,11 +106,6 @@ const isSoftDeletedCase = (req, type) => {
 
 exports.optionsPayload = (req, type_method, column) => {
   const where = req?.params;
-  if (req?.method === METHOD.DEL) {
-    type_method = 'soft-delete';
-  } else {
-    type_method = 'update';
-  }
   const payload = isSoftDeletedCase(req, type_method);
   const options = {
     where,
@@ -121,12 +118,7 @@ exports.optionsPayload = (req, type_method, column) => {
 };
 
 exports.updateType = (req) => {
-  let type = '';
-  if (req?.method === METHOD.DEL) {
-    type = 'soft-delete';
-  } else {
-    type = 'update';
-  }
-
+  let type = METHOD_TYPE.UPDATE;
+  if (req?.method === METHOD.DEL) type = METHOD_TYPE.SOFT_DELETE;
   return type;
 };

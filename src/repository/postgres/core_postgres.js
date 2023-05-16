@@ -2,9 +2,9 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable max-len */
 const { pgCore } = require('../../config/database');
-const { todayFormat } = require('../../utils');
+const { customFormat } = require('../../utils');
 
-const format = todayFormat('YYYYMMDDhmmss');
+const format = customFormat(new Date().toISOString(), 'YYYYMMDDhmmss');
 
 /**
  *

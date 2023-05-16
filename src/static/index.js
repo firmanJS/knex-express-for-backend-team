@@ -1,7 +1,9 @@
+const { APP_NAME } = require('../config');
+
 const info = {
   description: 'This is API , Made with ❤ by <a href="https://github.com/firmanJS" target="_blank">@firmanjs.</a>',
   version: '1.0.0',
-  title: 'API Documentation For Core API Balai Lelang',
+  title: `API Documentation For ${APP_NAME}`,
   contact: {
     email: ''
   },
@@ -15,10 +17,6 @@ const servers = [
   {
     url: '/api/v1/',
     description: 'Development server'
-  },
-  {
-    url: 'https://balailelang-api-gateway.d.logique.co.id/',
-    description: 'Gateway server'
   }
 ];
 
