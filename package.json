@@ -32,9 +32,10 @@
     "express-xss-sanitizer": "^1.1.6",
     "helmet": "^7.0.0",
     "i18n": "^0.15.1",
+    "jsonwebtoken": "^9.0.0",
     "knex": "^2.4.2",
     "morgan": "^1.10.0",
-    "pg": "^8.10.0",
+    "pg": "^8.11.0",
     "swagger-ui-express": "^4.6.2"
   },
   "devDependencies": {

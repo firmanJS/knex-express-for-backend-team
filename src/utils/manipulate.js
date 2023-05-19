@@ -2,7 +2,7 @@ const { lang } = require('../lang');
 const { METHOD_TYPE, MODEL_PROPERTIES: { DATE_ONLY } } = require('./constant');
 const { customFormat } = require('./date');
 
-exports.messageUpdateType = (options, value) => {
+exports.updateMessageType = (options, value) => {
   let message = lang.__('archive.success', { id: value });
   if (options?.type_method === METHOD_TYPE.UPDATE) {
     message = lang.__('updated.success', { id: value });

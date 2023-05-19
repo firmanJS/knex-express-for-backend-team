@@ -35,7 +35,7 @@ module.exports = {
   MODEL_PROPERTIES: {
     TABLES: {
       TODO: 'mst_todo',
-      STAFF: 'mst_staff'
+      USERS: 'users'
     },
     PRIMARY_KEY: {
       ID: 'id'
