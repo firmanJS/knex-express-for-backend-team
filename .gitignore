@@ -110,6 +110,5 @@ dist
 #lockfile
 package-lock.json
 yarn.lock
-.husky
 Makefile
 logs/

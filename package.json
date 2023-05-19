@@ -9,7 +9,9 @@
     "dev": "nodemon src/server.js",
     "lint": "eslint --fix --ext .js, . && yarn test:coverage",
     "fix": "eslint --fix --ext .js, .",
-    "prepare": "husky install"
+    "hooks-git": "git add .husky/pre-commit",
+    "prepare": "husky install",
+    "setup-husky": "npx husky add .husky/pre-commit 'yarn fix' && yarn hooks-git"
   },
   "repository": {
     "type": "git",
