@@ -3,6 +3,7 @@ const exception = require('./exception');
 const request = require('./request');
 const custom = require('./custom');
 const date = require('./date');
+const auth = require('./auth');
 
 module.exports = {
   ...constant,
@@ -10,4 +11,5 @@ module.exports = {
   ...request,
   ...custom,
   ...date,
+  ...auth
 };

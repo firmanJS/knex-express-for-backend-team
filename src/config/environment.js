@@ -3,6 +3,11 @@ require('dotenv').config();
 module.exports = {
   APP_TZ: process?.env?.TZ ?? 'Asia/Jakarta',
   APP_PORT: process?.env?.APP_PORT ?? 3000,
+  APP_ALGORITHM: process?.env?.PASSWORD_ALGORITHM ?? 'SHA512',
+  JWT_EXPIRED: process?.env?.JWT_EXPIRED ?? '8h',
+  JWT_SECRET_KEY: process?.env?.APP_SECRET_KEY ?? 'secret-xxxx-xxx',
+  JWT_ALGORITHM: process?.env?.JWT_ALGORITHM ?? 'SHA512',
+  JWT_REFRESH_TOKEN_EXPIRED: process?.env?.REFRESH_TOKEN_EXPIRED ?? '16h',
   APP_ENV: process?.env?.APP_ENV ?? 'development',
   APP_NAME: process?.env?.APP_NAME ?? 'boilerplate-app',
   APP_LIMIT: process?.env?.JSON_LIMIT ?? '12800kb',

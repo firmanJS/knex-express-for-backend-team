@@ -7,7 +7,7 @@ const {
   requestOptions
 } = require('../../utils');
 const { lang } = require('../../lang');
-const { messageUpdateType, manipulateDate } = require('../../utils/manipulate');
+const { updateMessageType, manipulateDate } = require('../../utils/manipulate');
 
 const COLUMN = [
   'id', 'name', 'description', ...CREATED
@@ -32,7 +32,6 @@ const condition = (builder, options) => {
   builder = isSoftDeleted(options.where, builder, single);
   if (options?.filter?.search) {
     builder.whereILike('name', `%${options?.filter?.search}%`);
-    builder.andWhere('deleted_at', null);
   }
   return builder;
 };
@@ -123,7 +122,7 @@ exports.getByParam = async (req, options, column = COLUMN) => {
  */
 exports.update = async (req, options) => {
   try {
-    const message = messageUpdateType(options, options?.where?.id);
+    const message = updateMessageType(options, options?.where?.id);
     options.table = TABLES.TODO;
     options.column = [COLUMN[1]];
     const result = await Repo.updated(options);

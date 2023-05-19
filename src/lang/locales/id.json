@@ -52,5 +52,10 @@
 	"knex.password": "Mohon cek kembali password / username basis data anda",
 	"knex.host": "Mohon cek kembali host basis data anda",
 	"knex.select": "Periksa kembali query anda atau nama table anda",
-	"data.exist": "{{msg}} sudah ada di database"
+	"data.exist": "{{msg}} sudah ada di database",
+	"validator.password.length": "inputan password harus mengandung 1 Kapital, 1 huruf kecil, 1 angka, 1 simbol dan minimal 8 karakter",
+	"validator.password.confirmation": "Password dan confirmation password tidak sama",
+	"register.success": "Berhasil melakukan registrasi",
+	"auth.success": "Berhasil melakukan authentikasi",
+	"auth.error": "Username atau password anda salah"
 }

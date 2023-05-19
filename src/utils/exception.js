@@ -110,7 +110,7 @@ exports.mappingSuccess = (message, data = [], code = HTTP.OK, status = true) => 
 const conditionCheck = (error, manipulate, message) => {
   switch (manipulate[0]) {
     case 'JsonWebTokenError':
-      message = error;
+      message = error?.message ?? error;
       break;
     case 'Error':
       message = lang.__('error.db.connection');
