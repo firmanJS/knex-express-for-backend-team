@@ -8,10 +8,9 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "lint": "eslint --fix --ext .js, . && yarn test:coverage",
-    "fix": "eslint --fix --ext .js, .",
-    "hooks-git": "git add .husky/pre-commit",
+    "check-code": "eslint --fix --ext .js, .",
     "prepare": "husky install",
-    "setup-husky": "npx husky add .husky/pre-commit 'yarn fix' && yarn hooks-git"
+    "setup-husky": "yarn prepare && npx husky add .husky/pre-commit 'yarn check-code'"
   },
   "repository": {
     "type": "git",
