@@ -7,6 +7,7 @@ const {
 } = require('../../utils');
 const { lang } = require('../../lang');
 
+const COLUMN_REFRESH = ['id'];
 const COLUMN_LOGIN = ['id', 'password', 'salt'];
 /**
  *
@@ -46,11 +47,34 @@ exports.login = async (req, payload) => {
       hash: result?.password,
       salt: result?.salt
     });
-    if (result && validationPassword === true) {
+    if (result?.id && validationPassword === true) {
       const token = setToken({ id: result?.id });
       return mappingSuccess(lang.__('auth.success'), token);
     }
-    return mappingSuccess(lang.__('auth.error'), result);
+    return mappingSuccess(lang.__('auth.error'));
+  } catch (error) {
+    error.path_filename = __filename;
+    return mappingError(req, error);
+  }
+};
+/**
+ *
+ *
+ * @param {object} req
+ * @return {object}
+ */
+exports.refreshToken = async (req) => {
+  try {
+    const query = pgCore(TABLES.USERS).where((builder) => {
+      builder.where('id', req?.users_info?.id);
+      builder.andWhere('deleted_at', null);
+    }).select(COLUMN_REFRESH);
+    const result = await query.first();
+    if (result?.id) {
+      const token = setToken({ id: result?.id });
+      return mappingSuccess(lang.__('auth.refresh'), token);
+    }
+    return mappingSuccess(lang.__('auth.error'));
   } catch (error) {
     error.path_filename = __filename;
     return mappingError(req, error);

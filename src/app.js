@@ -12,6 +12,7 @@ const {
   removeFavicon,
   MORGAN_FORMAT,
   syntaxError,
+  customFormat,
 } = require('./utils');
 
 const healthCheck = require('./routes');
@@ -36,6 +37,7 @@ app.use(cors({
 
 app.use(compress()); // gzip compression
 app.use(express.json({ limit: APP_LIMIT })); // json limit
+morgan.token('date', () => customFormat());// date logs
 if (APP_ENV === 'production') {
   app.use(morgan(MORGAN_FORMAT.PROD));
 } else {

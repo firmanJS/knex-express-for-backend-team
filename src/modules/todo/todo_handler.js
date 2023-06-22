@@ -11,12 +11,12 @@
 const repository = require('./todo_repository');
 const {
   baseResponse, paginationResponse, dynamicFilter, paging,
-  dynamicOrder, optionsPayload, updateType,
+  dynamicOrder, optionsPayload, updateType, isCreated,
 } = require('../../utils');
 
 exports.store = async (req, res) => {
-  // const payload = isCreated(req);
-  const payload = req?.body;
+  const payload = isCreated(req);
+  // const payload = req?.body;
   const result = await repository.create(req, payload);
   return baseResponse(res, result);
 };

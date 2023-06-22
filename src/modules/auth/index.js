@@ -1,6 +1,7 @@
 const express = require('express');
-const { register, login } = require('./auth_handler');
+const { register, login, refreshToken } = require('./auth_handler');
 const { registerValidation, loginValidation } = require('./auth_validation');
+const { verifyToken } = require('../../middlewares');
 
 const router = express.Router();
 
@@ -9,5 +10,6 @@ const router = express.Router();
 */
 router.post('/verify', loginValidation, login);
 router.post('/register', registerValidation, register);
+router.post('/refresh-token', verifyToken, refreshToken);
 
 module.exports = router;
