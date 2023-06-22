@@ -112,6 +112,9 @@ const conditionCheck = (error, manipulate, message) => {
     case 'JsonWebTokenError':
       message = error?.message ?? error;
       break;
+    case 'TokenExpiredError':
+      message = error?.message ?? error;
+      break;
     case 'Error':
       message = lang.__('error.db.connection');
       break;

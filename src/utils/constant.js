@@ -47,5 +47,8 @@ module.exports = {
     DATE_ONLY: [
       'created_at', 'updated_at', 'deleted_at'
     ]
+  },
+  DATE_FORMAT: {
+    IND: 'DD-MM-YYYY HH:mm:ss'
   }
 };

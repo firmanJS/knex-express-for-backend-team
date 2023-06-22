@@ -1,6 +1,6 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
-const { baseResponse, customFormat } = require('../utils');
+const { baseResponse, customFormat, DATE_FORMAT } = require('../utils');
 
 const router = express.Router();
 const { index } = require('../static');
@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
       response_time: `${getDurationInMilliseconds()}(ms)`,
       welcome: APP_NAME,
       uptimes: process.uptime(),
-      timestamp: customFormat(new Date().toISOString(), 'DD-MMM-YYYY HH:mm:ss'),
+      timestamp: customFormat({ format: DATE_FORMAT.IND }),
       documentation: `http://${req.get('host')}/documentation`
     }
   });

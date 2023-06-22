@@ -25,3 +25,8 @@ exports.login = async (req, res) => {
   const result = await repository.login(req, payload);
   return baseResponse(res, result);
 };
+
+exports.refreshToken = async (req, res) => {
+  const result = await repository.refreshToken(req);
+  return baseResponse(res, result);
+};

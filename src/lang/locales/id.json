@@ -57,5 +57,6 @@
 	"validator.password.confirmation": "Password dan confirmation password tidak sama",
 	"register.success": "Berhasil melakukan registrasi",
 	"auth.success": "Berhasil melakukan authentikasi",
-	"auth.error": "Username atau password anda salah"
+	"auth.error": "Username atau password anda salah",
+	"auth.refresh": "Berhasil melaukan refresh token"
 }

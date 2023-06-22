@@ -4,11 +4,6 @@
 			"tags": [
 				"Auth"
 			],
-			"security": [
-				{
-					"bearerAuth": []
-				}
-			],
 			"requestBody": {
 				"required": false,
 				"content": {
@@ -48,6 +43,30 @@
 					}
 				}
 			},
+			"responses": {
+				"200": {
+					"description": "OK",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SchemaAuthLoginResponse"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/auth/refresh-token": {
+		"post": {
+			"tags": [
+				"Auth"
+			],
+			"security": [
+				{
+					"bearerAuth": []
+				}
+			],
 			"responses": {
 				"200": {
 					"description": "OK",
