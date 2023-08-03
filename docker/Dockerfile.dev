@@ -1,20 +1,24 @@
-FROM node:18.12.1-buster-slim
+FROM node:18.16.0-alpine
 
-WORKDIR /usr/apps/knex-express-template
+WORKDIR /usr/apps/logique-express-api
 
-RUN rm -rf /var/cache/apk/*
-RUN apt-get update && \
-    apt-get install -yq tzdata && \
-    ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && \
-    dpkg-reconfigure -f noninteractive tzdata
+RUN apk update && apk add --no-cache tzdata
 
 LABEL maintainer="firmanjs"
 
-ENV NODE_ENV development
-ENV TZ Asia/Jakarta
+ENV NODE_ENV=development
+ENV TZ=Asia/Jakarta
 
-COPY package.json /usr/apps/knex-express-template/
+RUN apk add --no-cache --virtual .build-deps \
+    tzdata
 
-RUN yarn install && yarn global add knex && yarn cache clean --all
+RUN cp /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
+
+COPY package.json .
+
+RUN yarn install \
+    && yarn global add knex \
+    && yarn cache clean --all
 
 CMD ["yarn", "dev"]

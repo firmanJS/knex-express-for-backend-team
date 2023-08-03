@@ -1,4 +1,4 @@
-FROM node:18.12.1-buster-slim
+FROM nnode:18.16.0-alpine
 
 LABEL maintainer="firman"
 
