@@ -18,7 +18,11 @@ services:
       - /usr/apps/knex-express-template/node_modules
     ports:
       - "${APP_PORT}:${APP_PORT}"
-
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
 networks:
   express-template-network:
     driver: bridge

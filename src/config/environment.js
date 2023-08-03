@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+let CSP = process?.env?.APP_CONTENT_POLICY_DEV;
+if (process?.env?.APP_ENV === 'production') CSP = process?.env?.APP_CONTENT_POLICY_PROD;
 module.exports = {
   APP_TZ: process?.env?.TZ ?? 'Asia/Jakarta',
   APP_PORT: process?.env?.APP_PORT ?? 3000,
@@ -18,6 +20,7 @@ module.exports = {
     'Authorization',
     'Content-Type'
   ],
+  APP_CONTENT_POLICY: CSP,
   APP_EXPOSE_HEADER: process?.env?.APP_EXPOSE_HEADER.split(',') ?? ['Content-Length', 'Content-Type'],
   APP_PROTECTION: process?.env?.APP_PROTECTION ?? '1; mode=block;',
   APP_PERMISSION_POLICY: process?.env?.APP_PERMISSION_POLICY ?? 'autoplay=(self), camera=(), encrypted-media=(self), fullscreen=(), geolocation=(self), gyroscope=(self), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=(self), usb=()'
