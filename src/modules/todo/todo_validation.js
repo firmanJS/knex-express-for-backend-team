@@ -6,7 +6,7 @@ const { checkSameValueinDb, checkSameValueinDbUpdateUuid } = require('../../repo
 /* RULE
   ** More Documentation in here https://express-validator.github.io/docs/
 */
-const postValidation = [
+exports.postValidation = [
   check('name')
     .isString()
     .withMessage(lang.__('validator.string', { field: 'Name' }))
@@ -21,13 +21,12 @@ const postValidation = [
         name: 'name',
         message: lang.__('data.exist', { msg: `Name ${value}` })
       };
-      console.log(options);
       await checkSameValueinDb(options);
     }),
   (req, res, next) => { validateMiddleware(req, res, next); }
 ];
 
-const putValidation = [
+exports.putValidation = [
   check('name')
     .isString()
     .withMessage(lang.__('validator.string', { field: 'Name' }))
@@ -44,5 +43,3 @@ const putValidation = [
     }),
   (req, res, next) => { validateMiddleware(req, res, next); }
 ];
-
-module.exports = { postValidation, putValidation };
