@@ -13,7 +13,7 @@ module.exports = {
   [process?.env?.APP_ENV]: {
     client: process?.env?.DB_DRIVER,
     connection,
-    debug: process?.env?.APP_ENV === 'development',
+    debug: process?.env?.APP_ENV === 'production',
     migrations: {
       tableName: 'migrations',
       directory: path.join(__dirname, 'repository/postgres/migrations')

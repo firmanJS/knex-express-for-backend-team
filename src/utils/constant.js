@@ -19,6 +19,12 @@ module.exports = {
     DEV: '[:date[clf]] :remote-addr :remote-user \x1b[36m:method \x1b[36m:url \x1b[33m:status \x1b[32m:response-time\x1b[36m(ms)\x1b[0m',
     PROD: '[:date[clf]] :remote-addr :remote-user :method :url :status :response-time(ms)'
   },
+  ENVIRONMENT: {
+    DEV: 'development',
+    STG: 'staging',
+    LOC: 'local',
+    PROD: 'production'
+  },
   ENUM: {
     JABATAN: ['hr', 'developer', 'pm']
   },

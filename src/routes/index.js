@@ -4,7 +4,7 @@ const {
   baseResponse,
   customFormat,
   DATE_FORMAT,
-  useGzip
+  ENVIRONMENT
 } = require('../utils');
 
 const router = express.Router();
@@ -18,10 +18,9 @@ const getDurationInMilliseconds = (start = process.hrtime()) => {
 
   return (diff[0] * NS_PER_SEC + diff[1]) / NS_TO_MS;
 };
-router.disable('x-powered-by');
-router.use(useGzip());
+
 router.get('/', (req, res) => {
-  baseResponse(res, {
+  baseResponse(req, res, {
     data: {
       response_time: `${getDurationInMilliseconds()}(ms)`,
       welcome: APP_NAME,
@@ -32,7 +31,7 @@ router.get('/', (req, res) => {
   });
 });
 
-if (APP_ENV === 'development') {
+if (APP_ENV === ENVIRONMENT.DEV) {
   router.use('/documentation', swaggerUi.serve);
   router.get('/documentation', swaggerUi.setup(index, { isExplorer: false }));
 }

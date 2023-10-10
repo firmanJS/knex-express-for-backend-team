@@ -6,6 +6,7 @@ const date = require('./date');
 const auth = require('./auth');
 const gzip = require('./gzip');
 const sql = require('./sql');
+const config = require('./config');
 
 module.exports = {
   ...constant,
@@ -15,5 +16,6 @@ module.exports = {
   ...date,
   ...auth,
   ...gzip,
-  ...sql
+  ...sql,
+  ...config
 };

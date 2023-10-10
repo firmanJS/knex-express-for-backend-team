@@ -15,16 +15,16 @@ exports.register = async (req, res) => {
   const payload = generatePassword(req?.body);
   delete payload.password_confirmation;
   const result = await repository.register(req, payload);
-  return baseResponse(res, result);
+  return baseResponse(req, res, result);
 };
 
 exports.login = async (req, res) => {
   const payload = req?.body;
   const result = await repository.login(req, payload);
-  return baseResponse(res, result);
+  return baseResponse(req, res, result);
 };
 
 exports.refreshToken = async (req, res) => {
   const result = await repository.refreshToken(req);
-  return baseResponse(res, result);
+  return baseResponse(req, res, result);
 };

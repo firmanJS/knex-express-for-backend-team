@@ -23,11 +23,15 @@ const {
 } = require('../../utils');
 
 exports.store = async (req, res) => {
-  let payload = validateRequest({ req, type: req.body, column: schema.COLUMN });
+  let payload = validateRequest({
+    req,
+    type: 'body',
+    column: schema.SCHEMA_REQUEST
+  });
   payload = isCreated(req, payload);
   // const payload = req?.body;
   const result = await repository.create(req, payload);
-  return baseResponse(res, result);
+  return baseResponse(req, res, result);
 };
 
 exports.fetch = async (req, res) => {
@@ -48,11 +52,11 @@ exports.fetchByParam = async (req, res) => {
   const where = req?.params;
   const options = { where };
   const result = await repository.getByParam(req, options);
-  return baseResponse(res, result);
+  return baseResponse(req, res, result);
 };
 
 exports.update = async (req, res) => {
   const options = optionsPayload(req, updateType(req), ['name']);
   const result = await repository.update(req, options);
-  return baseResponse(res, result);
+  return baseResponse(req, res, result);
 };

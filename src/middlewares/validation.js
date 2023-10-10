@@ -37,7 +37,7 @@ const validateMiddleware = (req, res, next) => {
     captureLog(errors);
     const message = checkMessageError(catchMessage, errors);
     message.type_error = 'validation';
-    return baseResponse(res, mappingError(req, message));
+    return baseResponse(req, res, mappingError(req, message));
   }
 
   return next();

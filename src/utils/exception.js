@@ -1,7 +1,20 @@
 // const { captureLog } = require('express-logger-logique')
-const { HTTP, PAGE, LIMIT } = require('./constant');
+const { HTTP, PAGE, LIMIT, ENVIRONMENT } = require('./constant');
 const { lang } = require('../lang');
+const { customFormat } = require('./date');
+const { APP_DEBUG, APP_ENV } = require('../config');
 // const { todayFormat } = require('./date')
+const debugMode = (req) => {
+  if (+APP_DEBUG === 1) {
+    console.info(`=========== Incoming Request ${customFormat()} ===========`);
+    if ([ENVIRONMENT.LOC, ENVIRONMENT.DEV, ENVIRONMENT.STG].includes(APP_ENV)) {
+      console.info('Headers:', req?.headers);
+    }
+    console.info('Query:', JSON.stringify(req?.query));
+    console.info('Param:', JSON.stringify(req?.params));
+    console.info('Body:', JSON.stringify(req?.body));
+  }
+};
 
 exports.notFoundHandler = (req, res) => {
   const message = `Route : ${req.url} ${lang.__('notfound')}.`;
@@ -42,7 +55,7 @@ exports.syntaxError = (err, req, res, next) => {
     next();
   }
 
-  if (process.env.NODE_ENV === 'development') {
+  if (APP_ENV === ENVIRONMENT.DEV) {
     console.info(err.toString());
     res.status(HTTP.OK).send(result);
   } else {
@@ -53,6 +66,7 @@ exports.syntaxError = (err, req, res, next) => {
 };
 
 exports.paginationResponse = (req, res, rows) => {
+  debugMode(req);
   const options = {
     status: true,
     message: lang.__('get.success'),
@@ -66,7 +80,7 @@ exports.paginationResponse = (req, res, rows) => {
   }
   const limitPerPage = req.query?.limit || LIMIT;
   const countTotal = Number(rows?.data?.data?.count) || +LIMIT;
-  res.status(code).json({
+  return res.status(code).json({
     message,
     status,
     data: rows?.data?.data?.result || [],
@@ -80,7 +94,8 @@ exports.paginationResponse = (req, res, rows) => {
   });
 };
 
-exports.originResponse = (res, status, data) => {
+exports.originResponse = (req, res, status, data) => {
+  debugMode(req);
   let code;
   switch (status) {
     case 'success':
@@ -98,11 +113,13 @@ exports.originResponse = (res, status, data) => {
     default:
       code = HTTP.OK;
   }
-  res.status(code).json(data);
+  return res.status(code).json(data);
 };
 
-exports.baseResponse = (res, data) =>
-  res.status(data?.code ?? HTTP.OK).json(data?.data);
+exports.baseResponse = (req, res, data) => {
+  debugMode(req);
+  return res.status(data?.code ?? HTTP.OK).json(data?.data);
+};
 
 exports.mappingSuccess = (
   message,
@@ -154,7 +171,7 @@ exports.mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
   const manipulate = error.toString().split(':');
   console.error(`catch message ${error}`);
   message = lang.__('error.db.transaction');
-  if (process.env.APP_ENV === 'development') {
+  if (APP_ENV === ENVIRONMENT.DEV) {
     exception = error.toString();
     message = conditionCheck(error, manipulate, message);
   }
@@ -176,7 +193,7 @@ exports.mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
 };
 
 exports.captureLog = (err) => {
-  if (process.env.NODE_ENV === 'development') {
+  if ([ENVIRONMENT.LOC, ENVIRONMENT.DEV, ENVIRONMENT.STG].includes(APP_ENV)) {
     console.info('error validateMiddleware', err);
   }
 };

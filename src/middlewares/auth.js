@@ -14,7 +14,7 @@ const result = {
 
 exports.verifyToken = (req, res, next) => {
   try {
-    if (!req.headers.authorization) return baseResponse(res, result);
+    if (!req.headers.authorization) return baseResponse(req, res, result);
     const token = req?.headers?.authorization.split(' ')[1];
     const credential = jwt.verify(token, JWT_SECRET_KEY, {
       algorithms: JWT_ALGORITHM
@@ -23,9 +23,9 @@ exports.verifyToken = (req, res, next) => {
       req.users_info = credential;
       return next();
     }
-    return baseResponse(res, result);
+    return baseResponse(req, res, result);
   } catch (error) {
     const err = mappingError(req, error, HTTP.UNAUTHORIZED);
-    return baseResponse(res, err);
+    return baseResponse(req, res, err);
   }
 };

@@ -12,6 +12,7 @@ module.exports = {
   JWT_ALGORITHM: process?.env?.JWT_ALGORITHM ?? 'SHA512',
   JWT_REFRESH_TOKEN_EXPIRED: process?.env?.REFRESH_TOKEN_EXPIRED ?? '16h',
   APP_ENV: process?.env?.APP_ENV ?? 'development',
+  APP_DEBUG: process?.env?.APP_DEBUG ?? 1,
   APP_NAME: process?.env?.APP_NAME ?? 'boilerplate-app',
   APP_LIMIT: process?.env?.JSON_LIMIT ?? '12800kb',
   APP_METHOD: process?.env?.APP_METHOD.split(',') ?? [
