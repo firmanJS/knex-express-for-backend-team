@@ -1,7 +1,11 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const {
-  JWT_SECRET_KEY, JWT_EXPIRED, JWT_ALGORITHM, JWT_REFRESH_TOKEN_EXPIRED, APP_ALGORITHM
+  JWT_SECRET_KEY,
+  JWT_EXPIRED,
+  JWT_ALGORITHM,
+  JWT_REFRESH_TOKEN_EXPIRED,
+  APP_ALGORITHM
 } = require('../config');
 
 exports.generatePassword = (payload) => {
@@ -21,7 +25,14 @@ exports.generatePassword = (payload) => {
 exports.isValidPassword = (payload) => {
   try {
     const hashPassword = crypto
-      .pbkdf2Sync(payload?.password, payload?.salt ?? '', 10000, 150, APP_ALGORITHM).toString('hex');
+      .pbkdf2Sync(
+        payload?.password,
+        payload?.salt ?? '',
+        10000,
+        150,
+        APP_ALGORITHM
+      )
+      .toString('hex');
     return payload?.hash === hashPassword;
   } catch (error) {
     console.info('error validated password', error);

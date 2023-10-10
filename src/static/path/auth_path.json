@@ -1,9 +1,7 @@
 {
 	"/auth/register": {
 		"post": {
-			"tags": [
-				"Auth"
-			],
+			"tags": ["Auth"],
 			"requestBody": {
 				"required": false,
 				"content": {
@@ -30,9 +28,7 @@
 	},
 	"/auth/verify": {
 		"post": {
-			"tags": [
-				"Auth"
-			],
+			"tags": ["Auth"],
 			"requestBody": {
 				"required": false,
 				"content": {
@@ -59,9 +55,7 @@
 	},
 	"/auth/refresh-token": {
 		"post": {
-			"tags": [
-				"Auth"
-			],
+			"tags": ["Auth"],
 			"security": [
 				{
 					"bearerAuth": []

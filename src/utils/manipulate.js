@@ -1,5 +1,8 @@
 const { lang } = require('../lang');
-const { METHOD_TYPE, MODEL_PROPERTIES: { DATE_ONLY } } = require('./constant');
+const {
+  METHOD_TYPE,
+  MODEL_PROPERTIES: { DATE_ONLY }
+} = require('./constant');
 const { customFormat } = require('./date');
 
 exports.updateMessageType = (options, value) => {
@@ -21,7 +24,8 @@ exports.manipulateDate = (result, isArray = true, column = DATE_ONLY) => {
     });
   }
   for (let index = 0; index < column.length; index += 1) {
-    if (result[column[index]]) result[column[index]] = customFormat(result[column[index]]);
+    if (result[column[index]])
+      result[column[index]] = customFormat(result[column[index]]);
   }
   manipulate = result;
   return manipulate;

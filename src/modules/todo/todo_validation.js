@@ -1,11 +1,16 @@
 const { check } = require('express-validator');
 const { validateMiddleware } = require('../../middlewares');
 const { lang } = require('../../lang');
-const { MODEL_PROPERTIES: { TABLES } } = require('../../utils');
-const { checkSameValueinDb, checkSameValueinDbUpdateUuid } = require('../../repository/postgres/core_postgres');
+const {
+  MODEL_PROPERTIES: { TABLES }
+} = require('../../utils');
+const {
+  checkSameValueinDb,
+  checkSameValueinDbUpdateUuid
+} = require('../../repository/postgres/core_postgres');
 /* RULE
-  ** More Documentation in here https://express-validator.github.io/docs/
-*/
+ ** More Documentation in here https://express-validator.github.io/docs/
+ */
 exports.postValidation = [
   check('name')
     .isString()
@@ -23,7 +28,9 @@ exports.postValidation = [
       };
       await checkSameValueinDb(options);
     }),
-  (req, res, next) => { validateMiddleware(req, res, next); }
+  (req, res, next) => {
+    validateMiddleware(req, res, next);
+  }
 ];
 
 exports.putValidation = [
@@ -37,9 +44,11 @@ exports.putValidation = [
         column: 'id',
         name: req?.params?.id,
         message: lang.__('data.exist', { msg: `Name ${value}` }),
-        table: TABLES.TODO,
+        table: TABLES.TODO
       };
       await checkSameValueinDbUpdateUuid(options);
     }),
-  (req, res, next) => { validateMiddleware(req, res, next); }
+  (req, res, next) => {
+    validateMiddleware(req, res, next);
+  }
 ];

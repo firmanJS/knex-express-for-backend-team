@@ -1,15 +1,15 @@
-version: "2"
+version: '2'
 checks:
   similar-code:
     enabled: false
     config:
       languages:
-      - javascript
+        - javascript
   duplication:
     enabled: false
     config:
       languages:
-      - javascript
+        - javascript
 exclude_patterns:
-- node_modules/
-- __test__/
+  - node_modules/
+  - __test__/

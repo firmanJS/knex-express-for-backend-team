@@ -6,12 +6,10 @@
  * @param {*} res express response you can see with console.log(req)
  * @param {*} isCreated if request body need users id in token, you can use this
  * @return {JSON}
-*/
+ */
 
 const repository = require('./auth_repository');
-const {
-  baseResponse, generatePassword
-} = require('../../utils');
+const { baseResponse, generatePassword } = require('../../utils');
 
 exports.register = async (req, res) => {
   const payload = generatePassword(req?.body);

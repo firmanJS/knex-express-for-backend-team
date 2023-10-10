@@ -1,9 +1,10 @@
 const { pgCore } = require('../../config/database');
 const {
-  mappingSuccess, mappingError,
+  mappingSuccess,
+  mappingError,
   MODEL_PROPERTIES: { TABLES },
   isValidPassword,
-  setToken,
+  setToken
 } = require('../../utils');
 const { lang } = require('../../lang');
 
@@ -36,11 +37,13 @@ exports.register = async (req, payload) => {
  */
 exports.login = async (req, payload) => {
   try {
-    const query = pgCore(TABLES.USERS).where((builder) => {
-      builder.where('username', payload.username);
-      builder.orWhere('email', payload.username);
-      builder.andWhere('deleted_at', null);
-    }).select(COLUMN_LOGIN);
+    const query = pgCore(TABLES.USERS)
+      .where((builder) => {
+        builder.where('username', payload.username);
+        builder.orWhere('email', payload.username);
+        builder.andWhere('deleted_at', null);
+      })
+      .select(COLUMN_LOGIN);
     const result = await query.first();
     const validationPassword = isValidPassword({
       password: payload?.password,
@@ -65,10 +68,12 @@ exports.login = async (req, payload) => {
  */
 exports.refreshToken = async (req) => {
   try {
-    const query = pgCore(TABLES.USERS).where((builder) => {
-      builder.where('id', req?.users_info?.id);
-      builder.andWhere('deleted_at', null);
-    }).select(COLUMN_REFRESH);
+    const query = pgCore(TABLES.USERS)
+      .where((builder) => {
+        builder.where('id', req?.users_info?.id);
+        builder.andWhere('deleted_at', null);
+      })
+      .select(COLUMN_REFRESH);
     const result = await query.first();
     if (result?.id) {
       const token = setToken({ id: result?.id });

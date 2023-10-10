@@ -1,6 +1,5 @@
 version: '3'
 services:
-
   # Nodejs
   knex-express-template:
     image: firmanjs/knex-express-template:dev
@@ -17,12 +16,12 @@ services:
       - .:/usr/apps/knex-express-template
       - /usr/apps/knex-express-template/node_modules
     ports:
-      - "${APP_PORT}:${APP_PORT}"
+      - '${APP_PORT}:${APP_PORT}'
     logging:
-      driver: "json-file"
+      driver: 'json-file'
       options:
-        max-size: "100m"
-        max-file: "5"
+        max-size: '100m'
+        max-file: '5'
 networks:
   express-template-network:
     driver: bridge

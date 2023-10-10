@@ -1,7 +1,5 @@
 const express = require('express');
-const {
-  store, fetch, fetchByParam, update
-} = require('./todo_handler');
+const { store, fetch, fetchByParam, update } = require('./todo_handler');
 const { postValidation, putValidation } = require('./todo_validation');
 const { idMustBeUuid } = require('../../middlewares');
 

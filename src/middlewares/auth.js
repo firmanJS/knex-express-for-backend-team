@@ -8,7 +8,7 @@ const result = {
   data: {
     status: false,
     message: lang.__('validator.required', { field: 'token' }),
-    data: [],
+    data: []
   }
 };
 
@@ -16,7 +16,9 @@ exports.verifyToken = (req, res, next) => {
   try {
     if (!req.headers.authorization) return baseResponse(res, result);
     const token = req?.headers?.authorization.split(' ')[1];
-    const credential = jwt.verify(token, JWT_SECRET_KEY, { algorithms: JWT_ALGORITHM });
+    const credential = jwt.verify(token, JWT_SECRET_KEY, {
+      algorithms: JWT_ALGORITHM
+    });
     if (credential) {
       req.users_info = credential;
       return next();
