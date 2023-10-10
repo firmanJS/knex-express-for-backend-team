@@ -1,8 +1,28 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
-const {
-  LIMIT, PAGE, METHOD, METHOD_TYPE
-} = require('./constant');
+const { LIMIT, PAGE, METHOD, METHOD_TYPE } = require('./constant');
+/**
+ * @param {object} options
+ * @return {object}
+ */
+exports.validateRequest = (options) => {
+  try {
+    const request = Object.entries(options.req[options.type]);
+    const data = {};
+
+    for (const [i, v] of request) {
+      const check = options.column.find((item) => item === i);
+
+      if (check && v !== '') {
+        data[check] = v;
+      }
+    }
+    return data;
+  } catch (error) {
+    console.info('error valdate request filter', error);
+    return {};
+  }
+};
 
 exports.dynamicFilter = (req, column = []) => {
   const push = {};
@@ -30,7 +50,7 @@ exports.paging = (req, defaultOrder = []) => {
     direction,
     page,
     limit,
-    search,
+    search
   };
 };
 
@@ -49,10 +69,11 @@ exports.dynamicFilterJoin = (req, column = []) => {
 
 exports.dynamicOrder = (filter = {}) => {
   let order;
-  if (typeof filter.direction === 'string' && typeof filter.order === 'string') {
-    order = [
-      { column: filter.direction, order: filter.order }
-    ];
+  if (
+    typeof filter.direction === 'string' &&
+    typeof filter.order === 'string'
+  ) {
+    order = [{ column: filter.direction, order: filter.order }];
   } else {
     const dir = filter.direction;
     const or = filter.order;
@@ -85,8 +106,7 @@ exports.isSoftDeleted = (where, builder, isSingle) => {
   return builder;
 };
 
-exports.isCreated = (req) => {
-  const payload = req?.body;
+exports.isCreated = (req, payload) => {
   payload.created_by = req?.users_info?.id;
   payload.created_at = new Date().toISOString();
   return payload;
@@ -111,7 +131,7 @@ exports.optionsPayload = (req, type_method, column) => {
     where,
     type_method,
     column,
-    payload,
+    payload
   };
 
   return options;

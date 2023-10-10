@@ -6,27 +6,39 @@
  * @param {*} res express response you can see with console.log(req)
  * @param {*} isCreated if request body need users id in token, you can use this
  * @return {JSON}
-*/
+ */
 
 const repository = require('./todo_repository');
+const schema = require('./todo_schema');
 const {
-  baseResponse, paginationResponse, dynamicFilter, paging,
-  dynamicOrder, optionsPayload, updateType, isCreated,
+  baseResponse,
+  paginationResponse,
+  dynamicFilter,
+  paging,
+  dynamicOrder,
+  optionsPayload,
+  updateType,
+  isCreated,
+  validateRequest
 } = require('../../utils');
 
 exports.store = async (req, res) => {
-  const payload = isCreated(req);
+  let payload = validateRequest({ req, type: req.body, column: schema.COLUMN });
+  payload = isCreated(req, payload);
   // const payload = req?.body;
   const result = await repository.create(req, payload);
   return baseResponse(res, result);
 };
 
 exports.fetch = async (req, res) => {
-  const where = dynamicFilter(req, repository.COLUMN);
-  const filter = paging(req, repository.DEFAULT_SORT);
+  const where = dynamicFilter(req, schema.COLUMN);
+  const filter = paging(req, schema.DEFAULT_SORT);
   const order = dynamicOrder(filter);
   const options = {
-    where, order, filter, type: 'array'
+    where,
+    order,
+    filter,
+    type: 'array'
   };
   const result = await repository.get(req, options);
   return paginationResponse(req, res, result);

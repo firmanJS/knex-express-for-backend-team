@@ -15,8 +15,7 @@ process.on('unhandledRejection', (reason, promise) => {
   // alert here to sentry or email
   fs.writeSync(
     process.stderr.fd,
-    `Caught rejection: ${promise}\n`
-    + `Exception reason: ${reason}`
+    `Caught rejection: ${promise}\n` + `Exception reason: ${reason}`
   );
 });
 process.on('rejectionHandled', (promise) => {
@@ -27,8 +26,7 @@ process.on('uncaughtException', (err, origin) => {
   // alert here to sentry or email
   fs.writeSync(
     process.stderr.fd,
-    `Caught exception: ${err}\n`
-    + `Exception origin: ${origin}`
+    `Caught exception: ${err}\n` + `Exception origin: ${origin}`
   );
 });
 

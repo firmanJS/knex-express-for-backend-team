@@ -1,51 +1,15 @@
 const { pgCore } = require('../../config/database');
 const Repo = require('../../repository/postgres/core_postgres');
 const {
-  mappingSuccess, mappingError,
-  MODEL_PROPERTIES: { TABLES, CREATED },
-  isSoftDeleted,
-  requestOptions
+  mappingSuccess,
+  mappingError,
+  MODEL_PROPERTIES: { TABLES },
+  requestOptions,
+  mapOutput
 } = require('../../utils');
 const { lang } = require('../../lang');
 const { updateMessageType, manipulateDate } = require('../../utils/manipulate');
-
-const COLUMN = [
-  'id', 'name', 'description', ...CREATED
-];
-const DEFAULT_SORT = [COLUMN[0], 'DESC'];
-
-module.exports.COLUMN = COLUMN;
-module.exports.DEFAULT_SORT = DEFAULT_SORT;
-
-const mapOutput = async (options, query) => {
-  let result;
-  if (options.type === 'array') {
-    result = await query;
-  } else {
-    result = await query.first();
-  }
-  return result;
-};
-// function cloning
-const condition = (builder, options) => {
-  const single = true;
-  builder = isSoftDeleted(options.where, builder, single);
-  if (options?.filter?.search) {
-    builder.whereILike('name', `%${options?.filter?.search}%`);
-  }
-  return builder;
-};
-
-const sql = (options) => {
-  const query = pgCore(TABLES.TODO)
-    .where((builder) => {
-      condition(builder, options);
-    });
-
-  return query;
-};
-// end cloning
-
+const { COLUMN, sql } = require('./todo_schema');
 /**
  *
  *
@@ -57,7 +21,10 @@ exports.create = async (req, payload) => {
   const trx = await pgCore.transaction();
   try {
     const options = {
-      table: TABLES.TODO, payload, column: COLUMN[0], trx
+      table: TABLES.TODO,
+      payload,
+      column: COLUMN[0],
+      trx
     };
     const result = await Repo.insertTrx(options);
     await trx.commit();
@@ -105,9 +72,17 @@ exports.getByParam = async (req, options, column = COLUMN) => {
     query = requestOptions(options, query);
     const result = await mapOutput(options, query);
     if (result) {
-      return mappingSuccess(lang.__('get.success'), manipulateDate(result, false));
+      return mappingSuccess(
+        lang.__('get.success'),
+        manipulateDate(result, false)
+      );
     }
-    return mappingSuccess(lang.__('notfound.id', { id: options.where?.id }), result, 404, false);
+    return mappingSuccess(
+      lang.__('notfound.id', { id: options.where?.id }),
+      result,
+      404,
+      false
+    );
   } catch (error) {
     error.path_filename = __filename;
     return mappingError(req, error);
@@ -127,7 +102,12 @@ exports.update = async (req, options) => {
     options.column = [COLUMN[1]];
     const result = await Repo.updated(options);
     if (result) return mappingSuccess(message, result);
-    return mappingSuccess(lang.__('notfound.id', { id: options?.where?.id }), result, 404, false);
+    return mappingSuccess(
+      lang.__('notfound.id', { id: options?.where?.id }),
+      result,
+      404,
+      false
+    );
   } catch (error) {
     error.path_filename = __filename;
     return mappingError(req, error);
