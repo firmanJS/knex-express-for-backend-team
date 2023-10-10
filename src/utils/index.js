@@ -4,6 +4,8 @@ const request = require('./request');
 const custom = require('./custom');
 const date = require('./date');
 const auth = require('./auth');
+const gzip = require('./gzip');
+const sql = require('./sql');
 
 module.exports = {
   ...constant,
@@ -11,5 +13,7 @@ module.exports = {
   ...request,
   ...custom,
   ...date,
-  ...auth
+  ...auth,
+  ...gzip,
+  ...sql
 };

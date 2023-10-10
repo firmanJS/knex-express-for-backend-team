@@ -9,7 +9,7 @@ exports.notFoundHandler = (req, res) => {
   res.status(HTTP.OK).json({
     error: err.toString(),
     status: true,
-    message,
+    message
   });
 };
 
@@ -22,11 +22,12 @@ exports.removeFavicon = (req, res, next) => {
   }
 };
 
-exports.errorHandler = (_error, res) => res.status(HTTP.OK).json({
-  status: true,
-  message: lang.__('error.invalid.syntax'),
-  data: [],
-});
+exports.errorHandler = (_error, res) =>
+  res.status(HTTP.OK).json({
+    status: true,
+    message: lang.__('error.invalid.syntax'),
+    data: []
+  });
 
 exports.syntaxError = (err, req, res, next) => {
   const result = {
@@ -52,7 +53,11 @@ exports.syntaxError = (err, req, res, next) => {
 };
 
 exports.paginationResponse = (req, res, rows) => {
-  const options = { status: true, message: lang.__('get.success'), code: HTTP.OK };
+  const options = {
+    status: true,
+    message: lang.__('get.success'),
+    code: HTTP.OK
+  };
   let { status, message, code } = options;
   if (Number(rows?.data?.data?.count) === 0) {
     status = false;
@@ -82,13 +87,13 @@ exports.originResponse = (res, status, data) => {
       code = HTTP.OK;
       break;
     case 'created':
-      code = HTTP.OK;
+      code = HTTP.CREATED;
       break;
     case 'not found':
-      code = HTTP.OK;
+      code = HTTP.NOT_FOUND;
       break;
     case 'unauthorized':
-      code = HTTP.OK;
+      code = HTTP.UNAUTHORIZED;
       break;
     default:
       code = HTTP.OK;
@@ -96,9 +101,15 @@ exports.originResponse = (res, status, data) => {
   res.status(code).json(data);
 };
 
-exports.baseResponse = (res, data) => res.status(data?.code ?? HTTP.OK).json(data?.data);
+exports.baseResponse = (res, data) =>
+  res.status(data?.code ?? HTTP.OK).json(data?.data);
 
-exports.mappingSuccess = (message, data = [], code = HTTP.OK, status = true) => ({
+exports.mappingSuccess = (
+  message,
+  data = [],
+  code = HTTP.OK,
+  status = true
+) => ({
   code,
   data: {
     status,
@@ -138,7 +149,8 @@ const conditionCheck = (error, manipulate, message) => {
 };
 
 exports.mappingError = (req, error, code = HTTP.BAD_REQUEST) => {
-  let { message, exception } = ['', ''];
+  let message = '';
+  let exception = '';
   const manipulate = error.toString().split(':');
   console.error(`catch message ${error}`);
   message = lang.__('error.db.transaction');

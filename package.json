@@ -2,15 +2,26 @@
   "name": "knex-express-api-boilerplate",
   "version": "1.0.0",
   "description": "express boilerplate with orm knex",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
     "test:coverage": "jest --coverage --detectOpenHandles",
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "start": "node src/main.js",
+    "dev": "nodemon src/main.js",
     "lint": "eslint --fix --ext .js, . && yarn test:coverage",
     "check-code": "eslint --fix --ext .js, .",
     "prepare": "husky install",
-    "setup-husky": "yarn prepare && npx husky add .husky/pre-commit 'yarn check-code'"
+    "setup-husky": "yarn prepare && npx husky add .husky/pre-commit 'npx --no-install lint-staged'"
+  },
+  "lint-staged": {
+    "**/*.{js}": [
+      "eslint . --fix",
+      "prettier --write ."
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "repository": {
     "type": "git",
@@ -33,18 +44,21 @@
     "helmet": "^7.0.0",
     "i18n": "^0.15.1",
     "jsonwebtoken": "^9.0.0",
-    "knex": "^2.4.2",
+    "knex": "^3.0.1",
     "morgan": "^1.10.0",
     "pg": "^8.11.0",
-    "swagger-ui-express": "^4.6.2"
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "^8.39.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.27.5",
     "husky": "^8.0.3",
     "jest": "^29.5.0",
+    "lint-staged": "^14.0.1",
     "node-mocks-http": "^1.12.2",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.3"
   }
 }

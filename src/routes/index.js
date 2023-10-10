@@ -1,6 +1,11 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
-const { baseResponse, customFormat, DATE_FORMAT } = require('../utils');
+const {
+  baseResponse,
+  customFormat,
+  DATE_FORMAT,
+  useGzip
+} = require('../utils');
 
 const router = express.Router();
 const { index } = require('../static');
@@ -13,7 +18,8 @@ const getDurationInMilliseconds = (start = process.hrtime()) => {
 
   return (diff[0] * NS_PER_SEC + diff[1]) / NS_TO_MS;
 };
-
+router.disable('x-powered-by');
+router.use(useGzip());
 router.get('/', (req, res) => {
   baseResponse(res, {
     data: {
