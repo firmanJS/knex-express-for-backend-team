@@ -49,7 +49,9 @@ const idMustBeUuid = [
     .withMessage(lang.__('validator.uuid', { field: 'id' }))
     .notEmpty()
     .withMessage(lang.__('validator.required', { field: 'id' })),
-  (req, res, next) => { validateMiddleware(req, res, next); }
+  (req, res, next) => {
+    validateMiddleware(req, res, next);
+  }
 ];
 
 module.exports = {

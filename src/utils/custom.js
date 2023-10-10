@@ -11,7 +11,8 @@ exports.isNumeric = (str) => {
 
 exports.convertToSlug = (text = '') => {
   try {
-    return text.toLowerCase()
+    return text
+      .toLowerCase()
       .replace(/[^\w ]+/g, '')
       .replace(/ +/g, '-');
   } catch (error) {
@@ -29,12 +30,16 @@ exports.replaceString = (str, from, to = '') => {
 
 exports.ucword = (str = '') => {
   if (typeof str !== 'string') return str;
-  return (`${str}`).replace(/^([a-z])|\s+([a-z])/g, ($1) => $1.toUpperCase());
+  return `${str}`.replace(/^([a-z])|\s+([a-z])/g, ($1) => $1.toUpperCase());
 };
 
-exports.formatCurrency = (currency, options = {
-  language: 'id-ID', format: 'IDR'
-}) => {
+exports.formatCurrency = (
+  currency,
+  options = {
+    language: 'id-ID',
+    format: 'IDR'
+  }
+) => {
   try {
     const moneyFormat = Intl.NumberFormat(options?.language, {
       style: 'currency',

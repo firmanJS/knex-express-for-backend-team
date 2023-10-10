@@ -32,7 +32,9 @@ describe('all custom function testing', () => {
     expect(custom.convertToSlug('testing data')).toBe('testing-data');
   });
   it('is slug error handlerfunction', () => {
-    expect(custom.convertToSlug(123)).toBe('TypeError: text.toLowerCase is not a function');
+    expect(custom.convertToSlug(123)).toBe(
+      'TypeError: text.toLowerCase is not a function'
+    );
   });
   it('is first upper string function', () => {
     expect(custom.ucword('testing')).toBe('Testing');
@@ -44,7 +46,9 @@ describe('all custom function testing', () => {
     expect(custom.replaceString('aku-kamu', '-', ' ')).toBe('aku kamu');
   });
   it('is replace function error handler', () => {
-    expect(custom.replaceString(123, '-', ' ')).toBe('TypeError: str.replace is not a function');
+    expect(custom.replaceString(123, '-', ' ')).toBe(
+      'TypeError: str.replace is not a function'
+    );
   });
   it('is currency function', () => {
     expect(custom.formatCurrency(2000)).toBe(custom.formatCurrency(2000));
@@ -53,6 +57,8 @@ describe('all custom function testing', () => {
     expect(custom.formatCurrency({ a: 1 })).toBe('RpNaN');
   });
   it('is currency function', () => {
-    expect(custom.formatCurrency({ a: 1 }, false)).toBe('TypeError: Currency code is required with currency style.');
+    expect(custom.formatCurrency({ a: 1 }, false)).toBe(
+      'TypeError: Currency code is required with currency style.'
+    );
   });
 });

@@ -1,11 +1,15 @@
 const { check } = require('express-validator');
 const { validateMiddleware } = require('../../middlewares');
 const { lang } = require('../../lang');
-const { MODEL_PROPERTIES: { TABLES } } = require('../../utils');
-const { checkSameValueinDb } = require('../../repository/postgres/core_postgres');
+const {
+  MODEL_PROPERTIES: { TABLES }
+} = require('../../utils');
+const {
+  checkSameValueinDb
+} = require('../../repository/postgres/core_postgres');
 /* RULE
-  ** More Documentation in here https://express-validator.github.io/docs/
-*/
+ ** More Documentation in here https://express-validator.github.io/docs/
+ */
 exports.registerValidation = [
   check('username')
     .isString()
@@ -66,7 +70,9 @@ exports.registerValidation = [
     .withMessage(lang.__('validator.password')),
   check('password_confirmation')
     .notEmpty()
-    .withMessage(lang.__('validator.required', { field: 'Password confirmation' }))
+    .withMessage(
+      lang.__('validator.required', { field: 'Password confirmation' })
+    )
     .custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error(lang.__('validator.password.confirmation'));
@@ -75,7 +81,7 @@ exports.registerValidation = [
     }),
   (req, res, next) => {
     validateMiddleware(req, res, next);
-  },
+  }
 ];
 
 exports.loginValidation = [
@@ -83,7 +89,9 @@ exports.loginValidation = [
     .isString()
     .withMessage(lang.__('validator.string', { field: 'username atau email' }))
     .notEmpty()
-    .withMessage(lang.__('validator.required', { field: 'username atau email' })),
+    .withMessage(
+      lang.__('validator.required', { field: 'username atau email' })
+    ),
   check('password')
     .isLength({ min: 8, max: 12 })
     .withMessage(lang.__('validator.password.length'))
@@ -93,5 +101,5 @@ exports.loginValidation = [
     .withMessage(lang.__('validator.password')),
   (req, res, next) => {
     validateMiddleware(req, res, next);
-  },
+  }
 ];

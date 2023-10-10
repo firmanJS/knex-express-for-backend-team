@@ -6,5 +6,5 @@ module.exports = {
   detectOpenHandles: true,
   forceExit: true,
   testMatch: ['**/*.test.js'],
-  verbose: true,
+  verbose: true
 };

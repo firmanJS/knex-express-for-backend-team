@@ -12,7 +12,9 @@ const format = customFormat(new Date().toISOString(), 'YYYYMMDDhmmss');
  * @return {*}
  */
 exports.insert = async (options) => {
-  const [result] = await pgCore(options?.table).insert(options?.payload).returning(options?.column);
+  const [result] = await pgCore(options?.table)
+    .insert(options?.payload)
+    .returning(options?.column);
   return result;
 };
 /**
@@ -21,7 +23,9 @@ exports.insert = async (options) => {
  * @return {*}
  */
 exports.insertTrx = async (options) => {
-  const [result] = await pgCore(options?.table).transacting(options?.trx).insert(options?.payload)
+  const [result] = await pgCore(options?.table)
+    .transacting(options?.trx)
+    .insert(options?.payload)
     .returning(options?.column);
   return result;
 };
@@ -31,7 +35,9 @@ exports.insertTrx = async (options) => {
  * @return {*}
  */
 const fetchByParam = async (options) => {
-  const result = await pgCore(options?.table).where(options?.where).select(options?.column);
+  const result = await pgCore(options?.table)
+    .where(options?.where)
+    .select(options?.column);
   return result;
 };
 /**
@@ -43,7 +49,9 @@ exports.updated = async (options) => {
   const loop = (rows) => {
     options.payload.deleted_at = new Date().toISOString();
     for (const prop in options?.column) {
-      options.payload[options?.column[prop]] = `archived-${format}-${rows[options?.column[prop]]}`;
+      options.payload[options?.column[prop]] = `archived-${format}-${
+        rows[options?.column[prop]]
+      }`;
     }
     console.log(options);
     return options;
@@ -57,7 +65,10 @@ exports.updated = async (options) => {
     }
   }
 
-  const [result] = await pgCore(options?.table).where(options?.where).update(options?.payload).returning(options?.column);
+  const [result] = await pgCore(options?.table)
+    .where(options?.where)
+    .update(options?.payload)
+    .returning(options?.column);
 
   return result;
 };
@@ -67,7 +78,10 @@ exports.updated = async (options) => {
  * @return {*}
  */
 exports.deletePermanently = async (options) => {
-  const [result] = await pgCore(options?.table).where(options?.where).del().returning(options?.column);
+  const [result] = await pgCore(options?.table)
+    .where(options?.where)
+    .del()
+    .returning(options?.column);
   return result;
 };
 /**

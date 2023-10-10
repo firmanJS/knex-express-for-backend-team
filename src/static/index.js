@@ -1,7 +1,8 @@
 const { APP_NAME } = require('../config');
 
 const info = {
-  description: 'This is API , Made with ❤ by <a href="https://github.com/firmanJS" target="_blank">@firmanjs.</a>',
+  description:
+    'This is API , Made with ❤ by <a href="https://github.com/firmanJS" target="_blank">@firmanjs.</a>',
   version: '1.0.0',
   title: `API Documentation For ${APP_NAME}`,
   contact: {

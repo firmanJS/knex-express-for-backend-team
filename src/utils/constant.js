@@ -26,7 +26,7 @@ module.exports = {
     DEL: 'DELETE',
     PUT: 'PUT',
     POST: 'POST',
-    GET: 'GET',
+    GET: 'GET'
   },
   METHOD_TYPE: {
     UPDATE: 'updated',
@@ -41,12 +41,14 @@ module.exports = {
       ID: 'id'
     },
     CREATED: [
-      'created_at', 'created_by',
-      'updated_at', 'updated_by', 'deleted_at', 'deleted_by'
+      'created_at',
+      'created_by',
+      'updated_at',
+      'updated_by',
+      'deleted_at',
+      'deleted_by'
     ],
-    DATE_ONLY: [
-      'created_at', 'updated_at', 'deleted_at'
-    ]
+    DATE_ONLY: ['created_at', 'updated_at', 'deleted_at']
   },
   DATE_FORMAT: {
     IND: 'DD-MM-YYYY HH:mm:ss'
