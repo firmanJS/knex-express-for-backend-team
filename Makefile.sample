@@ -26,7 +26,7 @@ docker-down:
 	docker-compose -f $(compose-file) down
 docker-top:
 	docker-compose -f $(compose-file) top
-image-pull:
+docker-image-pull:
 	docker-compose -f $(compose-file) pull
 docker-migrate:
 	docker-compose -f $(compose-file) exec knex-express-template knex migrate:latest --cwd=src
