@@ -16,6 +16,7 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
 COPY package.json .
+COPY yarn.lock /usr/apps/logique-express-api
 
 RUN yarn install \
     && yarn global add knex \

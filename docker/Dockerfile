@@ -16,6 +16,7 @@ ENV NODE_ENV production
 ENV TZ Asia/Jakarta
 
 COPY package.json /usr/apps/logique-express-api
+COPY yarn.lock /usr/apps/logique-express-api
 COPY ./src /usr/apps/logique-express-api
 
 RUN yarn install --frozen-lockfile --production && yarn global add knex && yarn cache clean --all

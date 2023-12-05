@@ -2,6 +2,7 @@
 const fs = require('fs');
 const app = require('./app');
 const { APP_NAME, APP_PORT, APP_ENV } = require('./config');
+const { ENVIRONMENT } = require('./utils');
 
 process.on('warning', (warning) => {
   console.warn(warning.name);
@@ -35,7 +36,7 @@ process.on('SIGTERM', () => {
 });
 
 app.listen(APP_PORT, () => {
-  if (APP_ENV === 'development') {
+  if (APP_ENV === ENVIRONMENT.DEV) {
     console.info(`${APP_NAME} running in port ${APP_PORT} with env ${APP_ENV}`);
   } else {
     console.info(`${APP_NAME} is running with env ${APP_ENV}`);

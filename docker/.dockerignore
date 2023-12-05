@@ -1,0 +1,10 @@
+node_modules/
+logs/
+coverage/
+.vscode/
+.husky/
+.github/
+__test__/
+
+*.lcov
+*.log

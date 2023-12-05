@@ -1,8 +1,9 @@
 const path = require('path');
+const { ENVIRONMENT } = require('./utils');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 const connection = {
-  client: process?.env?.DB_DRIVER ?? 'pg',
+  client: 'pg',
   host: process?.env?.DB_HOST ?? 'localhost',
   port: process?.env?.DB_PORT ?? 5432,
   user: process?.env?.DB_USER ?? 'example',
@@ -10,10 +11,10 @@ const connection = {
   database: process?.env?.DB_NAME ?? 'example'
 };
 module.exports = {
-  [process?.env?.APP_ENV]: {
-    client: process?.env?.DB_DRIVER,
+  development: {
+    client: 'pg',
     connection,
-    debug: process?.env?.APP_ENV === 'production',
+    debug: process?.env?.NODE_ENV === ENVIRONMENT.PROD,
     migrations: {
       tableName: 'migrations',
       directory: path.join(__dirname, 'repository/postgres/migrations')

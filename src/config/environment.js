@@ -11,28 +11,15 @@ module.exports = {
   JWT_SECRET_KEY: process?.env?.APP_SECRET_KEY ?? 'secret-xxxx-xxx',
   JWT_ALGORITHM: process?.env?.JWT_ALGORITHM ?? 'SHA512',
   JWT_REFRESH_TOKEN_EXPIRED: process?.env?.REFRESH_TOKEN_EXPIRED ?? '16h',
-  APP_ENV: process?.env?.APP_ENV ?? 'development',
+  APP_ENV: process?.env?.NODE_ENV ?? 'development',
   APP_DEBUG: process?.env?.APP_DEBUG ?? 1,
   APP_NAME: process?.env?.APP_NAME ?? 'boilerplate-app',
   APP_LIMIT: process?.env?.JSON_LIMIT ?? '12800kb',
-  APP_METHOD: process?.env?.APP_METHOD.split(',') ?? [
-    'POST',
-    'PUT',
-    'DELETE',
-    'GET',
-    'OPTIONS'
-  ],
+  APP_METHOD: ['POST', 'PUT', 'DELETE', 'GET', 'OPTIONS'],
   APP_LANGUAGE: process?.env?.LANGUAGE ?? 'id',
-  APP_ALLOW_HEADER: process?.env?.APP_ALLOW_HEADER.split(',') ?? [
-    'Origin',
-    'Authorization',
-    'Content-Type'
-  ],
+  APP_ALLOW_HEADER: ['Origin', 'Authorization', 'Content-Type'],
   APP_CONTENT_POLICY: CSP,
-  APP_EXPOSE_HEADER: process?.env?.APP_EXPOSE_HEADER.split(',') ?? [
-    'Content-Length',
-    'Content-Type'
-  ],
+  APP_EXPOSE_HEADER: ['Content-Length', 'Content-Type'],
   APP_PROTECTION: process?.env?.APP_PROTECTION ?? '1; mode=block;',
   APP_PERMISSION_POLICY:
     process?.env?.APP_PERMISSION_POLICY ??
