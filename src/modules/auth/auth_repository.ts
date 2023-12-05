@@ -16,7 +16,10 @@ export default class AuthRepository implements AuthContractInterface {
 
   private readonly column_login: string[] = ['id', 'password', 'salt'];
 
-  async register(req: Request, payload: Record<string, string>): Promise<DtoInterface> {
+  async register(
+    req: Request,
+    payload: Record<string, string>
+  ): Promise<DtoInterface> {
     try {
       const [result]: AuthResponseInterface[] = await pgCore(this.table)
         .insert(payload)
@@ -28,13 +31,18 @@ export default class AuthRepository implements AuthContractInterface {
     }
   }
 
-  async login(req: Request, payload: Record<string, string>): Promise<DtoInterface> {
+  async login(
+    req: Request,
+    payload: Record<string, string>
+  ): Promise<DtoInterface> {
     try {
-      const query: Knex.QueryBuilder = pgCore(this.table).where((builder) => {
-        builder.where('username', payload.username);
-        builder.orWhere('email', payload.username);
-        builder.andWhere('deleted_at', null);
-      }).select(this.column_login);
+      const query: Knex.QueryBuilder = pgCore(this.table)
+        .where((builder) => {
+          builder.where('username', payload.username);
+          builder.orWhere('email', payload.username);
+          builder.andWhere('deleted_at', null);
+        })
+        .select(this.column_login);
       const result: AuthResponseInterface = await query.first();
       const validationPassword: boolean = Auth.isValidPassword({
         password: payload?.password,

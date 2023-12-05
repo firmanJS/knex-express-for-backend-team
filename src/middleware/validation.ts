@@ -10,7 +10,8 @@ const checkMessageError = (catchMessage: any, errors: any): string | any => {
   const extractedErrors: any = [];
   errors.array().map((err: any) => extractedErrors.push(err.msg));
   switch (catchMessage[0][0]) {
-    case 'database': message = Translate.__('knex.db');
+    case 'database':
+      message = Translate.__('knex.db');
       break;
     case 'connect':
       message = Translate.__('knex.connect');
@@ -44,6 +45,7 @@ export const validate = (req: Request, res: Response, next: NextFunction) => {
     }
     const message = checkMessageError(catchMessage, errors);
     return baseResponse(
+      req,
       res,
       mappingError(req, message, Http.UNPROCESSABLE_ENTITY)
     );
@@ -60,5 +62,5 @@ export const uuidValidation = [
     .withMessage(Translate.__('validator.required', { field: 'id' })),
   (req: Request, res: Response, next: NextFunction) => {
     validate(req, res, next);
-  },
+  }
 ];

@@ -3,7 +3,7 @@ import { Knex } from 'knex';
 import pgCore from '../../config/database';
 import {
   CountInterface,
-  RepositoryInterface,
+  RepositoryInterface
 } from '../../interface/repository_interface';
 import { RequestOptionsInterface } from '../../interface/request_interface';
 import { DtoInterface } from '../../interface/response_interface';
@@ -11,7 +11,10 @@ import Translate from '../../lang';
 import { coreUpdate } from '../../models/core';
 import { Constant, Exception, RequestUtils } from '../../utils';
 import { isSoftDeleted } from '../../utils/request';
-import { BlogCategoryInterface, BlogCategoryPost } from './blog_category_interface';
+import {
+  BlogCategoryInterface,
+  BlogCategoryPost
+} from './blog_category_interface';
 
 const table: string = Constant.Table.BLOG_CAT;
 const condition = (builder: any, options: RequestOptionsInterface | any) => {
@@ -78,7 +81,7 @@ export default class TodoRepository implements RepositoryInterface {
         .count(this.column[0]);
       return Exception?.mappingSuccess(Translate.__('get.success'), {
         result,
-        count: rows?.count,
+        count: rows?.count
       });
     } catch (error: any) {
       error.path_filename = __filename;

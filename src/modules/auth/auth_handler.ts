@@ -16,12 +16,12 @@ export default new (class AuthHandler implements AuthHandlerInterface {
     const payload: AuthRequestInterface = req?.body;
     const body = generatePassword(payload);
     const result = await this.repo.register(req, body);
-    return Exception.baseResponse(res, result);
+    return Exception.baseResponse(req, res, result);
   }
 
   async login(req: Request, res: Response): Promise<Response> {
     const payload: Record<string, string> = req?.body;
     const result: DtoInterface = await this.repo.login(req, payload);
-    return Exception.baseResponse(res, result);
+    return Exception.baseResponse(req, res, result);
   }
 })();

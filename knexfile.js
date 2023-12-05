@@ -6,19 +6,19 @@ const connection = {
   port: process?.env?.DB_PORT ?? 5432,
   user: process?.env?.DB_USER ?? 'example',
   password: process?.env?.DB_PASS ?? 'example',
-  database: process?.env?.DB_NAME ?? 'example',
+  database: process?.env?.DB_NAME ?? 'example'
 };
 module.exports = {
-  [process?.env?.APP_ENV]: {
+  [process?.env?.NODE_ENV]: {
     client: process?.env?.DB_DRIVER ?? 'pg',
     connection,
     debug: process?.env?.APP_ENV === 'development',
     migrations: {
       tableName: 'migrations',
-      directory: path.join(__dirname, 'src/models/migrations'),
+      directory: path.join(__dirname, 'src/models/migrations')
     },
     seeds: {
-      directory: path.join(__dirname, 'src/models/seeders'),
-    },
-  },
+      directory: path.join(__dirname, 'src/models/seeders')
+    }
+  }
 };

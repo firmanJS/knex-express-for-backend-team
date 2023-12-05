@@ -1,9 +1,7 @@
 {
 	"/auth/register": {
 		"post": {
-			"tags": [
-				"Auth"
-			],
+			"tags": ["Auth"],
 			"security": [
 				{
 					"bearerAuth": []
@@ -35,9 +33,7 @@
 	},
 	"/auth/login": {
 		"post": {
-			"tags": [
-				"Auth"
-			],
+			"tags": ["Auth"],
 			"requestBody": {
 				"required": false,
 				"content": {

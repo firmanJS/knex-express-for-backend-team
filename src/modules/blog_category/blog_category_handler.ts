@@ -16,7 +16,7 @@ export default new (class BlogCategory implements BaseHandlerInterface {
   async store(req: Request, res: Response): Promise<Response> {
     const payload: BlogCategoryPost = req?.body;
     const result = await this.repo.create(req, payload);
-    return Exception.baseResponse(res, result);
+    return Exception.baseResponse(req, res, result);
   }
 
   async fetch(req: Request, res: Response): Promise<Response> {
@@ -27,7 +27,7 @@ export default new (class BlogCategory implements BaseHandlerInterface {
       where,
       order,
       filter,
-      type: 'array',
+      type: 'array'
     };
     const result = await this.repo.get(req, options);
     return Exception.paginationResponse(req, res, result);
@@ -36,17 +36,17 @@ export default new (class BlogCategory implements BaseHandlerInterface {
   async fetchByParam(req: Request, res: Response): Promise<Response> {
     const options: RequestOptionsInterface = {
       where: {
-        id: req?.params?.id,
+        id: req?.params?.id
       },
-      type: 'object',
+      type: 'object'
     };
     const result = await this.repo.getByParam(req, options);
-    return Exception.baseResponse(res, result);
+    return Exception.baseResponse(req, res, result);
   }
 
   async update(req: Request, res: Response): Promise<Response> {
     const options = optionsPayload(req);
     const result = await this.repo.update(req, options);
-    return Exception.baseResponse(res, result);
+    return Exception.baseResponse(req, res, result);
   }
 })();

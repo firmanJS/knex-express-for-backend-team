@@ -1,4 +1,4 @@
-FROM node:18.12.1-buster-slim
+FROM node:alpine3.18
 
 RUN rm -rf /var/cache/apk/*
 

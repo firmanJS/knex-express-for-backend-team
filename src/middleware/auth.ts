@@ -7,7 +7,9 @@ import { Constant, Exception } from '../utils';
 const validate = (req: Request | any, res: Response, next: NextFunction) => {
   const token: string | any = req.headers.authorization.split(' ')[1];
   const algorithms: jwt.Algorithm | any = config.app.algorithm;
-  const credential: any = jwt.verify(token, config.app.secret_key, { algorithms });
+  const credential: any = jwt.verify(token, config.app.secret_key, {
+    algorithms
+  });
   if (credential) {
     req.users_info = credential;
     return next();
@@ -17,13 +19,17 @@ const validate = (req: Request | any, res: Response, next: NextFunction) => {
     data: {
       status: false,
       message: Translate.__('validator.required', { field: 'token' }),
-      data: [],
+      data: []
     }
   };
-  return Exception.baseResponse(res, result);
+  return Exception.baseResponse(req, res, result);
 };
 
-export const verifyToken = (req: Request, res: Response, next: NextFunction): any | void => {
+export const verifyToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): any | void => {
   try {
     if (!req.headers.authorization) {
       const result: Record<string, string | any> = {
@@ -31,14 +37,14 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): an
         data: {
           status: false,
           message: Translate.__('validator.required', { field: 'token' }),
-          data: [],
+          data: []
         }
       };
-      return Exception.baseResponse(res, result);
+      return Exception.baseResponse(req, res, result);
     }
     return validate(req, res, next);
-  } catch (error:any) {
+  } catch (error: any) {
     const err = Exception.mappingError(req, error, Constant.Http.UNAUTHORIZED);
-    return Exception.baseResponse(res, err);
+    return Exception.baseResponse(req, res, err);
   }
 };

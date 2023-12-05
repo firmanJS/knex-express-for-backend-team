@@ -1,5 +1,6 @@
 #ganti compose file sesuai environment
 compose-file = docker-compose-dev.yml
+container-name= knex-express-template
 
 # run using yarn
 run-dev:
@@ -19,9 +20,9 @@ docker-deploy:
 docker-stop:
 	docker-compose -f $(compose-file) stop
 docker-test:
-	docker-compose -f $(compose-file) exec knex-express-template yarn test
+	docker-compose -f $(compose-file) exec $(container-name) yarn test
 docker-coverage:
-	docker-compose -f $(compose-file) exec knex-express-template yarn coverage
+	docker-compose -f $(compose-file) exec $(container-name) yarn coverage
 docker-down:
 	docker-compose -f $(compose-file) down
 docker-top:
@@ -29,18 +30,22 @@ docker-top:
 docker-pull:
 	docker-compose -f $(compose-file) pull
 docker-migrate:
-	docker-compose -f $(compose-file) exec knex-express-template knex migrate:latest --cwd=src
+	docker-compose -f $(compose-file) exec $(container-name) knex migrate:latest --cwd=src
 docker-migrate-specific:
-	docker-compose -f $(compose-file) exec knex-express-template knex migrate:up $(table) --cwd=src
+	docker-compose -f $(compose-file) exec $(container-name) knex migrate:up $(table) --cwd=src
 docker-migrate-create:
-	docker-compose -f $(compose-file) exec knex-express-template knex migrate:make $(table).js --cwd=src 
+	docker-compose -f $(compose-file) exec $(container-name) knex migrate:make $(table).js --cwd=src 
 docker-rollback:
-	docker-compose -f $(compose-file) exec knex-express-template knex migrate:rollback --cwd=src
+	docker-compose -f $(compose-file) exec $(container-name) knex migrate:rollback --cwd=src
 docker-migrate-down:
-	docker-compose -f $(compose-file) exec knex-express-template knex migrate:down --cwd=src
+	docker-compose -f $(compose-file) exec $(container-name) knex migrate:down --cwd=src
 docker-migrate-down-specific:
-	docker-compose -f $(compose-file) exec knex-express-template knex migrate:down $(table) --cwd=src
+	docker-compose -f $(compose-file) exec $(container-name) knex migrate:down $(table) --cwd=src
 docker-seed:
-	docker-compose -f $(compose-file) exec knex-express-template knex seed:run --cwd=src
+	docker-compose -f $(compose-file) exec $(container-name) knex seed:run --cwd=src
 docker-seed-specific:
-	docker-compose -f $(compose-file) exec knex-express-template knex seed:run --specific=$(seed-name) --cwd=src
+	docker-compose -f $(compose-file) exec $(container-name) knex seed:run --specific=$(seed-name) --cwd=src
+docker-exec-container:
+	docker exec -it $(container-name) /bin/sh
+docker-log:
+	docker logs $(container-name) -f

@@ -20,7 +20,10 @@ export interface AuthResponseInterface extends LogInterface {
 }
 
 export interface AuthContractInterface {
-  register(req: Request, payload: Record<string, string>): Promise<DtoInterface>;
+  register(
+    req: Request,
+    payload: Record<string, string>
+  ): Promise<DtoInterface>;
   login(req: Request, payload: Record<string, string>): Promise<DtoInterface>;
 }
 

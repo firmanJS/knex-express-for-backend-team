@@ -1,9 +1,7 @@
 {
 	"/blog-category": {
 		"get": {
-			"tags": [
-				"Blog Category"
-			],
+			"tags": ["Blog Category"],
 			"security": [
 				{
 					"bearerAuth": []
@@ -70,9 +68,7 @@
 			}
 		},
 		"post": {
-			"tags": [
-				"Blog Category"
-			],
+			"tags": ["Blog Category"],
 			"security": [
 				{
 					"bearerAuth": []
@@ -104,9 +100,7 @@
 	},
 	"/blog-category/{id}": {
 		"get": {
-			"tags": [
-				"Blog Category"
-			],
+			"tags": ["Blog Category"],
 			"security": [
 				{
 					"bearerAuth": []
@@ -136,9 +130,7 @@
 			}
 		},
 		"put": {
-			"tags": [
-				"Blog Category"
-			],
+			"tags": ["Blog Category"],
 			"security": [
 				{
 					"bearerAuth": []
@@ -178,9 +170,7 @@
 			}
 		},
 		"delete": {
-			"tags": [
-				"Blog Category"
-			],
+			"tags": ["Blog Category"],
 			"security": [
 				{
 					"bearerAuth": []

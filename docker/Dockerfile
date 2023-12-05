@@ -1,4 +1,4 @@
-FROM node:18.12.1-buster-slim AS builder
+FROM node:alpine3.18 AS builder
 
 RUN rm -rf /var/cache/apk/*
 
@@ -19,7 +19,7 @@ RUN yarn build
 # Build Stage 2
 # This build takes the production build from staging build
 #
-FROM node:18.12.1-buster-slim
+FROM node:alpine3.18
 
 WORKDIR /usr/apps/knex-express-template
 

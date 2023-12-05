@@ -3,7 +3,7 @@ import { Knex } from 'knex';
 import pgCore from '../../config/database';
 import {
   CountInterface,
-  RepositoryInterface,
+  RepositoryInterface
 } from '../../interface/repository_interface';
 import { RequestOptionsInterface } from '../../interface/request_interface';
 import { DtoInterface } from '../../interface/response_interface';
@@ -12,8 +12,8 @@ import { coreUpdate } from '../../models/core';
 import { Constant, Exception, RequestUtils } from '../../utils';
 import { isSoftDeleted } from '../../utils/request';
 import { TodoInterface, TodoPost } from './todo_interface';
+import { column, sort, table } from './todo_schema';
 
-const table: string = Constant.Table.TODO;
 const condition = (builder: any, options: RequestOptionsInterface | any) => {
   const single: boolean = true;
   builder = isSoftDeleted(options.where, builder, single);
@@ -49,9 +49,9 @@ const mapOutput = async (
 export default class TodoRepository implements RepositoryInterface {
   private readonly table: string = table;
 
-  private readonly column: string[] = ['id', 'name', 'description'];
+  private readonly column: string[] = column;
 
-  private readonly sort: string[] = [this.column[0], 'ASC'];
+  private readonly sort: string[] = sort;
 
   async create(req: Request, payload: TodoPost): Promise<DtoInterface> {
     try {
@@ -78,7 +78,7 @@ export default class TodoRepository implements RepositoryInterface {
         .count(this.column[0]);
       return Exception?.mappingSuccess(Translate.__('get.success'), {
         result,
-        count: rows?.count,
+        count: rows?.count
       });
     } catch (error: any) {
       error.path_filename = __filename;

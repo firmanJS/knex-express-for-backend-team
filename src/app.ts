@@ -1,12 +1,16 @@
-import compression from 'compression';
-import cors from 'cors';
 import 'dotenv/config';
 import express, { Application } from 'express';
 import helmet from 'helmet';
-import morgan from 'morgan';
 import config from './config';
 import RestHttp from './route/V1';
-import { Constant, Exception } from './utils';
+import { Exception } from './utils';
+import {
+  corsSetup,
+  extraHeaders,
+  logger,
+  setLanguage,
+  useGzip
+} from './utils/app';
 
 class App {
   public app: Application;
@@ -18,30 +22,17 @@ class App {
   }
 
   protected plugins(): void {
-    this.app.use(helmet.hidePoweredBy());
-    this.app.use(helmet());
-    this.app.use((_req, res, next) => {
-      res.setHeader('Permissions-Policy', config?.app?.permission_policy);
-      res.setHeader('X-XSS-Protection', config?.app?.protetcion);
-      next();
-    });
-    this.app.use(
-      cors({
-        methods: config?.app?.method,
-        allowedHeaders: config?.app?.allow_header,
-        exposedHeaders: config?.app?.expose_header,
-      })
-    ); // cors setup
-    this.app.use(cors());
-    this.app.use(compression()); // gzip compression
+    this.app.use(setLanguage); // set language api response
+    this.app.use(useGzip()); // gzip compression
+    this.app.set('trust proxy', 1); // for real ip
+    this.app.use(helmet.hidePoweredBy()); // hide powered by headers
+    this.app.use(helmet.frameguard()); // frameguard headers
+    this.app.use(helmet.xContentTypeOptions()); // content hedares
+    this.app.use(helmet.referrerPolicy()); // referer policy headers
+    this.app.use(extraHeaders); // extra headers config
+    this.app.use(corsSetup()); // cors setup
+    this.app.use(logger()); // logger morgan
     this.app.use(express.json({ limit: config?.app?.limit })); // json limit
-    if (config?.app?.env === Constant.Environment.PROD) {
-      this.app.use(morgan(Constant.MORGAN_FORMAT.PROD_FORMAT));
-    } else {
-      this.app.use(
-        morgan(Constant.MORGAN_FORMAT.DEV_FORMAT, { stream: process.stderr })
-      );
-    }
   }
 
   protected routes(): void {

@@ -4,21 +4,36 @@ import {
   DtoInterface,
   OptionsInterface,
   ResponseInterface,
-  WithMetaInterface,
+  WithMetaInterface
 } from '../interface/response_interface';
 import Translate from '../lang';
-import {
-  Environment, Http, LIMIT, PAGE
-} from './constant';
+import { Environment, Http, LIMIT, PAGE } from './constant';
+
+import Dates from './date';
 
 namespace Exception {
   const optionCustom = (): OptionsInterface => {
     const data: OptionsInterface = {
       status: true,
-      message: Translate.__('get.success'),
+      message: Translate.__('get.success')
     };
 
     return data;
+  };
+
+  const debugRequest = (req: Request) => {
+    const ALLOWED_LOG = ['local', 'development'];
+    if (config.app.debug === 1) {
+      console.info(
+        `=========== Incoming Request ${Dates.todayFormat()} ===========`
+      );
+      if (ALLOWED_LOG.includes(config.app.env)) {
+        console.info('Headers:', req?.headers);
+      }
+      console.info('Query:', JSON.stringify(req?.query));
+      console.info('Param:', JSON.stringify(req?.params));
+      console.info('Body:', JSON.stringify(req?.body));
+    }
   };
 
   export const notFoundHandler = (req: Request, res: Response): Response => {
@@ -28,7 +43,7 @@ namespace Exception {
     const result: ResponseInterface = {
       data: err.toString(),
       status: false,
-      message,
+      message
     };
 
     return res.status(Http.NOT_FOUND).json(result);
@@ -51,9 +66,9 @@ namespace Exception {
     const result: ResponseInterface = {
       data: [],
       status: false,
-      message: Translate.__('error.invalid.syntax'),
+      message: Translate.__('error.invalid.syntax')
     };
-
+    debugRequest(req);
     return res.status(Http.BAD_REQUEST).json(result);
   };
 
@@ -66,7 +81,7 @@ namespace Exception {
     const result: ResponseInterface = {
       status: true,
       message: `syntax error ${err}`,
-      data: [],
+      data: []
     };
 
     if (err instanceof SyntaxError) {
@@ -103,7 +118,7 @@ namespace Exception {
     return {
       status,
       code,
-      message,
+      message
     };
   };
 
@@ -112,6 +127,7 @@ namespace Exception {
     res: Response,
     rows: any
   ): Response => {
+    debugRequest(req);
     const totalData: number = Number(rows?.data?.data?.count) ?? 0;
     const { status, message, code } = logicPagination(rows, totalData);
     const limitPerPage: number = Number(req.query?.limit) || +LIMIT;
@@ -125,14 +141,20 @@ namespace Exception {
         limit_per_page: +limitPerPage,
         total_page: Math.ceil(countTotal / limitPerPage),
         count_per_page: rows?.data?.response?.result?.length || 0,
-        count_total: countTotal,
-      },
+        count_total: countTotal
+      }
     };
     return res.status(code).json(result);
   };
 
-  export const baseResponse = (res: Response, data: any)
-    : Response => res.status(data?.code ?? Http.OK).json(data?.data);
+  export const baseResponse = (
+    req: Request,
+    res: Response,
+    data: any
+  ): Response => {
+    debugRequest(req);
+    return res.status(data?.code ?? Http.OK).json(data?.data);
+  };
 
   export const mappingSuccess = (
     message: string,
@@ -144,39 +166,24 @@ namespace Exception {
     data: {
       status,
       message,
-      data,
-    },
+      data
+    }
   });
 
   const conditionCheck = (
-    error: string,
-    manipulate: string,
-    message: string
-  ): string => {
-    switch (manipulate[0]) {
-      case 'JsonWebTokenError':
-        message = error;
-        break;
-      case 'Error':
-        message = Translate.__('error.db.connection');
-        break;
-      case 'TypeError':
-        message = `error in code ${manipulate.toString()}`;
-        break;
-      case 'AggregateError':
-        message = Translate.__('error.db.query');
-        break;
-      case 'MongoServerError':
-        message = manipulate.toString();
-        break;
-      case 'ReferenceError':
-        message = manipulate.toString();
-        break;
-      default:
-        message = error;
-    }
-
-    return message;
+    error: string | any,
+    manipulate: string
+  ): string | any => {
+    const msgList: string | Record<string, string> = {
+      JsonWebTokenError: error?.message ?? error,
+      TokenExpiredError: error?.message ?? error,
+      Error: Translate.__('error.db.connection'),
+      error: Translate.__('error.db'),
+      TypeError: `error in code ${manipulate.toString()}`,
+      AggregateError: Translate.__('error.db.query'),
+      ReferenceError: manipulate.toString()
+    };
+    return msgList[manipulate] ?? error;
   };
 
   export const mappingError = (
@@ -191,7 +198,7 @@ namespace Exception {
     message = Translate.__('error.db.transaction');
     if (config?.app?.env === Environment.DEV) {
       exception = error.toString();
-      message = conditionCheck(error, manipulate, message);
+      message = conditionCheck(error, manipulate);
     }
     if (error?.type_error !== 'validation') {
       // sent alert
@@ -203,8 +210,8 @@ namespace Exception {
         status: false,
         message,
         exception,
-        data: [],
-      },
+        data: []
+      }
     };
   };
 

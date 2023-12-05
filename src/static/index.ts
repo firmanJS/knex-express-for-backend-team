@@ -8,19 +8,19 @@ const info: object = {
   version: '1.0.0',
   title: `API Documentation For ${config?.app?.name}`,
   contact: {
-    email: '',
+    email: ''
   },
   license: {
     name: 'MIT',
-    url: 'https://opensource.org/licenses/MIT',
-  },
+    url: 'https://opensource.org/licenses/MIT'
+  }
 };
 
 const servers: object = [
   {
     url: '/api/v1/',
-    description: 'Development server',
-  },
+    description: 'Development server'
+  }
   // {
   //   url: 'https://balailelang-api-gateway.d.logique.co.id/',
   //   description: 'Gateway server'
@@ -37,9 +37,9 @@ export const swaggerInit: object = {
       bearerAuth: {
         type: 'http',
         scheme: 'bearer',
-        bearerFormat: 'JWT',
-      },
+        bearerFormat: 'JWT'
+      }
     },
-    schemas,
-  },
+    schemas
+  }
 };

@@ -2,7 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import { check } from 'express-validator';
 import Translate from '../../lang';
 import { validate } from '../../middleware/validation';
-import { checkSameValueinDb, checkSameValueinDbUpdate } from '../../models/core';
+import {
+  checkSameValueinDb,
+  checkSameValueinDbUpdate
+} from '../../models/core';
 import { Table } from '../../utils/constant';
 /* RULE
  ** More Documentation in here https://express-validator.github.io/docs/
@@ -21,7 +24,7 @@ export const postValidation = [
           deleted_at: null
         },
         column: ['name'],
-        message: Translate.__('data.exist', { msg: `name ${value}` }),
+        message: Translate.__('data.exist', { msg: `name ${value}` })
       };
       await checkSameValueinDb(options);
     }),
@@ -32,7 +35,7 @@ export const postValidation = [
     .withMessage(Translate.__('validator.required', { field: 'description' })),
   (req: Request, res: Response, next: NextFunction) => {
     validate(req, res, next);
-  },
+  }
 ];
 
 export const putValidation = [
@@ -52,7 +55,7 @@ export const putValidation = [
         type: 'uuid',
         column: ['id'],
         name: req?.params?.id,
-        message: Translate.__('data.exist', { msg: `name ${value}` }),
+        message: Translate.__('data.exist', { msg: `name ${value}` })
       };
       await checkSameValueinDbUpdate(options);
     }),
@@ -63,5 +66,5 @@ export const putValidation = [
     .withMessage(Translate.__('validator.required', { field: 'description' })),
   (req: Request, res: Response, next: NextFunction) => {
     validate(req, res, next);
-  },
+  }
 ];

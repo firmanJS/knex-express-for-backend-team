@@ -12,13 +12,13 @@ export default async (): Promise<Config.InitialOptions> => ({
   forceExit: true,
   globals: {
     'ts-jest': {
-      diagnostics: false,
-    },
+      diagnostics: false
+    }
   },
   testMatch: ['**/*.test.ts'],
   transform: {
-    '^.+\\.ts?$': 'ts-jest',
+    '^.+\\.ts?$': 'ts-jest'
   },
   setupFilesAfterEnv: ['jest-extended'],
-  verbose: true,
+  verbose: true
 });

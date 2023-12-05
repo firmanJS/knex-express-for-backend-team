@@ -6,7 +6,7 @@ import {
   RequestOrderInterface,
   RequestQueryInterface,
   RequestQueryParamInterface,
-  RequestSoftInterface,
+  RequestSoftInterface
 } from '../interface/request_interface';
 import Constant, { LIMIT, PAGE } from './constant';
 
@@ -19,7 +19,7 @@ namespace RequestUtils {
     return {
       page,
       limit,
-      search,
+      search
     };
   };
 
@@ -77,8 +77,8 @@ namespace RequestUtils {
   };
 
   export const isSoftDeleted = (
-    where:RequestSoftInterface,
-    builder:any,
+    where: RequestSoftInterface,
+    builder: any,
     type: boolean
   ): void | any => {
     builder.where(where);
@@ -86,19 +86,14 @@ namespace RequestUtils {
     return builder;
   };
 
-  export const isCreated = (
-    req:Request | any
-  ): void | any => {
+  export const isCreated = (req: Request | any): void | any => {
     const payload = req?.body;
     payload.created_by = req?.users_info?.id;
     payload.created_at = new Date().toISOString();
     return payload;
   };
 
-  const isSoftDeletedCase = (
-    req:Request | any,
-    type: string
-  ): void | any => {
+  const isSoftDeletedCase = (req: Request | any, type: string): void | any => {
     const payload = req?.body;
     if (type === 'update') {
       payload.updated_by = req?.users_info?.id;
@@ -123,7 +118,7 @@ namespace RequestUtils {
       where,
       typeMethod,
       column: ['name'],
-      payload,
+      payload
     };
 
     return options;

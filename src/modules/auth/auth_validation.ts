@@ -21,7 +21,7 @@ export const postValidation = [
           deleted_at: null
         },
         column: ['username'],
-        message: Translate.__('data.exist', { msg: `username ${value}` }),
+        message: Translate.__('data.exist', { msg: `username ${value}` })
       };
       await checkSameValueinDb(options);
     }),
@@ -38,7 +38,7 @@ export const postValidation = [
           deleted_at: null
         },
         column: ['full_name'],
-        message: Translate.__('data.exist', { msg: `full_name ${value}` }),
+        message: Translate.__('data.exist', { msg: `full_name ${value}` })
       };
       await checkSameValueinDb(options);
     }),
@@ -55,7 +55,7 @@ export const postValidation = [
           deleted_at: null
         },
         column: ['email'],
-        message: Translate.__('data.exist', { msg: `email ${value}` }),
+        message: Translate.__('data.exist', { msg: `email ${value}` })
       };
       await checkSameValueinDb(options);
     }),
@@ -68,7 +68,7 @@ export const postValidation = [
     .withMessage(Translate.__('validator.password')),
   (req: Request, res: Response, next: NextFunction) => {
     validate(req, res, next);
-  },
+  }
 ];
 
 export const registerValidation = [
@@ -86,5 +86,5 @@ export const registerValidation = [
     .withMessage(Translate.__('validator.password')),
   (req: Request, res: Response, next: NextFunction) => {
     validate(req, res, next);
-  },
+  }
 ];
