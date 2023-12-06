@@ -125,7 +125,7 @@ namespace Exception {
   export const paginationResponse = (
     req: Request,
     res: Response,
-    rows: any
+    rows: DtoInterface
   ): Response => {
     debugRequest(req);
     const totalData: number = Number(rows?.data?.data?.count) ?? 0;
@@ -140,7 +140,7 @@ namespace Exception {
         page: Number(req.query?.page) || +PAGE,
         limit_per_page: +limitPerPage,
         total_page: Math.ceil(countTotal / limitPerPage),
-        count_per_page: rows?.data?.response?.result?.length || 0,
+        count_per_page: rows?.data?.data?.result?.length || 0,
         count_total: countTotal
       }
     };
@@ -150,7 +150,7 @@ namespace Exception {
   export const baseResponse = (
     req: Request,
     res: Response,
-    data: any
+    data: DtoInterface
   ): Response => {
     debugRequest(req);
     return res.status(data?.code ?? Http.OK).json(data?.data);
