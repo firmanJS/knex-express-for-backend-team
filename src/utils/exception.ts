@@ -4,7 +4,7 @@ import {
   DtoInterface,
   OptionsInterface,
   ResponseInterface,
-  WithMetaInterface,
+  WithMetaInterface
 } from '../interface/response_interface';
 import Translate from '../lang';
 import { Environment, Http, LIMIT, PAGE } from './constant';
@@ -15,7 +15,7 @@ namespace Exception {
   const optionCustom = (): OptionsInterface => {
     const data: OptionsInterface = {
       status: true,
-      message: Translate.__('get.success'),
+      message: Translate.__('get.success')
     };
 
     return data;
@@ -43,7 +43,7 @@ namespace Exception {
     const result: ResponseInterface = {
       data: err.toString(),
       status: false,
-      message,
+      message
     };
 
     return res.status(Http.NOT_FOUND).json(result);
@@ -66,7 +66,7 @@ namespace Exception {
     const result: ResponseInterface = {
       data: [],
       status: false,
-      message: Translate.__('error.invalid.syntax'),
+      message: Translate.__('error.invalid.syntax')
     };
     debugRequest(req);
     return res.status(Http.BAD_REQUEST).json(result);
@@ -81,7 +81,7 @@ namespace Exception {
     const result: ResponseInterface = {
       status: true,
       message: `syntax error ${err}`,
-      data: [],
+      data: []
     };
 
     if (err instanceof SyntaxError) {
@@ -118,7 +118,7 @@ namespace Exception {
     return {
       status,
       code,
-      message,
+      message
     };
   };
 
@@ -141,8 +141,8 @@ namespace Exception {
         limit_per_page: +limitPerPage,
         total_page: Math.ceil(countTotal / limitPerPage),
         count_per_page: rows?.data?.data?.result?.length || 0,
-        count_total: countTotal,
-      },
+        count_total: countTotal
+      }
     };
     return res.status(code).json(result);
   };
@@ -166,8 +166,8 @@ namespace Exception {
     data: {
       status,
       message,
-      data,
-    },
+      data
+    }
   });
 
   const conditionCheck = (
@@ -181,7 +181,7 @@ namespace Exception {
       error: Translate.__('error.db'),
       TypeError: `error in code ${manipulate.toString()}`,
       AggregateError: Translate.__('error.db.query'),
-      ReferenceError: manipulate.toString(),
+      ReferenceError: manipulate.toString()
     };
     return msgList[manipulate] ?? error;
   };
@@ -210,8 +210,8 @@ namespace Exception {
         status: false,
         message,
         exception,
-        data: [],
-      },
+        data: []
+      }
     };
   };
 }
