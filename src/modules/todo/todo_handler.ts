@@ -56,4 +56,10 @@ export default new (class TodoHandler implements BaseHandlerInterface {
     const result = await this.repo.update(req, options);
     return Exception.baseResponse(req, res, result);
   }
+
+  async destroy(req: Request, res: Response): Promise<Response> {
+    const options = optionsPayload(req);
+    const result = await this.repo.destroy(req, options);
+    return Exception.baseResponse(req, res, result);
+  }
 })();

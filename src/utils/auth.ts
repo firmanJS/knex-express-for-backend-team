@@ -15,7 +15,7 @@ namespace Auth {
       payload.password = hash;
       return payload;
     } catch (error) {
-      console.info('error generated password', error);
+      console.log('error generated password', error);
       return payload;
     }
   };
@@ -35,7 +35,7 @@ namespace Auth {
         .toString('hex');
       return payload?.hash === hashPassword;
     } catch (error) {
-      console.info('error validated password', error);
+      console.log('error validated password', error);
       return false;
     }
   };

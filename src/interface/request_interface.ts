@@ -13,9 +13,9 @@ export interface RequestOptionsInterface {
   readonly type?: string;
   readonly typeMethod?: string;
   readonly id?: string;
-  readonly table?: string;
+  table?: string;
   readonly message?: string | any;
-  readonly column?: string | any;
+  column?: string | any;
   readonly name?: string | any;
   readonly payload?: object | any;
 }
@@ -27,10 +27,6 @@ export interface ColumnReqInterface {
 
 export interface RequestOrderInterface {
   readonly order?: ColumnReqInterface[];
-}
-
-export interface RequestQueryParamInterface {
-  readonly [key: string]: Object[];
 }
 
 export interface RequestSoftInterface {

@@ -5,9 +5,9 @@ import {
   RequestOptionsInterface,
   RequestOrderInterface,
   RequestQueryInterface,
-  RequestQueryParamInterface,
   RequestSoftInterface
 } from '../interface/request_interface';
+import { OutputInterface } from '../interface/response_interface';
 import Constant, { LIMIT, PAGE } from './constant';
 
 namespace RequestUtils {
@@ -26,7 +26,7 @@ namespace RequestUtils {
   export const dynamicFilter = (
     req: Request,
     column: string[] = []
-  ): RequestQueryParamInterface => {
+  ): OutputInterface => {
     const push: any = {};
     const asArray = Object.entries(req?.query);
     const filtered = asArray.filter(([key]) => column.includes(key));
@@ -122,6 +122,20 @@ namespace RequestUtils {
     };
 
     return options;
+  };
+
+  export const mapOutput = async (
+    options: RequestOptionsInterface,
+    query: any
+  ): Promise<OutputInterface> => {
+    let result: OutputInterface;
+    if (options.type === 'array') {
+      result = await query;
+    } else {
+      result = await query.first();
+    }
+
+    return result;
   };
 }
 export = RequestUtils;

@@ -14,6 +14,10 @@ export interface RepositoryInterface {
     req: Request,
     options: RequestOptionsInterface
   ): Promise<DtoInterface>;
+  destroy?(
+    req: Request,
+    options: RequestOptionsInterface
+  ): Promise<DtoInterface>;
   COLUMN?(): string[];
   SORT?(): string[];
 }

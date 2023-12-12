@@ -25,6 +25,7 @@ namespace Constant {
   };
   export const Table: Record<string, string> = {
     TODO: 'mst_todo',
+    ARCHIVE_TODO: 'archive_todo',
     USERS: 'users',
     BLOG_CAT: 'mst_category_blog'
   };

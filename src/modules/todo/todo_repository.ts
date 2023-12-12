@@ -10,20 +10,9 @@ import { DtoInterface } from '../../interface/response_interface';
 import Translate from '../../lang';
 import { coreUpdate } from '../../models/core';
 import { Constant, Exception, RequestUtils } from '../../utils';
-import { isSoftDeleted } from '../../utils/request';
+import { mapOutput } from '../../utils/request';
 import { TodoInterface, TodoPost } from './todo_interface';
-import { column, sort, table } from './todo_schema';
-
-const condition = (builder: any, options: RequestOptionsInterface | any) => {
-  const single: boolean = true;
-  builder = isSoftDeleted(options.where, builder, single);
-  if (options?.filter?.search) {
-    builder.whereILike('name', `%${options?.filter?.search}%`);
-    builder.orWhereILike('description', `%${options?.filter?.search}%`);
-    builder.andWhere('deleted_at', null);
-  }
-  return builder;
-};
+import { column, condition, sort, table } from './todo_schema';
 
 const sql = (options: RequestOptionsInterface) => {
   const query = pgCore(table).where((builder) => {
@@ -33,19 +22,6 @@ const sql = (options: RequestOptionsInterface) => {
   return query;
 };
 
-const mapOutput = async (
-  options: RequestOptionsInterface,
-  query: any
-): Promise<TodoInterface> => {
-  let result: TodoInterface;
-  if (options.type === 'array') {
-    result = await query;
-  } else {
-    result = await query.first();
-  }
-
-  return result;
-};
 export default class TodoRepository implements RepositoryInterface {
   private readonly table: string = table;
 
@@ -110,7 +86,7 @@ export default class TodoRepository implements RepositoryInterface {
 
   async update(
     req: Request,
-    options: RequestOptionsInterface | any
+    options: RequestOptionsInterface
   ): Promise<DtoInterface> {
     try {
       let message = '';
@@ -128,6 +104,27 @@ export default class TodoRepository implements RepositoryInterface {
       return Exception.mappingSuccess(
         Translate.__('notfound.id', { id: options?.where?.id }),
         result,
+        Constant.Http.NOT_FOUND,
+        false
+      );
+    } catch (error: any) {
+      error.path_filename = __filename;
+      return Exception.mappingError(req, error);
+    }
+  }
+
+  async destroy(
+    req: Request,
+    options: RequestOptionsInterface
+  ): Promise<DtoInterface> {
+    try {
+      const result = await pgCore(this.table).where(options.where).del();
+      if (result) {
+        return Exception.mappingSuccess(Translate.__('deleted'), result);
+      }
+      return Exception.mappingSuccess(
+        Translate.__('notfound.id', { id: options?.where?.id }),
+        { total_deleted: result },
         Constant.Http.NOT_FOUND,
         false
       );

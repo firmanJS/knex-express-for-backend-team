@@ -1,7 +1,7 @@
 const { TABLES } = require('../schema');
 
-exports.up = async (knex) => knex.schema.createTable(TABLES.BLOG_CAT, (table) => {
-  table.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary();
+exports.up = async (knex) => knex.schema.createTable(TABLES.ARCHIVE_TODO, (table) => {
+  table.uuid('id').primary();
   table.string('name', 150).notNullable().unique();
   table.text('description');
   table.timestamp('created_at').defaultTo(knex.fn.now());
@@ -16,4 +16,4 @@ exports.up = async (knex) => knex.schema.createTable(TABLES.BLOG_CAT, (table) =>
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = async (knex) => knex.schema.dropTable(TABLES.BLOG_CAT);
+exports.down = async (knex) => knex.schema.dropTable(TABLES.ARCHIVE_TODO);

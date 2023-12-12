@@ -113,7 +113,7 @@ export default class TodoRepository implements RepositoryInterface {
 
   async update(
     req: Request,
-    options: RequestOptionsInterface | any
+    options: RequestOptionsInterface
   ): Promise<DtoInterface> {
     try {
       let message = '';

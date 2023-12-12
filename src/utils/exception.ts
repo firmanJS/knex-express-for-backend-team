@@ -24,15 +24,15 @@ namespace Exception {
   const debugRequest = (req: Request) => {
     const ALLOWED_LOG = ['local', 'development'];
     if (config.app.debug === 1) {
-      console.info(
+      console.log(
         `=========== Incoming Request ${Dates.todayFormat()} ===========`
       );
       if (ALLOWED_LOG.includes(config.app.env)) {
-        console.info('Headers:', req?.headers);
+        console.log('Headers:', req?.headers);
       }
-      console.info('Query:', JSON.stringify(req?.query));
-      console.info('Param:', JSON.stringify(req?.params));
-      console.info('Body:', JSON.stringify(req?.body));
+      console.log('Query:', JSON.stringify(req?.query));
+      console.log('Param:', JSON.stringify(req?.params));
+      console.log('Body:', JSON.stringify(req?.body));
     }
   };
 
@@ -91,11 +91,11 @@ namespace Exception {
     next();
 
     if (process.env.NODE_ENV === 'development') {
-      console.info(err.toString());
+      console.log(err.toString());
       return res.status(Http.OK).send(result);
     }
     // sent to sentry or whatever
-    console.info(err.toString());
+    console.log(err.toString());
     return res.status(Http.OK).send(result);
   };
 
@@ -194,16 +194,16 @@ namespace Exception {
     let message: string = '';
     let exception: string = '';
     const manipulate: string = error.toString().split(':');
-    console.error(`catch message ${JSON.stringify(error)}`);
+    console.log(`catch message ${JSON.stringify(error)}`);
     message = Translate.__('error.db.transaction');
     if (config?.app?.env === Environment.DEV) {
-      exception = error.toString();
+      exception = error;
       message = conditionCheck(error, manipulate);
     }
     if (error?.type_error !== 'validation') {
       // sent alert
-      console.info('sent alert', error);
     }
+    console.log('request error', error);
     return {
       code,
       data: {
@@ -213,12 +213,6 @@ namespace Exception {
         data: []
       }
     };
-  };
-
-  export const captureLog = (err: any): void => {
-    if (config?.app?.env === Environment.DEV) {
-      console.info('error validateMiddleware', err);
-    }
   };
 }
 

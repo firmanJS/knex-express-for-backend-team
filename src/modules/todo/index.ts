@@ -35,7 +35,7 @@ class TodoRoutes extends BaseRest {
       '/:id',
       uuidValidation,
       async (req: Request, res: Response) => {
-        await TodoHandler.update(req, res);
+        await TodoHandler.destroy(req, res);
       }
     );
   }
