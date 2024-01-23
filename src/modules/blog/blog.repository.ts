@@ -1,32 +1,14 @@
 import { Request } from 'express';
 import { Knex } from 'knex';
 import pgCore from '../../config/database';
-import {
-  CountInterface,
-  RepositoryInterface
-} from '../../interface/repository_interface';
-import { RequestOptionsInterface } from '../../interface/request_interface';
-import { DtoInterface } from '../../interface/response_interface';
+import { RepositoryInterface } from '../../interface/repository.interface';
+import { RequestOptionsInterface } from '../../interface/request.interface';
+import { DtoInterface } from '../../interface/response.interface';
 import Translate from '../../lang';
 import { coreUpdate } from '../../models/core';
 import { Constant, Exception, RequestUtils } from '../../utils';
-import { isSoftDeleted } from '../../utils/request';
-import {
-  BlogCategoryInterface,
-  BlogCategoryPost
-} from './blog_category_interface';
-
-const table: string = Constant.Table.BLOG_CAT;
-const condition = (builder: any, options: RequestOptionsInterface | any) => {
-  const single: boolean = true;
-  builder = isSoftDeleted(options.where, builder, single);
-  if (options?.filter?.search) {
-    builder.whereILike('name', `%${options?.filter?.search}%`);
-    builder.orWhereILike('description', `%${options?.filter?.search}%`);
-    builder.andWhere('deleted_at', null);
-  }
-  return builder;
-};
+import { BlogCategoryInterface, BlogCategoryPost } from './blog.interface';
+import { column, condition, table } from './blog.schema';
 
 const sql = (options: RequestOptionsInterface) => {
   const query = pgCore(table).andWhere((builder) => {
@@ -36,32 +18,23 @@ const sql = (options: RequestOptionsInterface) => {
   return query;
 };
 
-const mapOutput = async (
-  options: RequestOptionsInterface,
-  query: any
-): Promise<BlogCategoryInterface> => {
-  let result: BlogCategoryInterface;
-  if (options.type === 'array') {
-    result = await query;
-  } else {
-    result = await query.first();
-  }
-
-  return result;
-};
 export default class TodoRepository implements RepositoryInterface {
-  private readonly table: string = table;
+  private readonly table = table;
 
-  private readonly column: string[] = ['id', 'name', 'description'];
+  private readonly column = column;
 
-  private readonly sort: string[] = [this.column[0], 'ASC'];
+  private readonly sort = column;
 
   async create(req: Request, payload: BlogCategoryPost): Promise<DtoInterface> {
     try {
       const [result]: BlogCategoryInterface[] = await pgCore(this.table)
         .insert(payload)
         .returning(this.column[0]);
-      return Exception.mappingSuccess(Translate.__('created.success'), result);
+      return Exception.mappingSuccess(
+        Translate.__('created.success'),
+        result,
+        Constant.Http.CREATED
+      );
     } catch (error: any) {
       error.path_filename = __filename;
       return Exception.mappingError(req, error);
@@ -75,10 +48,10 @@ export default class TodoRepository implements RepositoryInterface {
     try {
       let query: Knex.QueryBuilder = sql(options).clone().select(this.column);
       query = RequestUtils.RequestRepoOptions(options, query);
-      const result: BlogCategoryInterface = await mapOutput(options, query);
-      const [rows]: CountInterface[] = await sql(options)
-        .clone()
-        .count(this.column[0]);
+      const [result, [rows]] = await Promise.all([
+        RequestUtils.mapOutput(options, query),
+        sql(options).clone().count(this.column[0])
+      ]);
       return Exception?.mappingSuccess(Translate.__('get.success'), {
         result,
         count: rows?.count
@@ -96,7 +69,10 @@ export default class TodoRepository implements RepositoryInterface {
     try {
       let query: Knex.QueryBuilder = sql(options).clone().select(this.column);
       query = RequestUtils.RequestRepoOptions(options, query);
-      const result: BlogCategoryInterface = await mapOutput(options, query);
+      const result: BlogCategoryInterface = await RequestUtils.mapOutput(
+        options,
+        query
+      );
       if (result) {
         return Exception.mappingSuccess(Translate.__('get.success'), result);
       }

@@ -1,26 +1,26 @@
 import { Request, Response } from 'express';
 import { uuidValidation } from '../../middleware/validation';
 import BaseRest from '../../route/base';
-import TodoHandler from './todo.handler';
-import { postValidation, putValidation } from './todo.validation';
+import BlogCategoryHandler from './blog.handler';
+import { postValidation, putValidation } from './blog.validation';
 
-class TodoRoutes extends BaseRest {
+class BlogRoutes extends BaseRest {
   public routes(): void {
     this.router.post(
       '/',
       postValidation,
       async (req: Request, res: Response) => {
-        await TodoHandler.store(req, res);
+        await BlogCategoryHandler.store(req, res);
       }
     );
     this.router.get('/', async (req: Request, res: Response) => {
-      await TodoHandler.fetch(req, res);
+      await BlogCategoryHandler.fetch(req, res);
     });
     this.router.get(
       '/:id',
       uuidValidation,
       async (req: Request, res: Response) => {
-        await TodoHandler.fetchByParam(req, res);
+        await BlogCategoryHandler.fetchByParam(req, res);
       }
     );
     this.router.put(
@@ -28,17 +28,17 @@ class TodoRoutes extends BaseRest {
       uuidValidation,
       putValidation,
       async (req: Request, res: Response) => {
-        await TodoHandler.update(req, res);
+        await BlogCategoryHandler.update(req, res);
       }
     );
     this.router.delete(
       '/:id',
       uuidValidation,
       async (req: Request, res: Response) => {
-        await TodoHandler.destroy(req, res);
+        await BlogCategoryHandler.update(req, res);
       }
     );
   }
 }
 
-export default new TodoRoutes().router;
+export default new BlogRoutes().router;

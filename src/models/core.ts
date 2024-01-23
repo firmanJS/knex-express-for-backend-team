@@ -1,5 +1,5 @@
 import pgCore from '../config/database';
-import { RequestOptionsInterface } from '../interface/request_interface';
+import { RequestOptionsInterface } from '../interface/request.interface';
 import { todayFormat } from '../utils/date';
 
 const format = todayFormat('YYYYMMDDhmmss');

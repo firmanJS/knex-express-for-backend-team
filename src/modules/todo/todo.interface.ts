@@ -1,8 +1,8 @@
-import { LogInterface } from '../../interface/entity_interface';
+import { LogInterface } from '../../interface/entity.interface';
 
 export interface TodoPost extends LogInterface {
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
 }
 
 export interface TodoInterface extends LogInterface {

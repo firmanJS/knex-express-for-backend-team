@@ -5,7 +5,7 @@ import {
   OptionsInterface,
   ResponseInterface,
   WithMetaInterface
-} from '../interface/response_interface';
+} from '../interface/response.interface';
 import Translate from '../lang';
 import { Environment, Http, LIMIT, PAGE } from './constant';
 
@@ -30,6 +30,9 @@ namespace Exception {
       if (ALLOWED_LOG.includes(config.app.env)) {
         console.log('Headers:', req?.headers);
       }
+      if (config.app.env === Environment.PROD) {
+        delete req?.body?.password;
+      }
       console.log('Query:', JSON.stringify(req?.query));
       console.log('Param:', JSON.stringify(req?.params));
       console.log('Body:', JSON.stringify(req?.body));
@@ -45,7 +48,7 @@ namespace Exception {
       status: false,
       message
     };
-
+    debugRequest(req);
     return res.status(Http.NOT_FOUND).json(result);
   };
 
@@ -96,6 +99,7 @@ namespace Exception {
     }
     // sent to sentry or whatever
     console.log(err.toString());
+    debugRequest(req);
     return res.status(Http.OK).send(result);
   };
 
@@ -198,12 +202,12 @@ namespace Exception {
     message = Translate.__('error.db.transaction');
     if (config?.app?.env === Environment.DEV) {
       exception = error;
-      message = conditionCheck(error, manipulate);
+      message = conditionCheck(error, manipulate[0]);
     }
     if (error?.type_error !== 'validation') {
       // sent alert
     }
-    console.log('request error', error);
+    console.log(`request error ${req.originalUrl}`, error);
     return {
       code,
       data: {

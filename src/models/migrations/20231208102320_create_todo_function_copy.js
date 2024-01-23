@@ -1,8 +1,7 @@
 const { FUNC, TABLES } = require('../schema');
 
 exports.up = async (knex) => {
-  await knex
-    .raw(`CREATE OR REPLACE FUNCTION ${FUNC.COPY_TODO}
+  await knex.raw(`CREATE OR REPLACE FUNCTION ${FUNC.COPY_TODO}
     RETURNS trigger
     LANGUAGE plpgsql
    AS $function$
@@ -21,7 +20,5 @@ exports.up = async (knex) => {
  * @returns { Promise<void> }
  */
 exports.down = async (knex) => {
-  await knex.raw(
-    `DROP FUNCTION ${FUNC.COPY_TODO}`
-  );
+  await knex.raw(`DROP FUNCTION ${FUNC.COPY_TODO}`);
 };

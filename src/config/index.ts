@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { Config } from './config_interface';
+import { Config } from './config.interface';
 
 dotenv.config();
 let CSP: string = process?.env?.APP_CONTENT_POLICY_DEV ?? '';

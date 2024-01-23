@@ -1,10 +1,16 @@
 import { Request, Response } from 'express';
-import { DtoInterface } from '../../interface/response_interface';
+import { DtoInterface } from '../../interface/response.interface';
 import { Exception } from '../../utils';
 import { generatePassword } from '../../utils/auth';
-import { AuthHandlerInterface, AuthRequestInterface } from './auth_interface';
-import AuthRepository from './auth_repository';
-
+import {
+  AuthHandlerInterface,
+  AuthRequestInterface,
+  LoginRequestInterface
+} from './auth.interface';
+import AuthRepository from './auth.repository';
+/**
+ * Rule For Class, must be define handlerInterface in class
+ */
 export default new (class AuthHandler implements AuthHandlerInterface {
   private readonly repo: AuthRepository;
 
@@ -20,7 +26,7 @@ export default new (class AuthHandler implements AuthHandlerInterface {
   }
 
   async login(req: Request, res: Response): Promise<Response> {
-    const payload: Record<string, string> = req?.body;
+    const payload: LoginRequestInterface = req.body;
     const result: DtoInterface = await this.repo.login(req, payload);
     return Exception.baseResponse(req, res, result);
   }

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import BaseRest from '../../route/base';
-import TodoHandler from './auth_handler';
-import { postValidation, registerValidation } from './auth_validation';
+import TodoHandler from './auth.handler';
+import { postValidation, registerValidation } from './auth.validation';
 
 class AuthRoutes extends BaseRest {
   public routes(): void {

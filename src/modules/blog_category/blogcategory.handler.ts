@@ -1,10 +1,16 @@
 import { Request, Response } from 'express';
-import { BaseHandlerInterface } from '../../interface/handler_interface';
-import { RequestOptionsInterface } from '../../interface/request_interface';
+import { BaseHandlerInterface } from '../../interface/handler.interface';
+import { RequestOptionsInterface } from '../../interface/request.interface';
 import { Exception, RequestUtils } from '../../utils';
-import { optionsPayload } from '../../utils/request';
-import { BlogCategoryPost } from './blog_category_interface';
-import BlogCategoryRepository from './blog_category_repository';
+import {
+  isCreated,
+  optionsPayload,
+  validateRequest
+} from '../../utils/request';
+import { queryParam } from '../todo/todo.schema';
+import { BlogCategoryPost } from './blogcategory.interface';
+import BlogCategoryRepository from './blogcategory.repository';
+import { bodyRequest } from './blogcategory.schema';
 
 export default new (class BlogCategory implements BaseHandlerInterface {
   private readonly repo: BlogCategoryRepository;
@@ -14,13 +20,14 @@ export default new (class BlogCategory implements BaseHandlerInterface {
   }
 
   async store(req: Request, res: Response): Promise<Response> {
-    const payload: BlogCategoryPost = req?.body;
+    let payload: BlogCategoryPost = isCreated(req);
+    payload = validateRequest(req, bodyRequest, 'body');
     const result = await this.repo.create(req, payload);
     return Exception.baseResponse(req, res, result);
   }
 
   async fetch(req: Request, res: Response): Promise<Response> {
-    const where = RequestUtils.dynamicFilter(req, this.repo.COLUMN());
+    const where = RequestUtils.dynamicFilter(req, queryParam);
     const filter = RequestUtils.paging(req);
     const order = RequestUtils.dynamicOrder(req, this.repo.SORT());
     const options = {

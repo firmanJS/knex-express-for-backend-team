@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import { JwtInterface } from '../interface/entity_interface';
+import { JwtInterface } from '../interface/entity.interface';
 
 namespace Auth {
   export const generatePassword = (

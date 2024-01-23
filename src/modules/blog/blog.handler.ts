@@ -1,33 +1,33 @@
 import { Request, Response } from 'express';
-import { BaseHandlerInterface } from '../../interface/handler_interface';
-import { RequestOptionsInterface } from '../../interface/request_interface';
+import { BaseHandlerInterface } from '../../interface/handler.interface';
+import { RequestOptionsInterface } from '../../interface/request.interface';
 import { Exception, RequestUtils } from '../../utils';
-import { isCreated, optionsPayload } from '../../utils/request';
-import { TodoPost } from './todo_interface';
-import TodoRepository from './todo_repository';
+import {
+  isCreated,
+  optionsPayload,
+  validateRequest
+} from '../../utils/request';
+import { queryParam } from '../todo/todo.schema';
+import { BlogPost } from './blog.interface';
+import BlogRepository from './blog.repository';
+import { bodyRequest } from './blog.schema';
 
-// custom interface extends
-// interface CustomInterface extends BaseHandlerInterface {
-//   stores(req: Request, res: Response): Promise<Response>
-// }
-
-export default new (class TodoHandler implements BaseHandlerInterface {
-  private readonly repo: TodoRepository;
+export default new (class Blog implements BaseHandlerInterface {
+  private readonly repo: BlogRepository;
 
   constructor() {
-    this.repo = new TodoRepository();
+    this.repo = new BlogRepository();
   }
 
   async store(req: Request, res: Response): Promise<Response> {
-    /* if not using created at and created by using this */
-    // const payload: TodoPost = req.body
-    const payload: TodoPost = isCreated(req);
+    let payload: BlogPost = isCreated(req);
+    payload = validateRequest(req, bodyRequest, 'body');
     const result = await this.repo.create(req, payload);
     return Exception.baseResponse(req, res, result);
   }
 
-  async fetch(req: Request | any, res: Response): Promise<Response> {
-    const where = RequestUtils.dynamicFilter(req, this.repo.COLUMN());
+  async fetch(req: Request, res: Response): Promise<Response> {
+    const where = RequestUtils.dynamicFilter(req, queryParam);
     const filter = RequestUtils.paging(req);
     const order = RequestUtils.dynamicOrder(req, this.repo.SORT());
     const options = {
@@ -54,12 +54,6 @@ export default new (class TodoHandler implements BaseHandlerInterface {
   async update(req: Request, res: Response): Promise<Response> {
     const options = optionsPayload(req);
     const result = await this.repo.update(req, options);
-    return Exception.baseResponse(req, res, result);
-  }
-
-  async destroy(req: Request, res: Response): Promise<Response> {
-    const options = optionsPayload(req);
-    const result = await this.repo.destroy(req, options);
     return Exception.baseResponse(req, res, result);
   }
 })();

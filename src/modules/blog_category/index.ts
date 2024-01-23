@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { uuidValidation } from '../../middleware/validation';
 import BaseRest from '../../route/base';
-import BlogCategoryHandler from './blog_category_handler';
-import { postValidation, putValidation } from './blog_category_validation';
+import BlogCategoryHandler from './blogcategory.handler';
+import { postValidation, putValidation } from './blogcategory.validation';
 
 class BlogCategoryRoutes extends BaseRest {
   public routes(): void {

@@ -1,20 +1,16 @@
 import { Request } from 'express';
 import { Knex } from 'knex';
 import pgCore from '../../config/database';
-import {
-  CountInterface,
-  RepositoryInterface
-} from '../../interface/repository_interface';
-import { RequestOptionsInterface } from '../../interface/request_interface';
-import { DtoInterface } from '../../interface/response_interface';
+import { RepositoryInterface } from '../../interface/repository.interface';
+import { RequestOptionsInterface } from '../../interface/request.interface';
+import { DtoInterface } from '../../interface/response.interface';
 import Translate from '../../lang';
 import { coreUpdate } from '../../models/core';
 import { Constant, Exception, RequestUtils } from '../../utils';
-import { mapOutput } from '../../utils/request';
-import { TodoInterface, TodoPost } from './todo_interface';
-import { column, condition, sort, table } from './todo_schema';
+import { TodoInterface, TodoPost } from './todo.interface';
+import { column, condition, table } from './todo.schema';
 
-const sql = (options: RequestOptionsInterface) => {
+const sql = (options: RequestOptionsInterface): Knex.QueryBuilder => {
   const query = pgCore(table).where((builder) => {
     condition(builder, options);
   });
@@ -26,8 +22,6 @@ export default class TodoRepository implements RepositoryInterface {
   private readonly table: string = table;
 
   private readonly column: string[] = column;
-
-  private readonly sort: string[] = sort;
 
   async create(req: Request, payload: TodoPost): Promise<DtoInterface> {
     try {
@@ -48,10 +42,14 @@ export default class TodoRepository implements RepositoryInterface {
     try {
       let query: Knex.QueryBuilder = sql(options).clone().select(this.column);
       query = RequestUtils.RequestRepoOptions(options, query);
-      const result: TodoInterface = await mapOutput(options, query);
-      const [rows]: CountInterface[] = await sql(options)
-        .clone()
-        .count(this.column[0]);
+      // const result: TodoInterface = await mapOutput(options, query);
+      // const [rows]: CountInterface[] = await sql(options)
+      //   .clone()
+      //   .count(this.column[0]);
+      const [result, [rows]] = await Promise.all([
+        RequestUtils.mapOutput(options, query),
+        sql(options).clone().count(this.column[0])
+      ]);
       return Exception?.mappingSuccess(Translate.__('get.success'), {
         result,
         count: rows?.count
@@ -69,7 +67,10 @@ export default class TodoRepository implements RepositoryInterface {
     try {
       let query: Knex.QueryBuilder = sql(options).clone().select(this.column);
       query = RequestUtils.RequestRepoOptions(options, query);
-      const result: TodoInterface = await mapOutput(options, query);
+      const result: TodoInterface = await RequestUtils.mapOutput(
+        options,
+        query
+      );
       if (result) {
         return Exception.mappingSuccess(Translate.__('get.success'), result);
       }
@@ -132,13 +133,5 @@ export default class TodoRepository implements RepositoryInterface {
       error.path_filename = __filename;
       return Exception.mappingError(req, error);
     }
-  }
-
-  COLUMN(): string[] {
-    return this.column;
-  }
-
-  SORT(): string[] {
-    return this.sort;
   }
 }

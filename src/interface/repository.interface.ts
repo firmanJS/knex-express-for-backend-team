@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Request } from 'express';
-import { RequestOptionsInterface } from './request_interface';
-import { DtoInterface } from './response_interface';
+import { RequestOptionsInterface } from './request.interface';
+import { DtoInterface } from './response.interface';
 
 export interface RepositoryInterface {
   create?(req: Request, payload: object): Promise<DtoInterface>;

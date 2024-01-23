@@ -1,4 +1,3 @@
-/* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 import { Request } from 'express';
 import {
@@ -6,9 +5,10 @@ import {
   RequestOrderInterface,
   RequestQueryInterface,
   RequestSoftInterface
-} from '../interface/request_interface';
-import { OutputInterface } from '../interface/response_interface';
+} from '../interface/request.interface';
+import { OutputInterface } from '../interface/response.interface';
 import Constant, { LIMIT, PAGE } from './constant';
+import { standartDateISO } from './date';
 
 namespace RequestUtils {
   export const paging = (req: Request): RequestQueryInterface => {
@@ -40,6 +40,29 @@ namespace RequestUtils {
     return push;
   };
 
+  export const validateRequest = (
+    req: Request | any,
+    column: string[] = [],
+    type: string = 'query'
+  ): Record<string, string> => {
+    try {
+      const request: [string, string][] = Object.entries(req[type]);
+      const data: Record<string, string> = {};
+
+      for (const [i, v] of request) {
+        const check = column.find((item) => item === i);
+
+        if (check && v !== '') {
+          data[check] = v;
+        }
+      }
+      return data;
+    } catch (error) {
+      console.log('error request validation', error);
+      return {};
+    }
+  };
+
   export const dynamicOrder = (
     req: Request | any,
     defaultOrder: string[] = []
@@ -52,7 +75,9 @@ namespace RequestUtils {
     } else {
       const content = [];
       for (const a in direction) {
-        content.push({ column: direction[a], order: orders[a] });
+        if ({}.hasOwnProperty.call(a, direction)) {
+          content.push({ column: direction[a], order: orders[a] });
+        }
       }
       order = content;
     }
@@ -86,10 +111,12 @@ namespace RequestUtils {
     return builder;
   };
 
-  export const isCreated = (req: Request | any): void | any => {
+  export const isCreated = (
+    req: Request | any
+  ): Record<string, string> | any => {
     const payload = req?.body;
     payload.created_by = req?.users_info?.id;
-    payload.created_at = new Date().toISOString();
+    payload.created_at = standartDateISO();
     return payload;
   };
 
@@ -97,10 +124,10 @@ namespace RequestUtils {
     const payload = req?.body;
     if (type === 'update') {
       payload.updated_by = req?.users_info?.id;
-      payload.updated_at = new Date().toISOString();
+      payload.updated_at = standartDateISO();
     } else {
       payload.deleted_by = req?.users_info?.id;
-      payload.deleted_at = new Date().toISOString();
+      payload.deleted_at = standartDateISO();
     }
     return payload;
   };

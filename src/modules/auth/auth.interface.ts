@@ -1,12 +1,17 @@
 /* eslint-disable no-unused-vars */
 import { Request, Response } from 'express';
-import { LogInterface } from '../../interface/entity_interface';
-import { DtoInterface } from '../../interface/response_interface';
+import { LogInterface } from '../../interface/entity.interface';
+import { DtoInterface } from '../../interface/response.interface';
 
 export interface AuthRequestInterface {
   username: string;
   email?: string;
   full_name?: string;
+  password: string;
+}
+
+export interface LoginRequestInterface {
+  username: string;
   password: string;
 }
 
@@ -24,7 +29,7 @@ export interface AuthContractInterface {
     req: Request,
     payload: Record<string, string>
   ): Promise<DtoInterface>;
-  login(req: Request, payload: Record<string, string>): Promise<DtoInterface>;
+  login(req: Request, payload: LoginRequestInterface): Promise<DtoInterface>;
 }
 
 export interface AuthHandlerInterface {

@@ -1,20 +1,29 @@
 import { Request } from 'express';
 import { Knex } from 'knex';
 import pgCore from '../../config/database';
-import { JwtInterface } from '../../interface/entity_interface';
-import { DtoInterface } from '../../interface/response_interface';
+import { JwtInterface } from '../../interface/entity.interface';
+import { DtoInterface } from '../../interface/response.interface';
 import Translate from '../../lang';
-import { Auth, Constant, Exception } from '../../utils';
-import { AuthContractInterface, AuthResponseInterface } from './auth_interface';
-
-const table: string = Constant.Table.USERS;
+import { Auth, Exception } from '../../utils';
+import {
+  AuthContractInterface,
+  AuthResponseInterface,
+  LoginRequestInterface
+} from './auth.interface';
+import { column, columnLogin, table } from './auth.schema';
 
 export default class AuthRepository implements AuthContractInterface {
-  private readonly table: string = table;
+  private readonly table;
 
-  private readonly column: string[] = ['id', 'username', 'email', 'full_name'];
+  private readonly column;
 
-  private readonly column_login: string[] = ['id', 'password', 'salt'];
+  private readonly column_login;
+
+  constructor() {
+    this.table = table;
+    this.column = column;
+    this.column_login = columnLogin;
+  }
 
   async register(
     req: Request,
@@ -33,7 +42,7 @@ export default class AuthRepository implements AuthContractInterface {
 
   async login(
     req: Request,
-    payload: Record<string, string>
+    payload: LoginRequestInterface
   ): Promise<DtoInterface> {
     try {
       const query: Knex.QueryBuilder = pgCore(this.table)
