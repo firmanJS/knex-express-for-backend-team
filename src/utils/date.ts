@@ -1,14 +1,24 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import config from '../config';
+import Constant from './constant';
 
-const FULL_FORMAT: string = 'DD-MM-YYYY HH:mm:ss';
+const { tz } = config.app;
+
 namespace Dates {
+  const dateNow = () => {
+    const now = dayjs();
+    return now.format();
+  };
+
   export const todayFormat = (
-    format: string = FULL_FORMAT,
-    date = new Date().toISOString()
-  ): string => {
-    const newDate = moment(new Date(date)).format(format);
+    format = Constant.DATE_FORMAT.LOG,
+    date = dateNow()
+  ) => {
+    const newDate = dayjs(date, tz).format(format);
     return newDate;
   };
+
+  export const standartDateISO = () => dateNow();
 }
 
 export = Dates;

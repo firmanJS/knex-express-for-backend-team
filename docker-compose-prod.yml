@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   # Nodejs
   knex-express-template:
@@ -13,12 +13,11 @@ services:
     env_file:
       - .env
     ports:
-      - "${APP_PORT}:${APP_PORT}"
+      - '${APP_PORT}:${APP_PORT}'
 
 networks:
   database_postgre-local:
     external: true
-
 # for stand alone setup
 # networks:
 #   express-template-network:

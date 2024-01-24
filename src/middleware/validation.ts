@@ -6,32 +6,18 @@ import { Environment, Http } from '../utils/constant';
 import { baseResponse, mappingError } from '../utils/exception';
 
 const checkMessageError = (catchMessage: any, errors: any): string | any => {
-  let message;
-  const extractedErrors: any = [];
+  const extractedErrors: string[] = [];
   errors.array().map((err: any) => extractedErrors.push(err.msg));
-  switch (catchMessage[0][0]) {
-    case 'database': message = Translate.__('knex.db');
-      break;
-    case 'connect':
-      message = Translate.__('knex.connect');
-      break;
-    case 'password':
-      message = Translate.__('knex.password');
-      break;
-    case 'select':
-      message = Translate.__('knex.select');
-      break;
-    case 'getaddrinfo':
-      message = Translate.__('knex.host');
-      break;
-    case 'Please':
-      message = errors.array();
-      break;
-    default:
-      message = extractedErrors;
-  }
+  const msgList: any = {
+    database: Translate.__('knex.db'),
+    connect: Translate.__('knex.connect'),
+    password: Translate.__('knex.password'),
+    select: Translate.__('knex.select'),
+    getaddrinfo: Translate.__('knex.host'),
+    Please: errors.array()
+  };
 
-  return message;
+  return msgList[catchMessage[0][0]] ?? extractedErrors;
 };
 
 export const validate = (req: Request, res: Response, next: NextFunction) => {
@@ -40,10 +26,12 @@ export const validate = (req: Request, res: Response, next: NextFunction) => {
   if (!errors.isEmpty()) {
     const catchMessage = errors.array().map((err) => err.msg.split(' '));
     if (config?.app?.env === Environment.DEV) {
-      console.error('error validate', errors);
+      console.log('error validate', errors);
     }
+    console.log('error validation', errors);
     const message = checkMessageError(catchMessage, errors);
     return baseResponse(
+      req,
       res,
       mappingError(req, message, Http.UNPROCESSABLE_ENTITY)
     );
@@ -60,5 +48,5 @@ export const uuidValidation = [
     .withMessage(Translate.__('validator.required', { field: 'id' })),
   (req: Request, res: Response, next: NextFunction) => {
     validate(req, res, next);
-  },
+  }
 ];

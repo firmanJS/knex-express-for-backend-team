@@ -27,3 +27,6 @@ export interface OptionsInterface {
   message: string;
   code?: number;
 }
+export interface OutputInterface {
+  readonly [key: string]: Object[];
+}

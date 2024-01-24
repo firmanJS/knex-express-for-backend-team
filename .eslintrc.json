@@ -3,9 +3,7 @@
 		"browser": true,
 		"es2021": true
 	},
-	"extends": [
-		"airbnb-base"
-	],
+	"extends": ["airbnb-base", "prettier"],
 	"globals": {
 		"Atomics": "readonly",
 		"SharedArrayBuffer": "readonly"
@@ -15,18 +13,11 @@
 		"ecmaVersion": 11,
 		"sourceType": "module"
 	},
-	"plugins": [
-		"@typescript-eslint"
-	],
+	"plugins": ["@typescript-eslint"],
 	"settings": {
 		"import/resolver": {
 			"node": {
-				"extensions": [
-					".js",
-					".jsx",
-					".ts",
-					".tsx"
-				]
+				"extensions": [".js", ".jsx", ".ts", ".tsx"]
 			}
 		}
 	},

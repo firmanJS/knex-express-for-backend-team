@@ -1,9 +1,7 @@
 /* eslint-disable import/extensions */
 import { knex } from 'knex';
-import config from '.';
+import knexfile from '../knexfile';
 
-const knexfile = require('../../knexfile.js');
-
-const pgCore = knex(knexfile[config.app.env]);
+const pgCore = knex(knexfile);
 
 export default pgCore;

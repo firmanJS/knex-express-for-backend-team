@@ -9,7 +9,7 @@ const defaultLocale: string = process?.env?.APP_LANGUAGE ?? 'en';
 Translate.configure({
   locales: ['id', 'en'],
   defaultLocale,
-  directory: path.join(__dirname, 'locale'),
+  directory: path.join(__dirname, 'locale')
 });
 
 export default Translate;

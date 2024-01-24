@@ -4,21 +4,39 @@ import {
   DtoInterface,
   OptionsInterface,
   ResponseInterface,
-  WithMetaInterface,
-} from '../interface/response_interface';
+  WithMetaInterface
+} from '../interface/response.interface';
 import Translate from '../lang';
-import {
-  Environment, Http, LIMIT, PAGE
-} from './constant';
+import { Environment, Http, LIMIT, PAGE } from './constant';
+
+import Dates from './date';
 
 namespace Exception {
   const optionCustom = (): OptionsInterface => {
     const data: OptionsInterface = {
       status: true,
-      message: Translate.__('get.success'),
+      message: Translate.__('get.success')
     };
 
     return data;
+  };
+
+  const debugRequest = (req: Request) => {
+    const ALLOWED_LOG = ['local', 'development'];
+    if (config.app.debug === 1) {
+      console.log(
+        `=========== Incoming Request ${Dates.todayFormat()} ===========`
+      );
+      if (ALLOWED_LOG.includes(config.app.env)) {
+        console.log('Headers:', req?.headers);
+      }
+      if (config.app.env === Environment.PROD) {
+        delete req?.body?.password;
+      }
+      console.log('Query:', JSON.stringify(req?.query));
+      console.log('Param:', JSON.stringify(req?.params));
+      console.log('Body:', JSON.stringify(req?.body));
+    }
   };
 
   export const notFoundHandler = (req: Request, res: Response): Response => {
@@ -28,9 +46,9 @@ namespace Exception {
     const result: ResponseInterface = {
       data: err.toString(),
       status: false,
-      message,
+      message
     };
-
+    debugRequest(req);
     return res.status(Http.NOT_FOUND).json(result);
   };
 
@@ -51,9 +69,9 @@ namespace Exception {
     const result: ResponseInterface = {
       data: [],
       status: false,
-      message: Translate.__('error.invalid.syntax'),
+      message: Translate.__('error.invalid.syntax')
     };
-
+    debugRequest(req);
     return res.status(Http.BAD_REQUEST).json(result);
   };
 
@@ -66,7 +84,7 @@ namespace Exception {
     const result: ResponseInterface = {
       status: true,
       message: `syntax error ${err}`,
-      data: [],
+      data: []
     };
 
     if (err instanceof SyntaxError) {
@@ -76,11 +94,12 @@ namespace Exception {
     next();
 
     if (process.env.NODE_ENV === 'development') {
-      console.info(err.toString());
+      console.log(err.toString());
       return res.status(Http.OK).send(result);
     }
     // sent to sentry or whatever
-    console.info(err.toString());
+    console.log(err.toString());
+    debugRequest(req);
     return res.status(Http.OK).send(result);
   };
 
@@ -90,7 +109,7 @@ namespace Exception {
     let { status, message } = options;
     if (totalData === 0) {
       status = false;
-      message = Translate.__('notfound');
+      message = Translate.__('msg.notfound', { msg: 'Data' });
       code = Http.NOT_FOUND;
     }
 
@@ -103,15 +122,16 @@ namespace Exception {
     return {
       status,
       code,
-      message,
+      message
     };
   };
 
   export const paginationResponse = (
     req: Request,
     res: Response,
-    rows: any
+    rows: DtoInterface
   ): Response => {
+    debugRequest(req);
     const totalData: number = Number(rows?.data?.data?.count) ?? 0;
     const { status, message, code } = logicPagination(rows, totalData);
     const limitPerPage: number = Number(req.query?.limit) || +LIMIT;
@@ -124,15 +144,21 @@ namespace Exception {
         page: Number(req.query?.page) || +PAGE,
         limit_per_page: +limitPerPage,
         total_page: Math.ceil(countTotal / limitPerPage),
-        count_per_page: rows?.data?.response?.result?.length || 0,
-        count_total: countTotal,
-      },
+        count_per_page: rows?.data?.data?.result?.length || 0,
+        count_total: countTotal
+      }
     };
     return res.status(code).json(result);
   };
 
-  export const baseResponse = (res: Response, data: any)
-  : Response => res.status(data?.code ?? Http.OK).json(data?.data);
+  export const baseResponse = (
+    req: Request,
+    res: Response,
+    data: DtoInterface
+  ): Response => {
+    debugRequest(req);
+    return res.status(data?.code ?? Http.OK).json(data?.data);
+  };
 
   export const mappingSuccess = (
     message: string,
@@ -144,39 +170,24 @@ namespace Exception {
     data: {
       status,
       message,
-      data,
-    },
+      data
+    }
   });
 
   const conditionCheck = (
-    error: string,
-    manipulate: string,
-    message: string
-  ): string => {
-    switch (manipulate[0]) {
-      case 'JsonWebTokenError':
-        message = error;
-        break;
-      case 'Error':
-        message = Translate.__('error.db.connection');
-        break;
-      case 'TypeError':
-        message = `error in code ${manipulate.toString()}`;
-        break;
-      case 'AggregateError':
-        message = Translate.__('error.db.query');
-        break;
-      case 'MongoServerError':
-        message = manipulate.toString();
-        break;
-      case 'ReferenceError':
-        message = manipulate.toString();
-        break;
-      default:
-        message = error;
-    }
-
-    return message;
+    error: string | any,
+    manipulate: string
+  ): string | any => {
+    const msgList: string | Record<string, string> = {
+      JsonWebTokenError: error?.message ?? error,
+      TokenExpiredError: error?.message ?? error,
+      Error: Translate.__('error.db.connection'),
+      error: Translate.__('error.db'),
+      TypeError: `error in code ${manipulate.toString()}`,
+      AggregateError: Translate.__('error.db.query'),
+      ReferenceError: manipulate.toString()
+    };
+    return msgList[manipulate] ?? error;
   };
 
   export const mappingError = (
@@ -187,31 +198,25 @@ namespace Exception {
     let message: string = '';
     let exception: string = '';
     const manipulate: string = error.toString().split(':');
-    console.error(`catch message ${JSON.stringify(error)}`);
+    console.log(`catch message ${JSON.stringify(error)}`);
     message = Translate.__('error.db.transaction');
     if (config?.app?.env === Environment.DEV) {
-      exception = error.toString();
-      message = conditionCheck(error, manipulate, message);
+      exception = error;
+      message = conditionCheck(error, manipulate[0]);
     }
     if (error?.type_error !== 'validation') {
       // sent alert
-      console.info('sent alert', error);
     }
+    console.log(`request error ${req.originalUrl}`, error);
     return {
       code,
       data: {
         status: false,
         message,
         exception,
-        data: [],
-      },
+        data: []
+      }
     };
-  };
-
-  export const captureLog = (err: any): void => {
-    if (config?.app?.env === Environment.DEV) {
-      console.info('error validateMiddleware', err);
-    }
   };
 }
 

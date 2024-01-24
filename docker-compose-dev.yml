@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   # Nodejs
   knex-express-template:
@@ -16,7 +16,7 @@ services:
       - .:/usr/apps/knex-express-template
       - /usr/apps/knex-express-template/node_modules
     ports:
-      - "${APP_PORT}:${APP_PORT}"
+      - '${APP_PORT}:${APP_PORT}'
 
 networks:
   database_postgre-local:

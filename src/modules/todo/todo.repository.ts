@@ -1,30 +1,16 @@
 import { Request } from 'express';
 import { Knex } from 'knex';
 import pgCore from '../../config/database';
-import {
-  CountInterface,
-  RepositoryInterface,
-} from '../../interface/repository_interface';
-import { RequestOptionsInterface } from '../../interface/request_interface';
-import { DtoInterface } from '../../interface/response_interface';
+import { RepositoryInterface } from '../../interface/repository.interface';
+import { RequestOptionsInterface } from '../../interface/request.interface';
+import { DtoInterface } from '../../interface/response.interface';
 import Translate from '../../lang';
 import { coreUpdate } from '../../models/core';
 import { Constant, Exception, RequestUtils } from '../../utils';
-import { TodoInterface, TodoPost } from './todo_interface';
+import { TodoInterface, TodoPost } from './todo.interface';
+import { column, condition, table } from './todo.schema';
 
-const table: string = Constant.Table.TODO;
-const condition = (builder: any, options: RequestOptionsInterface | any) => {
-  builder.where(options?.where);
-  builder.andWhere('deleted_at', null);
-  if (options?.filter?.search) {
-    builder.whereILike('name', `%${options?.filter?.search}%`);
-    builder.orWhereILike('description', `%${options?.filter?.search}%`);
-    builder.andWhere(`${table}.deleted_at`, null);
-  }
-  return builder;
-};
-
-const sql = (options: RequestOptionsInterface) => {
+const sql = (options: RequestOptionsInterface): Knex.QueryBuilder => {
   const query = pgCore(table).where((builder) => {
     condition(builder, options);
   });
@@ -32,25 +18,10 @@ const sql = (options: RequestOptionsInterface) => {
   return query;
 };
 
-const mapOutput = async (
-  options: RequestOptionsInterface,
-  query: any
-): Promise<TodoInterface> => {
-  let result: TodoInterface;
-  if (options.type === 'array') {
-    result = await query;
-  } else {
-    result = await query.first();
-  }
-
-  return result;
-};
 export default class TodoRepository implements RepositoryInterface {
   private readonly table: string = table;
 
-  private readonly column: string[] = ['id', 'name', 'description'];
-
-  private readonly sort: string[] = [this.column[0], 'ASC'];
+  private readonly column: string[] = column;
 
   async create(req: Request, payload: TodoPost): Promise<DtoInterface> {
     try {
@@ -71,13 +42,17 @@ export default class TodoRepository implements RepositoryInterface {
     try {
       let query: Knex.QueryBuilder = sql(options).clone().select(this.column);
       query = RequestUtils.RequestRepoOptions(options, query);
-      const result: TodoInterface = await mapOutput(options, query);
-      const [rows]: CountInterface[] = await sql(options)
-        .clone()
-        .count(this.column[0]);
+      // const result: TodoInterface = await mapOutput(options, query);
+      // const [rows]: CountInterface[] = await sql(options)
+      //   .clone()
+      //   .count(this.column[0]);
+      const [result, [rows]] = await Promise.all([
+        RequestUtils.mapOutput(options, query),
+        sql(options).clone().count(this.column[0])
+      ]);
       return Exception?.mappingSuccess(Translate.__('get.success'), {
         result,
-        count: rows?.count,
+        count: rows?.count
       });
     } catch (error: any) {
       error.path_filename = __filename;
@@ -92,7 +67,10 @@ export default class TodoRepository implements RepositoryInterface {
     try {
       let query: Knex.QueryBuilder = sql(options).clone().select(this.column);
       query = RequestUtils.RequestRepoOptions(options, query);
-      const result: TodoInterface = await mapOutput(options, query);
+      const result: TodoInterface = await RequestUtils.mapOutput(
+        options,
+        query
+      );
       if (result) {
         return Exception.mappingSuccess(Translate.__('get.success'), result);
       }
@@ -109,7 +87,7 @@ export default class TodoRepository implements RepositoryInterface {
 
   async update(
     req: Request,
-    options: RequestOptionsInterface | any
+    options: RequestOptionsInterface
   ): Promise<DtoInterface> {
     try {
       let message = '';
@@ -136,11 +114,24 @@ export default class TodoRepository implements RepositoryInterface {
     }
   }
 
-  COLUMN(): string[] {
-    return this.column;
-  }
-
-  SORT(): string[] {
-    return this.sort;
+  async destroy(
+    req: Request,
+    options: RequestOptionsInterface
+  ): Promise<DtoInterface> {
+    try {
+      const result = await pgCore(this.table).where(options.where).del();
+      if (result) {
+        return Exception.mappingSuccess(Translate.__('deleted'), result);
+      }
+      return Exception.mappingSuccess(
+        Translate.__('notfound.id', { id: options?.where?.id }),
+        { total_deleted: result },
+        Constant.Http.NOT_FOUND,
+        false
+      );
+    } catch (error: any) {
+      error.path_filename = __filename;
+      return Exception.mappingError(req, error);
+    }
   }
 }

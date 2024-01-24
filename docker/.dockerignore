@@ -1,10 +1,10 @@
 node_modules/
 logs/
 coverage/
+.husky/
+__test__/
+.github/
 
-coverage
 *.lcov
 .vscode
 *.log
-.husky
-__test__/

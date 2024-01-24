@@ -1,0 +1,61 @@
+{
+	"/auth/register": {
+		"post": {
+			"tags": ["Auth"],
+			"security": [
+				{
+					"bearerAuth": []
+				}
+			],
+			"requestBody": {
+				"required": false,
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/SchemaAuthRequest"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "OK",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SchemaAuth"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/auth/login": {
+		"post": {
+			"tags": ["Auth"],
+			"requestBody": {
+				"required": false,
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/SchemaAuthLogin"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "OK",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SchemaAuthLoginResponse"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

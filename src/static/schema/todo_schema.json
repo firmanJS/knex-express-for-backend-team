@@ -20,39 +20,5 @@
 				"type": "string"
 			}
 		}
-	},
-	"SchemaPaginationResponse": {
-		"type": "object",
-		"properties": {
-			"message": {
-				"type": "string"
-			},
-			"status": {
-				"type": "boolean"
-			},
-			"data": {
-				"type": "object"
-			},
-			"meta": {
-				"type": "object",
-				"properties": {
-					"page": {
-						"type": "number"
-					},
-					"limit_per_page": {
-						"type": "number"
-					},
-					"total_page": {
-						"type": "number"
-					},
-					"count_per_page": {
-						"type": "number"
-					},
-					"count_total": {
-						"type": "number"
-					}
-				}
-			}
-		}
 	}
 }

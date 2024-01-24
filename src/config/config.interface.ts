@@ -1,6 +1,7 @@
 export interface Config {
   app: {
     name: string;
+    tz: string;
     env: string;
     language: string;
     port: number;
@@ -10,8 +11,15 @@ export interface Config {
     method: [] | string;
     allow_header: [] | string;
     expose_header: [] | string;
+    secret_key: string;
+    jwt_expired: string;
+    debug: boolean | number;
+    algorithm: string | any;
+    refresh_token_expired: string;
+    csp: string;
   };
   db: {
+    driver: string;
     host: string;
     port: number;
     username: string;

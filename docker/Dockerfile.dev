@@ -1,4 +1,9 @@
-FROM node:18.12.1-buster-slim
+FROM node:alpine3.18
+
+RUN npm install -g pnpm
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 
 RUN rm -rf /var/cache/apk/*
 
@@ -14,6 +19,6 @@ COPY . /usr/apps/knex-express-template/
 
 COPY src/lang/locale build/lang/locale
 
-RUN yarn install && yarn global add ts-node && yarn global add knex && yarn cache clean --all
+RUN pnpm install && pnpm add -g ts-node && pnpm add -g knex
 
-CMD ["yarn", "dev"]
+CMD ["pnpm", "dev"]

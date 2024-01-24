@@ -31,17 +31,15 @@ process.on('uncaughtException', (err, origin) => {
 });
 
 process.on('SIGTERM', () => {
-  console.info('SIGTERM received');
+  console.log('SIGTERM received');
 });
 
 app.listen(config?.app?.port, () => {
   if (config?.app?.env === 'development') {
-    console.info(
+    console.log(
       `${config?.app?.name} running in port ${config?.app?.port} with env ${config?.app?.env}`
     );
   } else {
-    console.info(
-      `${config?.app?.name} is running with env ${config?.app?.env}`
-    );
+    console.log(`${config?.app?.name} is running with env ${config?.app?.env}`);
   }
 });

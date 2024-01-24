@@ -108,7 +108,6 @@ dist
 .tern-port
 
 #lockfile
-package-lock.json
-yarn.lock
 Makefile
 build
+yarn.lock

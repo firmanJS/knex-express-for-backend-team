@@ -1,0 +1,59 @@
+{
+	"SchemaAuth": {
+		"type": "object",
+		"properties": {
+			"name": {
+				"id": "string"
+			},
+			"username": {
+				"type": "string"
+			},
+			"full_name": {
+				"type": "string"
+			},
+			"email": {
+				"type": "string"
+			}
+		}
+	},
+	"SchemaAuthRequest": {
+		"type": "object",
+		"properties": {
+			"username": {
+				"type": "string"
+			},
+			"full_name": {
+				"type": "string"
+			},
+			"email": {
+				"type": "string"
+			},
+			"password": {
+				"type": "string"
+			}
+		}
+	},
+	"SchemaAuthLogin": {
+		"type": "object",
+		"properties": {
+			"username": {
+				"type": "string",
+				"summary": "username or email"
+			},
+			"password": {
+				"type": "string"
+			}
+		}
+	},
+	"SchemaAuthLoginResponse": {
+		"type": "object",
+		"properties": {
+			"access_token": {
+				"type": "string"
+			},
+			"refresh_token": {
+				"type": "string"
+			}
+		}
+	}
+}

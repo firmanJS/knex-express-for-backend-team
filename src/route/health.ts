@@ -17,16 +17,17 @@ class HealthRest extends BaseRest {
   public routes(): void {
     this.router.get(
       '/',
-      async (req: Request, res: Response): Promise<Response> => res.json({
-        status: true,
-        message: `Welcome to api ${config?.app?.name}`,
-        data: {
-          response_time: `${getDurationInMilliseconds()}(ms)`,
-          uptimes: process.uptime(),
-          timestamp: new Date().toISOString(),
-          documentation: `http://${req.get('host')}/documentation`,
-        },
-      })
+      async (req: Request, res: Response): Promise<Response> =>
+        res.json({
+          status: true,
+          message: `Welcome to api ${config?.app?.name}`,
+          data: {
+            response_time: `${getDurationInMilliseconds()}(ms)`,
+            uptimes: process.uptime(),
+            timestamp: new Date().toISOString(),
+            documentation: `http://${req.get('host')}/documentation`
+          }
+        })
     );
 
     if (config?.app?.env === Environment.DEV) {
