@@ -18,8 +18,6 @@ export interface RepositoryInterface {
     req: Request,
     options: RequestOptionsInterface
   ): Promise<DtoInterface>;
-  COLUMN?(): string[];
-  SORT?(): string[];
 }
 
 export interface CountInterface {

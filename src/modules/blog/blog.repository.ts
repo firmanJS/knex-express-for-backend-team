@@ -7,7 +7,7 @@ import { DtoInterface } from '../../interface/response.interface';
 import Translate from '../../lang';
 import { coreUpdate } from '../../models/core';
 import { Constant, Exception, RequestUtils } from '../../utils';
-import { BlogCategoryInterface, BlogCategoryPost } from './blog.interface';
+import { BlogInterface, BlogPost } from './blog.interface';
 import { column, condition, table } from './blog.schema';
 
 const sql = (options: RequestOptionsInterface) => {
@@ -18,16 +18,16 @@ const sql = (options: RequestOptionsInterface) => {
   return query;
 };
 
-export default class TodoRepository implements RepositoryInterface {
+export default class BlogRepository implements RepositoryInterface {
   private readonly table = table;
 
   private readonly column = column;
 
   private readonly sort = column;
 
-  async create(req: Request, payload: BlogCategoryPost): Promise<DtoInterface> {
+  async create(req: Request, payload: BlogPost): Promise<DtoInterface> {
     try {
-      const [result]: BlogCategoryInterface[] = await pgCore(this.table)
+      const [result]: BlogInterface[] = await pgCore(this.table)
         .insert(payload)
         .returning(this.column[0]);
       return Exception.mappingSuccess(
@@ -69,7 +69,7 @@ export default class TodoRepository implements RepositoryInterface {
     try {
       let query: Knex.QueryBuilder = sql(options).clone().select(this.column);
       query = RequestUtils.RequestRepoOptions(options, query);
-      const result: BlogCategoryInterface = await RequestUtils.mapOutput(
+      const result: BlogInterface = await RequestUtils.mapOutput(
         options,
         query
       );
@@ -114,13 +114,5 @@ export default class TodoRepository implements RepositoryInterface {
       error.path_filename = __filename;
       return Exception.mappingError(req, error);
     }
-  }
-
-  COLUMN(): string[] {
-    return this.column;
-  }
-
-  SORT(): string[] {
-    return this.sort;
   }
 }

@@ -10,7 +10,7 @@ import {
 import { queryParam } from '../todo/todo.schema';
 import { BlogCategoryPost } from './blogcategory.interface';
 import BlogCategoryRepository from './blogcategory.repository';
-import { bodyRequest } from './blogcategory.schema';
+import { bodyRequest, sort } from './blogcategory.schema';
 
 export default new (class BlogCategory implements BaseHandlerInterface {
   private readonly repo: BlogCategoryRepository;
@@ -29,7 +29,7 @@ export default new (class BlogCategory implements BaseHandlerInterface {
   async fetch(req: Request, res: Response): Promise<Response> {
     const where = RequestUtils.dynamicFilter(req, queryParam);
     const filter = RequestUtils.paging(req);
-    const order = RequestUtils.dynamicOrder(req, this.repo.SORT());
+    const order = RequestUtils.dynamicOrder(req, sort);
     const options = {
       where,
       order,

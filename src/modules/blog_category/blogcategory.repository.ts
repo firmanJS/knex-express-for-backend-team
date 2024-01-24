@@ -118,12 +118,4 @@ export default class BlogCategoryRepository implements RepositoryInterface {
       return Exception.mappingError(req, error);
     }
   }
-
-  COLUMN(): string[] {
-    return this.column;
-  }
-
-  SORT(): string[] {
-    return this.sort;
-  }
 }

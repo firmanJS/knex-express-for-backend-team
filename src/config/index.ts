@@ -26,6 +26,7 @@ const config: Config = {
     csp: CSP
   },
   db: {
+    driver: process?.env?.DB_DRIVER ?? 'pg',
     host: process?.env?.DB_HOST ?? '',
     port: Number(process?.env?.DB_PORT ?? 5432),
     username: process?.env?.DB_USER ?? '',

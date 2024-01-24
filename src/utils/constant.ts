@@ -1,12 +1,14 @@
+import ConstantContract from '../interface/constant.interface';
+
 namespace Constant {
   export const LIMIT: number = 10;
   export const PAGE: number = 1;
-  export const Environment: Record<string, string> = {
+  export const Environment: ConstantContract.Environment = {
     DEV: 'development',
     STG: 'staging',
     PROD: 'production'
   };
-  export const Http: Record<string, number> = {
+  export const Http: ConstantContract.Http = {
     CREATED: 201,
     OK: 200,
     ACCEPTED: 202,
@@ -17,27 +19,27 @@ namespace Constant {
     UNPROCESSABLE_ENTITY: 422,
     INTERNAL_SERVER_ERROR: 500
   };
-  export const MORGAN_FORMAT: Record<string, string> = {
+  export const MORGAN_FORMAT: ConstantContract.MorganFormat = {
     DEV_FORMAT:
       '[:date[clf]] :remote-addr :remote-user \x1b[36m:method \x1b[36m:url \x1b[33m:status \x1b[32m:response-time\x1b[36m(ms)\x1b[0m',
     PROD_FORMAT:
       '[:date[clf]] :remote-addr :remote-user :method :url :status :response-time(ms)'
   };
-  export const Table: Record<string, string> = {
+  export const Table: ConstantContract.Table = {
     TODO: 'mst_todo',
     BLOG: 'mst_blog',
     ARCHIVE_TODO: 'archive_todo',
     USERS: 'users',
     BLOG_CAT: 'mst_category_blog'
   };
-  export const Method: Record<string, string> = {
+  export const Method: ConstantContract.Method = {
     DEL: 'DELETE',
     PUT: 'PUT',
     POST: 'POST',
     GET: 'GET'
   };
 
-  export const DATE_FORMAT: Record<string, string> = {
+  export const DATE_FORMAT: ConstantContract.DateFormat = {
     ID: 'DD-MM-YYYY HH:mm:ss',
     LOG: 'YYYY-MM-DD HH:mm:ss'
   };

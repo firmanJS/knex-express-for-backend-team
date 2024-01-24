@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import { JwtInterface } from '../interface/entity.interface';
+import { EntityContract } from '../interface/entity.interface';
 
 namespace Auth {
   export const generatePassword = (
@@ -42,8 +42,8 @@ namespace Auth {
 
   export const setToken = (
     payload: Record<string, string> | any
-  ): JwtInterface => {
-    const generateSecret: JwtInterface = {
+  ): EntityContract.JwtInterface => {
+    const generateSecret: EntityContract.JwtInterface = {
       access_token: jwt.sign(payload, config.app.secret_key, {
         expiresIn: config.app.jwt_expired,
         algorithm: config.app.algorithm

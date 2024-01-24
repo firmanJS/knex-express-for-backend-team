@@ -1,11 +1,11 @@
-import { LogInterface } from '../../interface/entity.interface';
+import { EntityContract } from '../../interface/entity.interface';
 
-export interface BlogPost extends LogInterface {
+export interface BlogPost extends EntityContract.LogInterface {
   name?: string;
   description?: string;
 }
 
-export interface BlogInterface extends LogInterface {
+export interface BlogInterface extends EntityContract.LogInterface {
   readonly id?: string;
   readonly name?: string;
   readonly description?: string;

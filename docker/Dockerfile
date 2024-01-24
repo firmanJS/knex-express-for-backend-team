@@ -29,8 +29,6 @@ ENV NODE_ENV=production
 
 RUN yarn install --frozen-lockfile --production
 
-COPY knexfile.js ./
-
 COPY src/lang/locale build/lang/locale
 
 COPY --from=builder /usr/apps/knex-express-template/build ./build

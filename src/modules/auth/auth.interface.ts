@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Request, Response } from 'express';
-import { LogInterface } from '../../interface/entity.interface';
+import { EntityContract } from '../../interface/entity.interface';
 import { DtoInterface } from '../../interface/response.interface';
 
 export interface AuthRequestInterface {
@@ -15,7 +15,7 @@ export interface LoginRequestInterface {
   password: string;
 }
 
-export interface AuthResponseInterface extends LogInterface {
+export interface AuthResponseInterface extends EntityContract.LogInterface {
   readonly id?: string;
   readonly username?: string;
   readonly email?: string;

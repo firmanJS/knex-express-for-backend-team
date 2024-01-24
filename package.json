@@ -9,7 +9,6 @@
 		"copy-lang": "cp -r src/lang/locale build/lang",
 		"copy-swagger-path": "cp -r src/static/path build/static/path",
 		"copy-swagger-schema": "cp -r src/static/schema build/static/schema",
-		"copy-knexfile": "cp -r knexfile.js build/knexfile.js",
 		"clean": "rm -rf build",
 		"watch": "nodemon src/main",
 		"dev": "yarn build && yarn watch",

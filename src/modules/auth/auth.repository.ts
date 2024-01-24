@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { Knex } from 'knex';
 import pgCore from '../../config/database';
-import { JwtInterface } from '../../interface/entity.interface';
+import { EntityContract } from '../../interface/entity.interface';
 import { DtoInterface } from '../../interface/response.interface';
 import Translate from '../../lang';
 import { Auth, Exception } from '../../utils';
@@ -59,7 +59,9 @@ export default class AuthRepository implements AuthContractInterface {
         salt: result?.salt
       });
       if (result && validationPassword === true) {
-        const token: JwtInterface = Auth.setToken({ id: result?.id });
+        const token: EntityContract.JwtInterface = Auth.setToken({
+          id: result?.id
+        });
         return Exception.mappingSuccess(Translate.__('auth.success'), token);
       }
       return Exception.mappingSuccess(Translate.__('auth.error'), result);

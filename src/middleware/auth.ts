@@ -15,7 +15,7 @@ const validate = (req: Request | any, res: Response, next: NextFunction) => {
     return next();
   }
   const result: Record<string, string | any> = {
-    code: +Constant.Http.UNAUTHORIZED,
+    code: Constant.Http.UNAUTHORIZED,
     data: {
       status: false,
       message: Translate.__('validator.required', { field: 'token' }),
@@ -33,7 +33,7 @@ export const verifyToken = (
   try {
     if (!req.headers.authorization) {
       const result: Record<string, string | any> = {
-        code: +Constant.Http.UNAUTHORIZED,
+        code: Constant.Http.UNAUTHORIZED,
         data: {
           status: false,
           message: Translate.__('validator.required', { field: 'token' }),

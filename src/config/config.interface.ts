@@ -19,6 +19,7 @@ export interface Config {
     csp: string;
   };
   db: {
+    driver: string;
     host: string;
     port: number;
     username: string;
